@@ -40,7 +40,7 @@ export const getBookings= async(businessId)=>{
 }
 export const getTotalSales= async(businessId)=>{
     console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalSales/${businessId}`)
+    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalSalesServices/${businessId}`)
     .then((response)=>{
         return response.data
     })
