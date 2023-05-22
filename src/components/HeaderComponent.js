@@ -1,9 +1,29 @@
-import { AppBar, Avatar, Box, Button, IconButton, ThemeProvider, Toolbar, Typography } from '@mui/material'
+import { AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, ThemeProvider, Toolbar, Typography } from '@mui/material'
 import { width } from '@mui/system'
-import React from 'react'
+import React, { useState } from 'react'
 import theme from '../theme/theme'
+import { AccountCircle } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import { logOut } from '../services/service'
 
 const HeaderComponent = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [auth, setAuth] = useState(true);
+  const navigate= useNavigate()
+  const handleChange = (event) => {
+    setAuth(event.target.checked);
+  };
+ 
+  const handleClose = () => {
+    
+    setAnchorEl(null)
+    logOut()
+    navigate('/login')
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
   return (
     <ThemeProvider theme={theme}>
         
@@ -13,11 +33,32 @@ const HeaderComponent = () => {
             <Box sx={{width:"70%", paddingInline:'16px'}}>
                 <img className='logo' src={`${process.env.PUBLIC_URL}/logo1.png`} alt='logo'/>
             </Box>
-          <Box sx={{display:"flex", alignContent:"center", justifyContent:"flex-end", gap:"12px", width:"40%", paddingInline:'18px'}}>
-          <Avatar></Avatar>
-          <Typography variant="p" mt={2} color={'white'} >
-            username
+          <Box sx={{display:"flex",cursor:'pointer', alignContent:"center", justifyContent:"flex-end", gap:"12px", width:"40%", paddingInline:'18px'}} onClick={handleMenu}>
+          
+                <Avatar/>
+              
+              <Typography variant="p" mt={2} color={'white'} >
+            {localStorage.getItem('user')}
           </Typography>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Cerrar Sesión</MenuItem>
+               
+              </Menu>
+          
           </Box>
         </Toolbar>
       </AppBar>

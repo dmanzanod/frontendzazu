@@ -1,9 +1,22 @@
-import { Box, Button, Paper, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material'
 import { textAlign } from '@mui/system'
-import React from 'react'
+import React, { useState } from 'react'
 import Principal from './Principal'
+import { getQr } from '../services/service'
+import QRCode from 'react-qr-code'
 
 const QRPage = () => {
+  const [qr,setQr]=useState('')
+  const [loading,setLoading]=useState(false)
+  
+  const getBotQr=async()=>{
+    setLoading(true)
+    const resp= await getQr(localStorage.getItem('Business'))
+    if(resp!==''){
+      setLoading(false)
+      setQr(resp.qr)
+    }
+  }
   return (
     <Principal>
         <Box sx={{
@@ -38,12 +51,25 @@ const QRPage = () => {
             }}>
 
             
-            <Button variant='contained' color='error' sx={{
+           {!loading && qr==='' && qr!=='connected' &&<Button variant='contained' color='error' sx={{
                     width:'200px',
                     height:"60px",
                     alignSelf:'center'
-            }}>Generar QR</Button>
-            <Typography variant="h6">Esto puede demorar unos minutos.</Typography>
+            }}
+            onClick={getBotQr}
+            >Generar QR</Button>}
+            {loading && <CircularProgress color='primary' sx={{alignSelf:'center'}}/>}
+            {qr!=='' && qr!=='connected' &&
+            <QRCode
+            size={256}
+            style={{alignSelf:'center'}}
+            value={qr}
+            />
+
+
+            }
+            
+            <Typography variant="h6">{qr==='connected'?'Usted está conectado':'Esto puede demorar unos minutos.'}</Typography>
             </Paper>
         </Box>
     </Principal>

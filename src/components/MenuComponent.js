@@ -9,6 +9,8 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import { useLocation, useNavigate } from 'react-router-dom';
+import WorkIcon from '@mui/icons-material/Work'
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 const MenuComponent = () => {
     const icons=[<DashboardOutlinedIcon/>,<QrCodeOutlinedIcon/>,<DesignServicesIcon/>,<SummarizeOutlinedIcon/>,<ContactSupportOutlinedIcon/>];
@@ -22,7 +24,7 @@ const MenuComponent = () => {
       setExpand(!expand)
     }
     const handleSubList=(index)=>{
-      const subRoutes=['/categories/643d4b1b9e19c3e7b5862152','/products/643d4b1b9e19c3e7b5862152']
+      const subRoutes=[`/categories/${localStorage.getItem('Business')}`,`/products/${localStorage.getItem('Business')}`,`/bookingDetails/${localStorage.getItem('Business')}`,`/businessDetailsUpdate/${localStorage.getItem('Business')}`]
       navigate(subRoutes[index])
     }
   const handleListItemClick = (event, index) => {
@@ -92,6 +94,19 @@ const MenuComponent = () => {
             </ListItemIcon>
             <ListItemText primary="Servicios" />
           </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
+            <ListItemIcon>
+              <ListAltIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Reservas" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(3)}>
+            <ListItemIcon>
+              <WorkIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Información" />
+          </ListItemButton>
+          
         </List>
       </Collapse>
             <ListItem  disablePadding>

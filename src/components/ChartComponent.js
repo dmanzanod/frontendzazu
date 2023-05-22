@@ -34,8 +34,8 @@ const ChartComponent = ({title,data,type}) => {
           data={data}
         >
           <PieSeries
-            valueField="area"
-            argumentField="country"
+            valueField="timesServiceAppears"
+            argumentField="serviceName"
           /> 
           
          

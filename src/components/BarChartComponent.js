@@ -12,6 +12,7 @@ import {
 import { Animation, HoverState } from '@devexpress/dx-react-chart';
 import { Legend } from '@devexpress/dx-react-chart-material-ui';
 const BarChartComponent = ({data,title}) => {
+  console.log(data)
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{
@@ -39,8 +40,8 @@ const BarChartComponent = ({data,title}) => {
           <ValueAxis max={7} />
 
           <BarSeries
-            valueField="population"
-            argumentField="year"
+            valueField="total"
+            argumentField="month"
           />
           
           <Title
