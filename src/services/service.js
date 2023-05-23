@@ -4,7 +4,7 @@ AxiosInterceptor()
 
 export const getQr= async(businessId)=>{
     console.log(process.env.BASE_URL)
-    return await axios.get(`http://localhost:3000/api/qr/${businessId}`)
+    return await axios.get(`${localStorage.getItem('url')}`)
     .then((response)=>{
         return response.data
     })

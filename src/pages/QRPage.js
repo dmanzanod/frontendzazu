@@ -13,8 +13,15 @@ const QRPage = () => {
     setLoading(true)
     const resp= await getQr(localStorage.getItem('Business'))
     if(resp!==''){
-      setLoading(false)
+      if(resp.ok){
+        setQr(resp.qr.split(',')[1])
+      }
+      else{
+        setLoading(false)
       setQr(resp.qr)
+      }
+      
+      
     }
   }
   return (
