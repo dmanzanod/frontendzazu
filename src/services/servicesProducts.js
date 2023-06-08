@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { AxiosInterceptor } from './axios'
 AxiosInterceptor()
+const url= process.env.REACT_APP_BASE_URL
 //Orders
 export const getHistoryOrders= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/historyOrders/${businessId}`)
+    
+    return await axios.get(`${url}/historyOrders/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -21,8 +22,8 @@ export const getHistoryOrders= async(businessId)=>{
 
 }
 export const getOrders= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getOrders/${businessId}`)
+    
+    return await axios.get(`${url}/getOrders/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -40,8 +41,8 @@ export const getOrders= async(businessId)=>{
 }
 
 export const getTotalSalesProducts= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalSalesProduct/${businessId}`)
+    
+    return await axios.get(`${url}/getTotalSalesProduct/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -58,8 +59,8 @@ export const getTotalSalesProducts= async(businessId)=>{
 
 }
 export const getTotalOrders= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalOrders/${businessId}`)
+    
+    return await axios.get(`${url}/getTotalOrders/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -76,8 +77,8 @@ export const getTotalOrders= async(businessId)=>{
 
 }
 export const getProductsStats= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getProductsStats/${businessId}`)
+    
+    return await axios.get(`${url}/getProductsStats/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -94,8 +95,8 @@ export const getProductsStats= async(businessId)=>{
 
 }
 export const getMonthlyOrders= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getOrdersByMonth/${businessId}`)
+    
+    return await axios.get(`${url}/getOrdersByMonth/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -112,8 +113,8 @@ export const getMonthlyOrders= async(businessId)=>{
 
 }
 export const getWeeklyOrders= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getOrdersByWeek/${businessId}`)
+    
+    return await axios.get(`${url}/getOrdersByWeek/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -133,7 +134,7 @@ export const getWeeklyOrders= async(businessId)=>{
 //Categories
 export const getCategoriesProduct= async(businessId)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getCategoriesProduct/${businessId}`)
+    return await axios.get(`${url}/getCategoriesProduct/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -150,7 +151,7 @@ export const getCategoriesProduct= async(businessId)=>{
 }
 export const getCategoryProduct= async(Id)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getCategoryProduct/${Id}`)
+    return await axios.get(`${url}/getCategoryProduct/${Id}`)
     .then((response)=>{
         return response.data
     })
@@ -167,7 +168,7 @@ export const getCategoryProduct= async(Id)=>{
 }
 
 export const newCategoryProduct=async(values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/createCategoryProduct`,values)
+    return await axios.post(`${url}/createCategoryProduct`,values)
     .then((response)=>{
         return response.data
     })
@@ -181,7 +182,7 @@ export const newCategoryProduct=async(values)=>{
     })
 }
 export const updateCategoryProduct=async(id,values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/updateCategoryProduct/${id}`,values)
+    return await axios.post(`${url}/updateCategoryProduct/${id}`,values)
     .then((response)=>{
         return response.data
     })
@@ -195,7 +196,7 @@ export const updateCategoryProduct=async(id,values)=>{
     })
 }
 export const deleteCategoryProduct=async(id)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/deleteCategoryProduct/${id}`)
+    return await axios.post(`${url}/deleteCategoryProduct/${id}`)
     .then((response)=>{
         return response.data
     })
@@ -213,7 +214,7 @@ export const deleteCategoryProduct=async(id)=>{
 
 export const getProducts= async(businessId)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getProducts/${businessId}`)
+    return await axios.get(`${url}/getProducts/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -230,7 +231,7 @@ export const getProducts= async(businessId)=>{
 }
 export const getProduct= async(id)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getProduct/${id}`)
+    return await axios.get(`${url}/getProduct/${id}`)
     .then((response)=>{
         return response.data
     })
@@ -246,7 +247,7 @@ export const getProduct= async(id)=>{
 
 }
 export const newProduct=async(values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/createProduct`,values)
+    return await axios.post(`${url}/createProduct`,values)
     .then((response)=>{
         return response.data
     })
@@ -260,7 +261,7 @@ export const newProduct=async(values)=>{
     })
 }
 export const updateProduct=async(id,values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/updateProduct/${id}`,values)
+    return await axios.post(`${url}/updateProduct/${id}`,values)
     .then((response)=>{
         return response.data
     })
@@ -274,7 +275,7 @@ export const updateProduct=async(id,values)=>{
     })
 }
 export const deleteProduct=async(id)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/deleteProduct/${id}`)
+    return await axios.post(`${url}/deleteProduct/${id}`)
     .then((response)=>{
         return response.data
     })

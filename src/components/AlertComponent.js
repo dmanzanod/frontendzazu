@@ -14,9 +14,9 @@ const AlertComponent = ({open,severity,message, handleClose, route}) => {
     
   }
     return (
-        <Stack sx={{ width: {xs:'100%',lg:'60%'} }} spacing={2}>
+        <Stack sx={{ width: {xs:'100%',lg:'95%'}, mt:1 }} spacing={2}>
     <Collapse in={open}>
-        <Alert
+        <Alert 
         severity={severity}
           action={
             <Button

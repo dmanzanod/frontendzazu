@@ -7,21 +7,35 @@ import QRCode from 'react-qr-code'
 
 const QRPage = () => {
   const [qr,setQr]=useState('')
+  const[image,setImage]=useState('')
   const [loading,setLoading]=useState(false)
-  
+  const [error,setError]=useState('')
   const getBotQr=async()=>{
     setLoading(true)
     const resp= await getQr(localStorage.getItem('Business'))
-    if(resp!==''){
+    console.log(resp)
+    if(!resp.error){
       if(resp.ok){
-        setQr(resp.qr.split(',')[1])
+        // setQr(resp.qr.split(',')[1])
+        setLoading(false)
+        setImage(resp.qr)
+        setQr('')
+        setError('')
       }
       else{
         setLoading(false)
+        setImage('')
       setQr(resp.qr)
+      setError('')
       }
       
       
+    }
+    else{
+      setLoading(false)
+      setQr('')
+      setImage('')
+      setError('Ha ocurrido un error al generar el código. Intente de nuevo más tarde.')
     }
   }
   return (
@@ -53,12 +67,12 @@ const QRPage = () => {
             width:{xs:'80%', sm:'60%', lg:'50%'},
             alignSelf:'center',
             marginInline:'auto',
-            
+            mb:1
 
             }}>
 
             
-           {!loading && qr==='' && qr!=='connected' &&<Button variant='contained' color='error' sx={{
+           {!loading && qr==='' && qr!=='connected' && image==='' &&<Button variant='contained' color='error' sx={{
                     width:'200px',
                     height:"60px",
                     alignSelf:'center'
@@ -66,7 +80,7 @@ const QRPage = () => {
             onClick={getBotQr}
             >Generar QR</Button>}
             {loading && <CircularProgress color='primary' sx={{alignSelf:'center'}}/>}
-            {qr!=='' && qr!=='connected' &&
+            {qr!=='' && qr!=='connected' && image===''&&
             <QRCode
             size={256}
             style={{alignSelf:'center'}}
@@ -75,8 +89,13 @@ const QRPage = () => {
 
 
             }
+            {qr==='' && qr!=='connected' && image!==''&&
+            <img className='image__qr' src={image}/>
+
+
+            }
             
-            <Typography variant="h6">{qr==='connected'?'Usted está conectado':'Esto puede demorar unos minutos.'}</Typography>
+            <Typography variant="h6">{qr==='connected'?'Usted está conectado':error!==''?error:'Esto puede demorar unos minutos.'}</Typography>
             </Paper>
         </Box>
     </Principal>

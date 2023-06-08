@@ -13,7 +13,7 @@ const HistoryComponent = ({history}) => {
             alignContent:'flex-start',
             alignItems:'space-between',
             width: '100%',
-            padding: "18px",
+            padding: "16px",
             borderRadius:"20px",
             backgroundColor:"#FFF",
             mb:8,
@@ -25,13 +25,14 @@ const HistoryComponent = ({history}) => {
                 {history.length>0 && history.map((booking)=>(
 
                 
-                <ListItem sx={{
+                <ListItem key={booking.timestamp} sx={{
                     borderBottom:"2px solid #F4F3FA"
+                    
                 }}>
                     <ListItemAvatar>
                         <Avatar/>
                     </ListItemAvatar>
-                    <ListItemText primary={booking.phone} secondary={<p>{booking.date}</p>}>
+                    <ListItemText primary={booking.phone.match(/\d+/g).join('')} secondary={<p>{new Date(booking.timestamp).toLocaleString()}</p>}>
                         
                         
                     </ListItemText>

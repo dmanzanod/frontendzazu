@@ -16,13 +16,23 @@ import CreateServicePage from './pages/CreateServicePage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import ProtectedRouteServices from './routes/ProtectedRouteServices';
 import ProtectedRouteProduct from './routes/ProtectedRouteProduct';
+import SignUpPage from './pages/SignUpPage';
+import VerifyPage from './pages/VreifyPage';
+import RequestNewPasswordPage from './pages/RequestNewPasswordPage';
+import ChangePasswordPage from './pages/ChangePasswordPage';
+import HelpPage from './pages/HelpPage';
 function App() {
   return (
     <Router>
       <Routes>
         <Route exact path='/' element={<DashboardPage/>}/>
         <Route exact path='/qr' element ={<QRPage/>}/>
+        <Route exact path='/help' element ={<HelpPage/>}/>
         <Route exact path='/login' element={<LoginPage/>}/>
+        <Route exact path='/signUp' element={<SignUpPage/>}/>
+        <Route exact path='/forgotPassword' element={<RequestNewPasswordPage/>}/>
+        <Route exact path='/users/:id/verify/:token' element={<VerifyPage/>}/>
+        <Route exact path='/users/:id/password/:token' element={<ChangePasswordPage/>}/>
         <Route exact path='/categories/:id' element={<ProtectedRoute redirectPath='/login'><CategoryPage/></ProtectedRoute>}/>
         <Route exact path='/products/:id' element={<ProtectedRoute redirectPath='/login'><ProductService/></ProtectedRoute>}/>
         <Route exact path='/categoryUpdate/:id' element={<ProtectedRoute redirectPath='/login'><UpdateCategoryPage/></ProtectedRoute>}/>

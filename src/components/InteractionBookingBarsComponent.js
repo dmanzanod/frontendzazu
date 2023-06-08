@@ -11,15 +11,16 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation, HoverState } from '@devexpress/dx-react-chart';
 import { Legend } from '@devexpress/dx-react-chart-material-ui';
-const ChartComponent = ({title,data,type}) => {
-  const resultArray = Object.values(
-    data.reduce((accumulator, item) => {
-      const { serviceName, timesServiceAppears } = item;
-      accumulator[serviceName] = accumulator[serviceName] || { serviceId: item.serviceId, serviceName, timesServiceAppears: 0 };
-      accumulator[serviceName].timesServiceAppears += timesServiceAppears;
-      return accumulator;
-    }, {})
-  );
+const InteractionBookingComponent = ({bookings,conversations,title}) => {
+  console.log(bookings,conversations)
+  const data=[{
+    property:"Reservas",
+    total:bookings.totalBookings
+  },
+{
+  property:"Conversaciones",
+  total:conversations.total
+}]
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{
@@ -39,19 +40,22 @@ const ChartComponent = ({title,data,type}) => {
             <Paper >
         <Chart
         
-          data={resultArray}
+          data={data}
         >
-          <PieSeries
-            valueField="timesServiceAppears"
-            argumentField="serviceName"
-          /> 
+           
           
-         
+           <ArgumentAxis />
+          <ValueAxis max={7} />
+
+          <BarSeries
+            valueField="total"
+            argumentField="property"
+          />
           
           <Title
             text={title}
           />
-          <Legend/>
+          
           <Animation />
           
         </Chart>
@@ -65,4 +69,4 @@ const ChartComponent = ({title,data,type}) => {
   )
 }
 
-export default ChartComponent
+export default InteractionBookingComponent

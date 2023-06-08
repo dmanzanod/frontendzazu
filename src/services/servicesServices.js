@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { AxiosInterceptor } from './axios'
 AxiosInterceptor()
+const url= process.env.REACT_APP_BASE_URL
 //Bookings
 export const getHistoryBookings= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/historyBookings/${businessId}`)
+    
+    return await axios.get(`${url}/historyBookings/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -21,8 +22,8 @@ export const getHistoryBookings= async(businessId)=>{
 
 }
 export const getBookings= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getBookings/${businessId}`)
+    
+    return await axios.get(`${url}/getBookings/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -39,8 +40,8 @@ export const getBookings= async(businessId)=>{
 
 }
 export const getTotalSales= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalSalesServices/${businessId}`)
+    
+    return await axios.get(`${url}/getTotalSalesServices/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -57,8 +58,8 @@ export const getTotalSales= async(businessId)=>{
 
 }
 export const getTotalBookings= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getTotalBookings/${businessId}`)
+    
+    return await axios.get(`${url}/getTotalBookings/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -75,8 +76,8 @@ export const getTotalBookings= async(businessId)=>{
 
 }
 export const getServicesStats= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getServicesStats/${businessId}`)
+    
+    return await axios.get(`${url}/getServicesStats/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -93,8 +94,8 @@ export const getServicesStats= async(businessId)=>{
 
 }
 export const getMonthlyBookings= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getBookingsByMonth/${businessId}`)
+    
+    return await axios.get(`${url}/getBookingsByMonth/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -111,8 +112,8 @@ export const getMonthlyBookings= async(businessId)=>{
 
 }
 export const getWeeklyBookings= async(businessId)=>{
-    console.log(process.env.BASE_URL)
-    return await axios.get(`https://zazu-backend.onrender.com/api/getBookingsByWeek/${businessId}`)
+    
+    return await axios.get(`${url}/getBookingsByWeek/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -131,7 +132,7 @@ export const getWeeklyBookings= async(businessId)=>{
 //categories
 export const getCategories= async(businessId)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getCategoriesService/${businessId}`)
+    return await axios.get(`${url}/getCategoriesService/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -148,7 +149,7 @@ export const getCategories= async(businessId)=>{
 }
 export const getCategory= async(Id)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getCategoryService/${Id}`)
+    return await axios.get(`${url}/getCategoryService/${Id}`)
     .then((response)=>{
         return response.data
     })
@@ -165,7 +166,7 @@ export const getCategory= async(Id)=>{
 }
 
 export const newCategory=async(values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/createCategoryService`,values)
+    return await axios.post(`${url}/createCategoryService`,values)
     .then((response)=>{
         return response.data
     })
@@ -179,7 +180,7 @@ export const newCategory=async(values)=>{
     })
 }
 export const updateCategory=async(id,values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/updateCategoryService/${id}`,values)
+    return await axios.post(`${url}/updateCategoryService/${id}`,values)
     .then((response)=>{
         return response.data
     })
@@ -193,7 +194,7 @@ export const updateCategory=async(id,values)=>{
     })
 }
 export const deleteCategory=async(id)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/deleteCategoryService/${id}`)
+    return await axios.post(`${url}/deleteCategoryService/${id}`)
     .then((response)=>{
         return response.data
     })
@@ -210,7 +211,7 @@ export const deleteCategory=async(id)=>{
 //Services
 export const getServices= async(businessId)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getServices/${businessId}`)
+    return await axios.get(`${url}/getServices/${businessId}`)
     .then((response)=>{
         return response.data
     })
@@ -227,7 +228,7 @@ export const getServices= async(businessId)=>{
 }
 export const getService= async(id)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getService/${id}`)
+    return await axios.get(`${url}/getService/${id}`)
     .then((response)=>{
         return response.data
     })
@@ -243,7 +244,7 @@ export const getService= async(id)=>{
 
 }
 export const newService=async(values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/createServices`,values)
+    return await axios.post(`${url}/createServices`,values)
     .then((response)=>{
         return response.data
     })
@@ -257,7 +258,7 @@ export const newService=async(values)=>{
     })
 }
 export const updateService=async(id,values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/updateService/${id}`,values)
+    return await axios.post(`${url}/updateService/${id}`,values)
     .then((response)=>{
         return response.data
     })
@@ -271,7 +272,7 @@ export const updateService=async(id,values)=>{
     })
 }
 export const deleteService=async(id)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/deleteService/${id}`)
+    return await axios.post(`${url}/deleteService/${id}`)
     .then((response)=>{
         return response.data
     })

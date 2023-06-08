@@ -14,11 +14,17 @@ import TotalBookingsComponent from '../components/TotalBookingsComponent'
 import TotalSalesComponent from '../components/TotalSalesComponent'
 import { getHistoryOrders, getMonthlyOrders, getProductsStats, getTotalOrders, getTotalSalesProducts } from '../services/servicesProducts'
 import { getHistoryBookings, getMonthlyBookings, getServicesStats, getTotalBookings, getTotalSales } from '../services/servicesServices'
+import { getConversationFlows, getConversationHistory, getInteractions, getInteractionsByWeek } from '../services/servicesInteractions'
+import InteractionBookingComponent from '../components/InteractionBookingBarsComponent'
+import LineChartComponent from '../components/LineChartComponent'
 const DashboardPage = () => {
   const [history,setHistory]=useState([])
   const[stats,setStats]=useState([])
   const [totalSales,setTotalSales]=useState()
   const[totalBookings,setTotalBookings]=useState()
+  const[weeklyInteractions,setWeeklyInteractions]=useState([])
+  const[totalInteractions,setTotalInteractions]=useState()
+  const[conversationFlows,setConversationFlows]=useState([])
   const[monthlyBookings,setMonthlyBookings]=useState([])
   const navigate=useNavigate()
   const type=localStorage.getItem('type')
@@ -38,15 +44,10 @@ const DashboardPage = () => {
   ]
   useEffect(()=>{
     const getBusinessHistory= async()=>{
-      let resp
-      if(type==='services') 
-      {resp= await getHistoryBookings(localStorage.getItem('Business'))}
-      else{
-        resp=await getHistoryOrders(localStorage.getItem('Business'))
-      }
+      const resp= await getConversationHistory(localStorage.getItem('Business'))
 
-      if(!resp.error){
-        setHistory(resp)
+      if(resp.success===true){
+        setHistory(resp.total)
       }
       else{
         if(resp.status===403){
@@ -136,9 +137,49 @@ const DashboardPage = () => {
       }
 
     }
+    const getBusinessInteractions= async()=>{
+      const resp = await getInteractions(localStorage.getItem('Business')) 
+      if(!resp.error){
+        setTotalInteractions(resp)
+      }
+      else{
+        if(resp.status===403){
+          logOut()
+          navigate('/login')
+        }
+      }
+    }
+    const getBusinessInteractionsByWeek=async()=>{
+      const resp = await getInteractionsByWeek(localStorage.getItem('Business')) 
+      if(resp.success===true){
+        setWeeklyInteractions(resp.data)
+      }
+      else{
+        if(resp.status===403){
+          logOut()
+          navigate('/login')
+        }
+      }
+    }
+    const getFlows=async()=>{
+      const resp = await getConversationFlows(localStorage.getItem('Business')) 
+      if(!resp.error){
+        setConversationFlows(resp)
+      }
+      else{
+        if(resp.status===403){
+          logOut()
+          navigate('/login')
+        }
+      }
+    }
+    
     getBusinessHistory()
     getProductsData()
     getSales()
+    getBusinessInteractions()
+    getBusinessInteractionsByWeek()
+    getFlows()
     getSalesNumber()
     getBookingsMonthly()
   },[])
@@ -165,16 +206,23 @@ const DashboardPage = () => {
       ]
   return (
     <Principal>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, display:"grid", backgroundColor:"#F4F3FA", mt:'72px',gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px"}}>
+        <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:2,md:3}, display:"grid", backgroundColor:"#F4F3FA", mt:'72px',gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px"}}>
         
        {stats.length>0&& <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        <HistoryComponent history={history}/>
+        {totalBookings && totalInteractions && <InteractionBookingComponent title={'Conversaciones/Reservas'} bookings={totalBookings} conversations={totalInteractions}/>}
+        
+        {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
+       
+<HistoryComponent history={history}/>
+       
+        
         <Box sx={{
           display:'flex',
           flexDirection:'column',
           width:'100%',
-          gap: '12px'
+          gap: '12px',
+          mb:10
         }}>
           {totalSales && <TotalSalesComponent total={totalSales}/>}
           {totalBookings && <TotalBookingsComponent total={totalBookings}/>}

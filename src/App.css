@@ -43,3 +43,7 @@ background-color:#D3F6DE;
   
 
 }
+.image__qr{
+  width:256px;
+  align-self:center;
+}

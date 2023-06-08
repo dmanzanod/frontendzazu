@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { AxiosInterceptor } from './axios'
+const url= process.env.REACT_APP_BASE_URL
 AxiosInterceptor()
 
 export const getQr= async(businessId)=>{
@@ -11,10 +12,10 @@ export const getQr= async(businessId)=>{
     .catch((error)=>{
         console.log(error)
         return {
-            error: error.response.data.message,
+            error: error.response? error.response.data.message:"error",
             code: error.code,
             name: error.name,
-            status:error.response.status
+            status:error.response? error.response.status:500
         }
     })
     
@@ -23,7 +24,7 @@ export const getQr= async(businessId)=>{
 
 export const getBusinessById= async(id)=>{
     
-    return await axios.get(`https://zazu-backend.onrender.com/api/getBusiness/${id}`)
+    return await axios.get(`${url}/getBusiness/${id}`)
     .then((response)=>{
         return response.data
     })
@@ -40,7 +41,7 @@ export const getBusinessById= async(id)=>{
 }
 
 export const updateBusiness=async(id,values)=>{
-    return await axios.post(`https://zazu-backend.onrender.com/api/updateBusiness/${id}`,values)
+    return await axios.post(`${url}/updateBusiness/${id}`,values)
     .then((response)=>{
         return response.data
     })
@@ -55,7 +56,67 @@ export const updateBusiness=async(id,values)=>{
 }
 
 export const login=async(values)=>{
-    return await axios.post('https://zazu-backend.onrender.com/api/login',values)
+    return await axios.post(`${url}/login`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        console.log(error)
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+export const signUp=async(values)=>{
+    return await axios.post(`${url}/signUp`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        console.log(error)
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+export const verify=async(id,token)=>{
+    return await axios.get(`${url}/users/${id}/verify/${token}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        console.log(error)
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+export const resetPassword=async(values)=>{
+    return await axios.post(`${url}/resetPassword`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        console.log(error)
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+export const changePassword=async(id,token,values)=>{
+    return await axios.post(`${url}/users/${id}/password/${token}`,values)
     .then((response)=>{
         return response.data
     })

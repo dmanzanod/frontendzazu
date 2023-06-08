@@ -100,6 +100,7 @@ const BusinessDetailsUpdate = () => {
         instagram: Yup.string().matches(urlMatch, "La URL no es válida"),
         tiktok: Yup.string().matches(urlMatch, "La URL no es válida"),
         twitter: Yup.string().matches(urlMatch, "La URL no es válida"),
+        web: Yup.string().matches(urlMatch, "La URL no es válida")
       }),
     }),
     onSubmit: async (values) => {
@@ -386,6 +387,25 @@ const BusinessDetailsUpdate = () => {
               fullWidth
               InputLabelProps={{ shrink: true }}
               value={formik.values.rrss.twitter}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} className="grid__column">
+              <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "60%" } }}>
+            <TextField
+              id="web"
+              name="rrss.web"
+              error={Boolean(
+                getIn(formik.touched, "rrss.web") &&
+                  getIn(formik.errors, "rrss.web")
+              )}
+              label="Sitio web"
+              variant="filled"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={formik.values.rrss.web}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
