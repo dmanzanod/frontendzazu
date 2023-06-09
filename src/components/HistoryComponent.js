@@ -4,6 +4,7 @@ import React from 'react'
 import theme from '../theme/theme'
 
 const HistoryComponent = ({history}) => {
+    console.log(history)
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{
@@ -39,6 +40,9 @@ const HistoryComponent = ({history}) => {
                     
                 </ListItem>
                 ))}
+                {history.length===0 &&
+               <Typography sx={{textAlign:'center',marginBlock:'auto'}} variant="subtitle1" color={"gray"}>Todavía no tienes información registrada</Typography>
+                }
             </List>
 
         </Box>

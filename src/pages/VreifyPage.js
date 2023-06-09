@@ -33,7 +33,7 @@ const VerifyPage = () => {
         alignItems:'center',
         justifyContent:'flex-start',
        gap:'24px',
-        alignItems:'center',
+        
         margin:'0',
         flexDirection:'column',
         minHeight: '100vh',

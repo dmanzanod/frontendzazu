@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, FormControl, FormHelperText, InputLabel, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FormControl, FormHelperText, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCategories, getService, updateService } from '../services/servicesServices'

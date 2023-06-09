@@ -5,9 +5,9 @@ import AlertComponent from '../components/AlertComponent'
 import { cyan } from '@mui/material/colors'
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 import FooterComponent from '../components/FooterComponent'
-import { changePassword, resetPassword } from '../services/service'
+import { changePassword } from '../services/service'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 const ChangePasswordPage = () => {

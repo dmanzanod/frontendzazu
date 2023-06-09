@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Principal from './Principal'
-import TermsAndConditionsComponent from '../components/TermsAndConditionsComponent'
+
 import { Box, Link, Paper, Typography } from '@mui/material'
 import TermsModalComponent from '../components/TermsModalComponent'
 

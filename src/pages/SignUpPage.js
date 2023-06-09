@@ -4,13 +4,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../theme/theme';
-import { cyan, orange } from '@mui/material/colors';
-import FooterComponent from '../components/FooterComponent';
+import { cyan } from '@mui/material/colors';
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
-import { login, signUp } from '../services/service';
+import {  signUp } from '../services/service';
 import AlertComponent from '../components/AlertComponent';
-import { useNavigate } from 'react-router-dom';
+
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TermsModalComponent from '../components/TermsModalComponent';
@@ -21,7 +20,7 @@ const SignUpPage = () => {
     const [message,setMessage]=useState(false)
     const [severity,setSeverity]=useState('error')
     const [open,setOpen]=useState(false)
-    const navigate =useNavigate()
+   
     const countryMatch =
     /^[a-zA-Z_0-9\u00C0-\u017F][a-zA-Z_0-9\u00C0-\u017F\s]*$/g;
   const handleClickShowPassword = () => setShowPassword((show) => !show);

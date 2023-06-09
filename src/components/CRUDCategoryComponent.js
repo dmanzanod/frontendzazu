@@ -4,12 +4,12 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import { red } from "@mui/material/colors";
-import { useNavigate } from "react-router-dom";
+
 import UpdateCategoryModal from "./UpdateCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
-import DeleteServiceModal from "./DeleteServiceModal";
+
 const CRUDCategoryComponent = ({id,deleted,updated}) => {
-    const navigate=useNavigate()
+    
     const [openCategoryUpdate,setOpenCategoryUpdate]=useState(false)
     const [openDeleteCategoryModal,setOpenDeleteCategoryModal]=useState(false)
    

@@ -1,9 +1,7 @@
-import { AppBar, Box, CssBaseline, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
-import { ThemeProvider } from '@mui/system'
+import {  Box } from '@mui/material'
+
 import React, { useEffect, useState } from 'react'
-import HeaderComponent from '../components/HeaderComponent'
-import MenuComponent from '../components/MenuComponent'
-import theme from '../theme/theme'
+
 import ChartComponent from '../components/ChartComponent'
 import BarChartComponent from '../components/BarChartComponent'
 import HistoryComponent from '../components/HistoryComponent'
@@ -12,11 +10,12 @@ import { logOut } from '../services/service'
 import { useNavigate } from 'react-router-dom'
 import TotalBookingsComponent from '../components/TotalBookingsComponent'
 import TotalSalesComponent from '../components/TotalSalesComponent'
-import { getHistoryOrders, getMonthlyOrders, getProductsStats, getTotalOrders, getTotalSalesProducts } from '../services/servicesProducts'
-import { getHistoryBookings, getMonthlyBookings, getServicesStats, getTotalBookings, getTotalSales } from '../services/servicesServices'
+import {  getMonthlyOrders, getProductsStats, getTotalOrders, getTotalSalesProducts } from '../services/servicesProducts'
+import {  getMonthlyBookings, getServicesStats, getTotalBookings, getTotalSales } from '../services/servicesServices'
 import { getConversationFlows, getConversationHistory, getInteractions, getInteractionsByWeek } from '../services/servicesInteractions'
 import InteractionBookingComponent from '../components/InteractionBookingBarsComponent'
 import LineChartComponent from '../components/LineChartComponent'
+import EmptyComponent from '../components/EmptyComponent'
 const DashboardPage = () => {
   const [history,setHistory]=useState([])
   const[stats,setStats]=useState([])
@@ -208,9 +207,9 @@ const DashboardPage = () => {
     <Principal>
         <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:2,md:3}, display:"grid", backgroundColor:"#F4F3FA", mt:'72px',gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px"}}>
         
-       {stats.length>0&& <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>}
+       {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        {totalBookings && totalInteractions && <InteractionBookingComponent title={'Conversaciones/Reservas'} bookings={totalBookings} conversations={totalInteractions}/>}
+        {totalBookings && totalInteractions!==0 ? <InteractionBookingComponent title={type==='services'?'Conversaciones/Reservas':'Conversaciones/Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
         
         {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
        

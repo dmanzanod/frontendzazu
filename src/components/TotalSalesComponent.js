@@ -20,7 +20,7 @@ const TotalSalesComponent = ({total}) => {
                 <MonetizationOnIcon/>
                 <Typography variant='h5'>Monto total de ventas</Typography>
             </Box>
-            <Typography variant='h3' color={'primary'}>{total.totalBookings}</Typography>
+            <Typography variant='h3' color={'primary'}>{total.totalBookings||total.totalOrders}</Typography>
         </Box>
     </ThemeProvider>
   )

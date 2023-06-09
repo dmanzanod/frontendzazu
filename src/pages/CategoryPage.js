@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCategories } from '../services/servicesServices'

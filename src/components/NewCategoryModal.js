@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { newCategory } from '../services/servicesServices'
-import AlertComponent from './AlertComponent'
+
 import { newCategoryProduct } from '../services/servicesProducts'
 
 const NewCategoryModal = ({open, handleClose,created}) => {
@@ -71,7 +71,7 @@ const NewCategoryModal = ({open, handleClose,created}) => {
         }
         {result===''?
             <DialogActions sx={{justifyContent:'space-around'}}>
-            <Button variant='contained' onClick={formik.handleSubmit}>Crear</Button>
+            <Button variant='contained' disabled={loading} onClick={formik.handleSubmit}>{loading?'Creando...':'Crear'}</Button>
             <Button onClick={handleClose}>Cancelar</Button>
         </DialogActions>:
         <DialogActions>

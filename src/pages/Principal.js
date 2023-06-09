@@ -1,4 +1,4 @@
-import { AppBar, Box, CssBaseline, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
+import { Box, CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/system'
 import React from 'react'
 import FooterComponent from '../components/FooterComponent'

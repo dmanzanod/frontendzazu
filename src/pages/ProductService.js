@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material'
-import { blue, grey } from '@mui/material/colors'
+import { blue} from '@mui/material/colors'
 import { DataGrid,esES } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
@@ -14,9 +14,7 @@ const ProductService = () => {
     const getCategoryName=(params)=>{
         return params.row.categoryId.name
     }
-    const getServiceId=(params)=>{
-        return params.row._id
-    }
+    
     const formatPrice=(params)=>{
         return `${params.row.price} ${params.row.coin}`
     }

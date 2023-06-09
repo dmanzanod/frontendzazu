@@ -1,6 +1,6 @@
 import React from 'react'
-import { Navigate, Route } from 'react-router-dom'
-import LoginPage from '../pages/LoginPage'
+import { Navigate } from 'react-router-dom'
+
 
 
     const ProtectedRoute = ({

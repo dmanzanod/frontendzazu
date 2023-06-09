@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, Modal } from '@mui/material'
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material'
 import React from 'react'
 import TermsAndConditionsComponent from './TermsAndConditionsComponent'
 import CloseIcon from '@mui/icons-material/Close';

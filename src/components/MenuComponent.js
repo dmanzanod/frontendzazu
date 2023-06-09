@@ -1,4 +1,4 @@
-import { Box, Collapse, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, SvgIcon, Toolbar } from '@mui/material'
+import { Box, Collapse,  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,  Toolbar } from '@mui/material'
 import React, { useState } from 'react'
 import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -13,7 +13,7 @@ import WorkIcon from '@mui/icons-material/Work'
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 const MenuComponent = () => {
-    const icons=[<DashboardOutlinedIcon/>,<QrCodeOutlinedIcon/>,<DesignServicesIcon/>,<SummarizeOutlinedIcon/>,<ContactSupportOutlinedIcon/>];
+    
     const [expand, setExpand]=useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1);
     const routes=['/','/qr','/crud','/report','/help']

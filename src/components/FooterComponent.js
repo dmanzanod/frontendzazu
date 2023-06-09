@@ -1,11 +1,11 @@
-import styled from "@emotion/styled";
-import { AppBar, Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
+
+import {Box, IconButton, Link,  Typography } from "@mui/material";
 import { cyan } from "@mui/material/colors";
 import React from "react";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 const FooterComponent = () => {
-    const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
+    
   return (
     
     <Box 
@@ -23,7 +23,7 @@ const FooterComponent = () => {
         bottom:0,
         zIndex: (theme) => theme.zIndex.drawer + 1
     }}>
-        <img className="bot" src={`${process.env.PUBLIC_URL}/bot.png`}/>
+        <img alt='bot_image' className="bot" src={`${process.env.PUBLIC_URL}/bot.png`}/>
         <Box>
             
         

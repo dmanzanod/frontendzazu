@@ -1,18 +1,16 @@
-import { AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, ThemeProvider, Toolbar, Typography } from '@mui/material'
-import { width } from '@mui/system'
+import { AppBar, Avatar, Box,  Menu, MenuItem, ThemeProvider, Toolbar, Typography } from '@mui/material'
+
 import React, { useState } from 'react'
 import theme from '../theme/theme'
-import { AccountCircle } from '@mui/icons-material'
+
 import { useNavigate } from 'react-router-dom'
 import { logOut } from '../services/service'
 
 const HeaderComponent = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [auth, setAuth] = useState(true);
+
   const navigate= useNavigate()
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+ 
  
   const handleClose = () => {
     

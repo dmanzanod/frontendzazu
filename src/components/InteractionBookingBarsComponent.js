@@ -1,21 +1,21 @@
 import { ThemeProvider } from '@emotion/react'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
-import { ArgumentAxis, BarSeries, Tooltip, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
+import { ArgumentAxis, BarSeries,  ValueAxis } from '@devexpress/dx-react-chart-material-ui';
 import {
   Chart,
-  PieSeries,
+  
   Title,
 } from '@devexpress/dx-react-chart-material-ui';
-import { Animation, HoverState } from '@devexpress/dx-react-chart';
-import { Legend } from '@devexpress/dx-react-chart-material-ui';
+import { Animation} from '@devexpress/dx-react-chart';
+
 const InteractionBookingComponent = ({bookings,conversations,title}) => {
   console.log(bookings,conversations)
   const data=[{
-    property:"Reservas",
-    total:bookings.totalBookings
+    property:title.includes('Pedidos')?'Pedidos':'Reservas',
+    total:bookings.totalBookings || bookings.totalOrders
   },
 {
   property:"Conversaciones",

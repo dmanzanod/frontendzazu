@@ -1,17 +1,16 @@
 import { ThemeProvider } from '@emotion/react'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
-import { ArgumentAxis, BarSeries, Tooltip, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
+import { ArgumentAxis, ValueAxis } from '@devexpress/dx-react-chart-material-ui';
 import {
   Chart,
-  PieSeries,
   Title,
 } from '@devexpress/dx-react-chart-material-ui';
 import {  LineSeries } from '@devexpress/dx-react-chart-material-ui';
-import { Animation, HoverState } from '@devexpress/dx-react-chart';
-import { Legend } from '@devexpress/dx-react-chart-material-ui';
+import { Animation } from '@devexpress/dx-react-chart';
+
 const LineChartComponent = ({data,title}) => {
   const days=['L','M','X','J','V','S','D']
   const formattedData=data.map((pair)=>({day:days[pair.day],total:pair.total}))

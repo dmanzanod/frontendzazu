@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material'
-import { textAlign } from '@mui/system'
+
 import React, { useState } from 'react'
 import Principal from './Principal'
 import { getQr } from '../services/service'

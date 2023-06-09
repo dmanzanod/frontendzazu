@@ -1,11 +1,11 @@
-import { Box, Button, CircularProgress, FilledInput, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Link, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FilledInput, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Link, Paper, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../theme/theme';
-import { cyan, orange } from '@mui/material/colors';
-import FooterComponent from '../components/FooterComponent';
+import { cyan } from '@mui/material/colors';
+
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
 import { login } from '../services/service';
