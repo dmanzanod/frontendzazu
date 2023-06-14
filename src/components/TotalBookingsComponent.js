@@ -21,7 +21,7 @@ const TotalBookingsComponent = ({total}) => {
             <TrendingUpIcon/>
             <Typography variant='h5'>Número total de ventas</Typography>
         </Box>
-        <Typography variant='h3' color={'primary'}>{total.totalBookings|| total.totalOrders}</Typography>
+        <Typography variant='h3' color={'primary'}>{total.total}</Typography>
     </Box>
 </ThemeProvider>
   )
