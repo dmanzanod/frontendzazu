@@ -137,12 +137,14 @@ const LoginPage = () => {
             }
           />
           {formik.touched.password && formik.errors.password && <FormHelperText error>{formik.errors.password}</FormHelperText>}
-          </FormControl></div>
-          
-          <Link sx={{mr:4}} href='/forgotPassword'>Olvidé mi contraseña</Link>
-          
+          </FormControl>
+          </div>
+          <div>
+          <Link sx={{marginInline:'auto'}} href='/forgotPassword'>Olvidé mi contraseña</Link>
+          </div>
+          <div>
           <Link sx={{mb:2,mt:4}} href='/signUp'>¿No tienes cuenta? Regístrate</Link>
-          
+          </div>
           <div>
           <Button variant='contained' disabled={loading} type='submit' sx={{mt:2, color:'#fff'}}>{loading?'Ingresando...':'Ingresar'}</Button>
          
@@ -172,7 +174,8 @@ const LoginPage = () => {
         justifyContent:'center',
         alignContent:'center',
         gap:'24px',
-        
+        position:'absolute',
+        bottom:0,
         zIndex: (theme) => theme.zIndex.drawer + 1
     }}>
         <img className="bot" src={`${process.env.PUBLIC_URL}/bot.png`}/>
