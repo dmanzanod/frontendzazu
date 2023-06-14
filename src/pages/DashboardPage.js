@@ -64,6 +64,7 @@ const DashboardPage = () => {
       }
 
       if(!resp.error){
+        console.log(resp)
         setStats(resp)
       }
       else{
@@ -122,7 +123,7 @@ const DashboardPage = () => {
         resp= await getMonthlyOrders(localStorage.getItem('Business'))
 
       }
-      
+      console.log(resp)
       if(!resp.error){
         const latestMonths=resp.filter((booking)=>booking.month<=now)
       

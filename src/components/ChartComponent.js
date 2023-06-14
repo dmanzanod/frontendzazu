@@ -20,8 +20,7 @@ const ChartComponent = ({title,data,type}) => {
       return accumulator;
     }, {})
   );
-  return (
-    <ThemeProvider theme={theme}>
+  return (    <ThemeProvider theme={theme}>
         <Box sx={{
             display:'flex',
             flexDirection:'column',
