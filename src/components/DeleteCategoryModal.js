@@ -39,7 +39,7 @@ const DeleteCategoryModal = ({open,handleClose,id,deleted}) => {
         else{
             resp= await deleteCategoryProduct(id)
         }
-        console.log(resp)
+        
         if(resp.success){
             setLoading(false)
             setResult(`${resp.message}`)
@@ -54,7 +54,7 @@ const DeleteCategoryModal = ({open,handleClose,id,deleted}) => {
     <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{color:red[400], display:'flex', alignItems:'center'}}>
             <DeleteForeverOutlined fontSize='large' sx={{color:red[400]}}/>
-            <Typography variant='h4'>Eliminar Categoría </Typography>
+            Eliminar Categoría 
         
         </DialogTitle>
         {result===''?

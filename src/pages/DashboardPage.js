@@ -125,7 +125,7 @@ const DashboardPage = () => {
       
       if(!resp.error){
         const latestMonths=resp.filter((booking)=>booking.month<=now)
-        console.log(latestMonths)
+      
         setMonthlyBookings(latestMonths.map(booking=>({month:months[booking.month-1].name,total:booking.total})))
       }
       else{
@@ -182,34 +182,15 @@ const DashboardPage = () => {
     getSalesNumber()
     getBookingsMonthly()
   },[])
-    // const data = [
-    //     { country: 'Russia', area: 12 },
-    //     { country: 'Canada', area: 7 },
-    //     { country: 'USA', area: 7 },
-    //     { country: 'China', area: 7 },
-    //     { country: 'Brazil', area: 6 },
-    //     { country: 'Australia', area: 5 },
-    //     { country: 'India', area: 2 },
-    //     { country: 'Others', area: 55 },
-    //   ];
-    
-
-      const dataBar=[
-        { year: '1950', population: 2.525 },
-  { year: '1960', population: 3.018 },
-  { year: '1970', population: 3.682 },
-  { year: '1980', population: 4.440 },
-  { year: '1990', population: 5.310 },
-  { year: '2000', population: 6.127 },
-  { year: '2010', population: 6.930 },
-      ]
+   
+      
   return (
     <Principal>
         <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:2,md:3}, display:"grid", backgroundColor:"#F4F3FA", mt:'72px',gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px"}}>
         
        {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        {totalBookings && totalInteractions!==0 ? <InteractionBookingComponent title={type==='services'?'Conversaciones/Reservas':'Conversaciones/Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
+        {totalBookings && totalInteractions? <InteractionBookingComponent title={type==='services'?'Conversaciones/Reservas':'Conversaciones/Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
         
         {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
        

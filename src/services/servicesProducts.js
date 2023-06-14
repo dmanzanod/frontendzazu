@@ -10,7 +10,7 @@ export const getHistoryOrders= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -28,7 +28,7 @@ export const getOrders= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -47,7 +47,7 @@ export const getTotalSalesProducts= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -65,7 +65,7 @@ export const getTotalOrders= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -83,7 +83,7 @@ export const getProductsStats= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -101,7 +101,7 @@ export const getMonthlyOrders= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -119,7 +119,7 @@ export const getWeeklyOrders= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -168,6 +168,7 @@ export const getCategoryProduct= async(Id)=>{
 }
 
 export const newCategoryProduct=async(values)=>{
+    
     return await axios.post(`${url}/createCategoryProduct`,values)
     .then((response)=>{
         return response.data
@@ -247,7 +248,22 @@ export const getProduct= async(id)=>{
 
 }
 export const newProduct=async(values)=>{
-    return await axios.post(`${url}/createProduct`,values)
+    const formData= new FormData()
+    formData.append('name',values.name)
+    formData.append('code',values.code)
+    formData.append('stock',values.stock)
+    formData.append('description',values.description)
+    formData.append('details',values.details)
+    formData.append('price',values.price)
+    formData.append('coin',values.coin)
+    formData.append('categoryId',values.categoryId)
+    formData.append('businessId',values.businessId)
+    formData.append('image',values.image)
+    return await axios.post(`${url}/createProduct`,formData,{
+        headers:{
+            "Content-Type":'multipart/form-data'
+        }
+    })
     .then((response)=>{
         return response.data
     })
@@ -261,7 +277,22 @@ export const newProduct=async(values)=>{
     })
 }
 export const updateProduct=async(id,values)=>{
-    return await axios.post(`${url}/updateProduct/${id}`,values)
+    const formData= new FormData()
+    formData.append('name',values.name)
+    formData.append('code',values.code)
+    formData.append('stock',values.stock)
+    formData.append('description',values.description)
+    formData.append('details',values.details)
+    formData.append('price',values.price)
+    formData.append('coin',values.coin)
+    formData.append('categoryId',values.categoryId)
+    formData.append('businessId',values.businessId)
+    formData.append('image',values.image)
+    return await axios.post(`${url}/updateProduct/${id}`,formData,{
+        headers:{
+            "Content-Type":'multipart/form-data'
+        }
+    })
     .then((response)=>{
         return response.data
     })

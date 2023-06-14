@@ -25,7 +25,7 @@ const RequestNewPasswordPage = () => {
         onSubmit:async(values)=>{
           setLoading(true)
           const resp= await resetPassword(values)
-          console.log(resp)
+          
           if(resp.success){
             setLoading(false)
             setSeverity('success')

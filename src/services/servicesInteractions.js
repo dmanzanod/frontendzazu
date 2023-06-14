@@ -9,7 +9,7 @@ export const getInteractions= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -27,7 +27,7 @@ export const getInteractionsByWeek= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -45,7 +45,7 @@ export const getConversationFlows= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -63,7 +63,7 @@ export const getConversationHistory= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,

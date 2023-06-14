@@ -24,7 +24,7 @@ const ProductService = () => {
     const {id}= useParams()
     const type=localStorage.getItem('type')
     const newProductService=()=>{
-        if(type==='service'){
+        if(type==='services'){
             navigate('/newService')
         }
         else{
@@ -33,7 +33,7 @@ const ProductService = () => {
     }
     const navigate=useNavigate()
     useEffect(()=>{
-        console.log(deleted)
+       
         let resp
         const getBusinessServices = async()=>{
             if(type==='services'){
@@ -85,7 +85,7 @@ const ProductService = () => {
         pageSize={3}
         rowsPerPageOptions={[5]}
         rowLength={10}
-        onRowSelectionModelChange={(newRowSelected)=>{console.log(newRowSelected);setSelectedRow(newRowSelected)}}
+        onRowSelectionModelChange={(newRowSelected)=>{setSelectedRow(newRowSelected)}}
         rowSelectionModel={selectedRow}
       />
       </Box>

@@ -4,13 +4,13 @@ const url= process.env.REACT_APP_BASE_URL
 AxiosInterceptor()
 
 export const getQr= async(businessId)=>{
-    console.log(process.env.BASE_URL)
+    
     return await axios.get(`${localStorage.getItem('url')}`)
     .then((response)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response? error.response.data.message:"error",
             code: error.code,
@@ -61,7 +61,7 @@ export const login=async(values)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return{
             error:error.response.data.message,
             code:error.code,
@@ -76,7 +76,7 @@ export const signUp=async(values)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return{
             error:error.response.data.message,
             code:error.code,
@@ -91,7 +91,7 @@ export const verify=async(id,token)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return{
             error:error.response.data.message,
             code:error.code,
@@ -106,7 +106,7 @@ export const resetPassword=async(values)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return{
             error:error.response.data.message,
             code:error.code,
@@ -121,7 +121,7 @@ export const changePassword=async(id,token,values)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return{
             error:error.response.data.message,
             code:error.code,

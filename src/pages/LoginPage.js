@@ -37,7 +37,7 @@ const LoginPage = () => {
     onSubmit:async(values)=>{
       setLoading(true)
       const resp= await login(values)
-      console.log(resp)
+      
       if(resp.success){
         setLoading(false)
         localStorage.setItem('Auth',resp.data.token)

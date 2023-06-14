@@ -10,6 +10,7 @@ const DeleteServiceModal = ({open,handleClose,id,deleted}) => {
     const [loading,setLoading]=useState(false)
     const [result,setResult]=useState(false)
     const [response,setResponse]=useState('')
+    const type=localStorage.getItem('type')==='services'?'servicio':'producto'
     useEffect(()=>{
         const getServiceById=async()=>{
             const resp= await getService(id)
@@ -42,7 +43,7 @@ const DeleteServiceModal = ({open,handleClose,id,deleted}) => {
             resp= await deleteProduct(id)
         }
         
-        console.log(resp)
+        
         if(resp.success){
             setLoading(false)
             deleted()
@@ -60,11 +61,11 @@ const DeleteServiceModal = ({open,handleClose,id,deleted}) => {
         <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{color:red[400], display:'flex', alignItems:'center'}}>
             <DeleteForeverOutlined fontSize='large' sx={{color:red[400]}}/>
-            <Typography variant='h4'>Eliminar Servicio </Typography>
+            Eliminar {type}
         
         </DialogTitle>
         {!result?<DialogContent>
-            <Typography variant='h5' >Se eliminará el servicio <strong>{service.name}</strong>.</Typography>
+            <Typography variant='h5' >Se eliminará el {type} <strong>{service.name}</strong>.</Typography>
             <Typography variant='h6'> Esta acción no se puede deshacer</Typography>
             
             

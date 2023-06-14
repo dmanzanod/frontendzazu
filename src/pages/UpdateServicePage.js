@@ -18,7 +18,7 @@ const UpdateServicePage = () => {
     useEffect(()=>{
         const getServiceById=async()=>{
             const resp= await getService(id)
-            console.log(resp)
+          
             if(!resp.error){
                 setService(resp)
                 
@@ -31,7 +31,7 @@ const UpdateServicePage = () => {
         }
         const getBusinessCategories= async()=>{
             
-                const resp= await getCategories('643d4b1b9e19c3e7b5862152')
+                const resp= await getCategories(localStorage.getItem('Business'))
                 if(!resp.error){
                     setCategories(resp)
                 }
@@ -57,7 +57,7 @@ const UpdateServicePage = () => {
           setLoading(true)
             const resp= await updateService(id,values)
 
-            console.log(resp)
+        
             if(resp.success){
               setLoading(false)
               setSeverity('success')
@@ -91,7 +91,7 @@ const UpdateServicePage = () => {
             variant='filled'
             fullWidth
             InputLabelProps={{ shrink: true }}
-            value={formik.values.name}
+            value={formik.values.name||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.name && formik.errors.name && (
@@ -126,7 +126,7 @@ const UpdateServicePage = () => {
             label='Código'
             InputLabelProps={{ shrink: true }}
             variant='filled'
-            value={formik.values.code}
+            value={formik.values.code||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             />
@@ -141,7 +141,7 @@ const UpdateServicePage = () => {
             label='Precio'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.price}
+            value={formik.values.price||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             />
@@ -155,7 +155,7 @@ const UpdateServicePage = () => {
             label='Moneda'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.coin}
+            value={formik.values.coin||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.coin && formik.errors.coin && (
@@ -171,7 +171,7 @@ const UpdateServicePage = () => {
             multiline
             InputLabelProps={{ shrink: true }}
             maxRows={4}
-            value={formik.values.description}
+            value={formik.values.description||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.description && formik.errors.description && (
@@ -185,7 +185,7 @@ const UpdateServicePage = () => {
             label='Detalles'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.details}
+            value={formik.values.details||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             

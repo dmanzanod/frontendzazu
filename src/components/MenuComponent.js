@@ -30,7 +30,7 @@ const MenuComponent = () => {
   const handleListItemClick = (event, index) => {
     
     setSelectedIndex(index);
-   console.log(location.pathname)
+   
     navigate(routes[index])
   };
   return (
@@ -92,13 +92,13 @@ const MenuComponent = () => {
             <ListItemIcon>
               <InventoryOutlinedIcon/>
             </ListItemIcon>
-            <ListItemText primary="Servicios" />
+            <ListItemText primary={localStorage.getItem('type')==='services'?"Servicios":"Productos"} />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
             <ListItemIcon>
               <ListAltIcon/>
             </ListItemIcon>
-            <ListItemText primary="Reservas" />
+            <ListItemText primary={localStorage.getItem('type')==='services'?"Reservas":"Pedidos"} />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(3)}>
             <ListItemIcon>

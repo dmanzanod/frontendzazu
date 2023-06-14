@@ -19,6 +19,8 @@ import VerifyPage from './pages/VreifyPage';
 import RequestNewPasswordPage from './pages/RequestNewPasswordPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import HelpPage from './pages/HelpPage';
+import CreateProductPage from './pages/CreateProductPage';
+import ProductUpdatePage from './pages/ProductUpdatePage';
 function App() {
   return (
     <Router>
@@ -35,9 +37,9 @@ function App() {
         <Route exact path='/products/:id' element={<ProtectedRoute redirectPath='/login'><ProductService/></ProtectedRoute>}/>
         <Route exact path='/categoryUpdate/:id' element={<ProtectedRoute redirectPath='/login'><UpdateCategoryPage/></ProtectedRoute>}/>
         <Route exact path='/serviceUpdate/:id' element={<ProtectedRouteServices redirectPath='/login'><UpdateServicePage/></ProtectedRouteServices>}/>
-        <Route exact path='/productUpdate/:id' element={<ProtectedRouteProduct redirectPath='/login'><UpdateServicePage/></ProtectedRouteProduct>}/>
+        <Route exact path='/productUpdate/:id' element={<ProtectedRouteProduct redirectPath='/login'><ProductUpdatePage/></ProtectedRouteProduct>}/>
         <Route exact path='/newService' element={<ProtectedRouteServices redirectPath='/login'><CreateServicePage/></ProtectedRouteServices>}/>
-        <Route exact path='/newProduct' element={<ProtectedRouteProduct redirectPath='/login'><CreateServicePage/></ProtectedRouteProduct>}/>
+        <Route exact path='/newProduct' element={<ProtectedRouteProduct redirectPath='/login'><CreateProductPage/></ProtectedRouteProduct>}/>
         <Route exact path='/businessDetailsUpdate/:id' element={<ProtectedRoute redirectPath='/login'><BusinessDetailsUpdate/></ProtectedRoute>}/>
         <Route exact path='/bookingDetails/:id' element={<ProtectedRoute redirectPath='/login'><BookingDetailsPage/></ProtectedRoute>}/> 
       </Routes>

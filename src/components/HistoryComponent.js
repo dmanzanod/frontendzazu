@@ -4,7 +4,7 @@ import React from 'react'
 import theme from '../theme/theme'
 
 const HistoryComponent = ({history}) => {
-    console.log(history)
+    
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{

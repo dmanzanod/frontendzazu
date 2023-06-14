@@ -4,7 +4,7 @@ import theme from '../theme/theme'
 import { Box, Typography } from '@mui/material'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 const TotalBookingsComponent = ({total}) => {
-  console.log(total)
+  
   return (
     <ThemeProvider theme={theme}>
     <Box sx={{
