@@ -42,6 +42,9 @@ const DashboardPage = () => {
     {id:12,name:'Diciembre'}
   ]
   useEffect(()=>{
+    if(!localStorage.getItem('Business')){
+      navigate('/login')
+    }
     const getBusinessHistory= async()=>{
       const resp= await getConversationHistory(localStorage.getItem('Business'))
 
@@ -64,7 +67,7 @@ const DashboardPage = () => {
       }
 
       if(!resp.error){
-        console.log(resp)
+        
         setStats(resp)
       }
       else{
@@ -123,7 +126,7 @@ const DashboardPage = () => {
         resp= await getMonthlyOrders(localStorage.getItem('Business'))
 
       }
-      console.log(resp)
+     
       if(!resp.error){
         const latestMonths=resp.filter((booking)=>booking.month<=now)
       
