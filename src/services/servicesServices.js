@@ -10,7 +10,7 @@ export const getHistoryBookings= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -28,7 +28,7 @@ export const getBookings= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -46,7 +46,7 @@ export const getTotalSales= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -64,7 +64,7 @@ export const getTotalBookings= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -82,7 +82,7 @@ export const getServicesStats= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -100,7 +100,7 @@ export const getMonthlyBookings= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,
@@ -118,7 +118,7 @@ export const getWeeklyBookings= async(businessId)=>{
         return response.data
     })
     .catch((error)=>{
-        console.log(error)
+        
         return {
             error: error.response.data.message,
             code: error.code,

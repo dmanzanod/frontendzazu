@@ -51,7 +51,7 @@ const SignUpPage = () => {
     onSubmit:async(values)=>{
       setLoading(true)
       const resp= await signUp(values)
-      console.log(resp)
+      
       if(resp.success){
         setLoading(false)
         setSeverity('success')

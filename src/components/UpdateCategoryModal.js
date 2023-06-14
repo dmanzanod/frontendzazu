@@ -15,14 +15,14 @@ const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
     useEffect(()=>{
         const getCategoryById=async()=>{
             const resp= await getCategory(id)
-            console.log(resp)
+            
             if(!resp.error){
                 setCategory(resp)
             }
         }
         const getCategoryProductById=async()=>{
             const resp= await getCategoryProduct(id)
-            console.log(resp)
+            
             if(!resp.error){
                 setCategory(resp)
             }
@@ -45,7 +45,7 @@ const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
         onSubmit:async(values)=>{
             setLoading(true)
             const resp= await updateCategory(id,values)
-            console.log(resp)
+            
             if(!resp.error){
                 setLoading(false)
                 setSeverity('success')

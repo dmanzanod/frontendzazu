@@ -13,7 +13,7 @@ const NewCategoryModal = ({open, handleClose,created}) => {
     const formik=useFormik({
         initialValues:{
             name:'',
-            businessId:"643d4b1b9e19c3e7b5862152"
+            businessId:localStorage.getItem('Business')
         },
         validationSchema:Yup.object({
             name:Yup.string().required('La categoría necesita un nombre')

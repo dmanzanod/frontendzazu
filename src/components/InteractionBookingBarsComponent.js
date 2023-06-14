@@ -12,7 +12,7 @@ import {
 import { Animation} from '@devexpress/dx-react-chart';
 
 const InteractionBookingComponent = ({bookings,conversations,title}) => {
-  console.log(bookings,conversations)
+ 
   const data=[{
     property:title.includes('Pedidos')?'Pedidos':'Reservas',
     total:bookings.totalBookings || bookings.totalOrders

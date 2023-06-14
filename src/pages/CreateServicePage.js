@@ -56,14 +56,14 @@ const CreateServicePage = () => {
               else{
 
               
-              console.log('failed')
+           
               setMessage(`Ha ocurrido un error: ${resp.name}`)
               setSeverity('error')
               setAlert(true)
               setLoading(false)
             }
             
-            console.log(resp)
+            
         }
 
     })

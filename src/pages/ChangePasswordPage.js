@@ -34,10 +34,10 @@ const ChangePasswordPage = () => {
  
         }),
         onSubmit:async(values)=>{
-            console.log(id,token)
+            
           setLoading(true)
           const resp= await changePassword(id,token,values)
-          console.log(resp)
+         
           if(resp.success){
             setLoading(false)
             setSeverity('success')

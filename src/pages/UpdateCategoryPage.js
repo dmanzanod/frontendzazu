@@ -24,7 +24,7 @@ const UpdateCategoryPage = () => {
             name:Yup.string().required('El nombre es requerido.')
         }),
         onSubmit:async(values)=>{
-            console.log(values)
+            
         }
     })
   return (

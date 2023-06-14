@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { logOut } from '../services/service'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { getCategoriesProduct, getProduct, updateProduct } from '../services/servicesProducts'
 import Principal from './Principal'
-import { Box, FormControl, FormHelperText, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FormControl, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import AlertComponent from '../components/AlertComponent'
+import { FileUploadOutlined } from '@mui/icons-material'
 const ProductUpdatePage = () => {
     const {id}=useParams()
     const [product,setProduct]=useState({})
@@ -14,12 +15,15 @@ const ProductUpdatePage = () => {
     const [loading,setLoading]=useState(false)
     const[alert,setAlert]=useState(false)
     const[message,setMessage]=useState('')
+    const [image,setImage]=useState(null)
+    const [previewImage, setPreviewImage] = useState(null);
     const [severity,setSeverity]=useState('success')
     const navigate=useNavigate()
     useEffect(()=>{
         const getProductById=async()=>{
             const resp= await getProduct(id)
-            console.log(resp)
+            
+            
             if(!resp.error){
                 setProduct(resp)
                 
@@ -33,16 +37,20 @@ const ProductUpdatePage = () => {
         }
         const getBusinessCategories= async()=>{
             
-                const resp= await getCategoriesProduct('643d4b1b9e19c3e7b5862152')
+                const resp= await getCategoriesProduct(localStorage.getItem('Business'))
                 if(!resp.error){
                     setCategories(resp)
                 }
             
         }
-        getServiceById()
+        getProductById()
         getBusinessCategories()
     },[id])
-
+    const  handleUpload=(event)=>{
+      formik.setFieldValue('image',event.target.files[0])
+      setPreviewImage(URL.createObjectURL(event.target.files[0]))
+      setImage(event.target.files[0])
+    }
     const formik= useFormik({
         initialValues: {...product},
         enableReinitialize: true,
@@ -54,13 +62,22 @@ const ProductUpdatePage = () => {
             stock:Yup.number().integer('El stock debe ser positivo').required('El stock es requerido'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
+            image: Yup.mixed()
+  .test("type", "Solo puede subir una imagen", function (value) {
+     if(value=='undefined' || value){
+       return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
+     }
+     else{
+        return true
+     }
+  }),
             categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
         }),
         onSubmit:async(values)=>{
           setLoading(true)
             const resp= await updateProduct(id,values)
 
-            console.log(resp)
+           
             if(resp.success){
               setLoading(false)
               setSeverity('success')
@@ -81,7 +98,7 @@ const ProductUpdatePage = () => {
   return (
     <Principal>
     <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
-        <Typography variant='h3' color={'primary'} sx={{mb:4}}>Actualizar Servicio</Typography>
+        <Typography variant='h3' color={'primary'} sx={{mb:4}}>Actualizar Producto</Typography>
         <AlertComponent open={alert} message={message} handleClose={()=>setAlert(false)} severity={severity} route={'/products/643d4b1b9e19c3e7b5862152'}/>
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
@@ -93,7 +110,7 @@ const ProductUpdatePage = () => {
             variant='filled'
             fullWidth
             InputLabelProps={{ shrink: true }}
-            value={formik.values.name}
+            value={formik.values.name||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.name && formik.errors.name && (
@@ -128,7 +145,7 @@ const ProductUpdatePage = () => {
             label='Código'
             InputLabelProps={{ shrink: true }}
             variant='filled'
-            value={formik.values.code}
+            value={formik.values.code||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             />
@@ -143,7 +160,7 @@ const ProductUpdatePage = () => {
             label='Stock'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.stock}
+            value={formik.values.stock||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             />
@@ -158,7 +175,7 @@ const ProductUpdatePage = () => {
             label='Precio'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.price}
+            value={formik.values.price||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             />
@@ -172,12 +189,46 @@ const ProductUpdatePage = () => {
             label='Moneda'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.coin}
+            value={formik.values.coin||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.coin && formik.errors.coin && (
             <FormHelperText error>{formik.errors.coin}</FormHelperText>
           )}
+          </FormControl>
+          <FormControl sx={{display:'flex',flexDirection:{xs:'column',lg:'row'}, gap:'12px', width:{xs:'100%', sm:'60%', lg:'50%'}}}>
+          {product.image && !image &&
+          <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
+            <img className='image__product' src={`${process.env.REACT_APP_BASE_URL_IMAGES}${product.image.replace('\\','/')}`} alt='prodImage'/>
+          </Box>}
+          {image&&
+          <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
+            <img className='image__product' src={previewImage} alt='prodImage'/>
+          </Box>}
+          <TextField
+          sx={{alignSelf:{xs:'flex-start',lg:'flex-end'}, width:{xs:'100%',lg:'50%'}}}
+      variant="filled"
+      value={image?.name || product.image?.split('\\')[1] || ''}          
+      type="text"
+      label='Imagen'
+      InputLabelProps={{ shrink: true }}
+      InputProps={{
+        endAdornment: (
+          <IconButton component='label'>
+            <FileUploadOutlined />
+            <input
+              styles={{display:"none"}}
+              type="file"
+              accept="image/jpeg,image/png,image/jpg"
+              hidden
+              onChange={(e)=>handleUpload(e)}
+              name="image"
+            />
+          </IconButton>
+        ),
+      }}
+    />
+    {formik.touched.image && formik.errors.image&&<FormHelperText>{formik.errors.image}</FormHelperText>}
           </FormControl>
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
@@ -188,7 +239,7 @@ const ProductUpdatePage = () => {
             multiline
             InputLabelProps={{ shrink: true }}
             maxRows={4}
-            value={formik.values.description}
+            value={formik.values.description||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             {formik.touched.description && formik.errors.description && (
@@ -202,7 +253,7 @@ const ProductUpdatePage = () => {
             label='Detalles'
             variant='filled'
             InputLabelProps={{ shrink: true }}
-            value={formik.values.details}
+            value={formik.values.details||''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}/>
             

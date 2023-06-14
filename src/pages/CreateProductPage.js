@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Principal from './Principal'
-import { Box, FormControl, FormHelperText, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, FormControl, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import AlertComponent from '../components/AlertComponent'
 import NewCategoryModal from '../components/NewCategoryModal'
 import { useFormik } from 'formik'
@@ -8,17 +8,25 @@ import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom'
 import { getCategoriesProduct, newProduct } from '../services/servicesProducts'
 import { logOut } from '../services/service'
+import { AddOutlined, FileUploadOutlined } from '@mui/icons-material'
 const CreateProductPage = () => {
     const [categories,setCategories]=useState([])
     const [open,setOpen]=useState(false)
     const [loading,setLoading]=useState(false)
     const[alert,setAlert]=useState(false)
+    const [image,setImage]=useState(null)
+    const [previewImage, setPreviewImage] = useState(null);
     const [severity,setSeverity]=useState('success')
     const [message,setMessage]=useState('Producto creado exitosamente.')
     const navigate= useNavigate()
     
     const handleClose=()=>{
         setOpen(false)
+    }
+    const  handleUpload=(event)=>{
+      formik.setFieldValue('image',event.target.files[0])
+      setPreviewImage(URL.createObjectURL(event.target.files[0]))
+      setImage(event.target.files[0])
     }
     const formik= useFormik({
         initialValues: {
@@ -29,22 +37,33 @@ const CreateProductPage = () => {
             price:0,
             stock:0,
             coin:"",
+            image:image,
             categoryId:"",
             businessId:localStorage.getItem('Business')
 
         },
         
         validationSchema:Yup.object({
-            name:Yup.string().required('El servicio necesita un nombre'),
+            name:Yup.string().required('El producto necesita un nombre'),
             code:Yup.string(),
             description:Yup.string(),
             details:Yup.string(),
             stock:Yup.number().integer('El stock debe ser positivo').required('El stock es requerido'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
+            image: Yup.mixed()
+  .test("type", "Solo puede subir una imagen", function (value) {
+     if(value==='undefined' || value){
+       return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
+     }
+     else{
+        return true
+     }
+  }),
             categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
         }),
         onSubmit:async(values)=>{
+          
             setLoading(true)
             const resp= await newProduct(values)
             if(resp.success){
@@ -57,14 +76,14 @@ const CreateProductPage = () => {
               else{
 
               
-              console.log('failed')
+              
               setMessage(`Ha ocurrido un error: ${resp.name}`)
               setSeverity('error')
               setAlert(true)
               setLoading(false)
             }
             
-            console.log(resp)
+            
         }
 
     })
@@ -72,6 +91,7 @@ const CreateProductPage = () => {
         const getBusinessCategories= async()=>{
             
             const resp= await getCategoriesProduct(localStorage.getItem('Business'))
+           
             if(!resp.error){
                 setCategories(resp)
             }
@@ -88,7 +108,7 @@ const CreateProductPage = () => {
   return (
     <Principal>
         <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
-        <Typography variant='h3' color={'primary'} sx={{mb:4}}>Nuevo Servicio</Typography>
+        <Typography variant='h3' color={'primary'} sx={{mb:4}}>Nuevo Producto</Typography>
          {alert && <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)} route={'/products/643d4b1b9e19c3e7b5862152'}/>}
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
@@ -193,6 +213,37 @@ const CreateProductPage = () => {
             {formik.touched.coin && formik.errors.coin && (
             <FormHelperText error>{formik.errors.coin}</FormHelperText>
           )}
+          </FormControl>
+          <FormControl sx={{display:'flex',flexDirection:{xs:'column',lg:'row'}, gap:'12px', width:{xs:'100%', sm:'60%', lg:'50%'}}}>
+          {image&&
+          <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
+            <img className='image__product' src={previewImage} alt='prodImage'/>
+          </Box>}
+          
+          <TextField
+          sx={{alignSelf:{xs:'flex-start',lg:'flex-end'}, width:{xs:'100%',lg:'50%'}}}
+      variant="filled"
+      value={image?.name|| ''}          
+      type="text"
+      label='Imagen'
+      InputLabelProps={{ shrink: true }}
+      InputProps={{
+        endAdornment: (
+          <IconButton component='label'>
+            <FileUploadOutlined />
+            <input
+              styles={{display:"none"}}
+              type="file"
+              accept="image/jpeg,image/png,image/jpg"
+              hidden
+              onChange={(e)=>handleUpload(e)}
+              name="image"
+            />
+          </IconButton>
+        ),
+      }}
+    />
+    {formik.touched.image && formik.errors.image&&<FormHelperText>{formik.errors.image}</FormHelperText>}
           </FormControl>
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             

@@ -36,7 +36,7 @@ const formatPrice=(params)=>{
           resp= await getOrders(id)
       }
       
-      console.log(resp)
+      
       if(!resp.error){
           setBookings(resp)
       }
@@ -75,7 +75,7 @@ const formatPrice=(params)=>{
         pageSize={3}
         rowsPerPageOptions={[5]}
         rowLength={10}
-        onRowSelectionModelChange={(newRowSelected)=>{console.log(newRowSelected);setSelectedRow(newRowSelected)}}
+        onRowSelectionModelChange={(newRowSelected)=>{setSelectedRow(newRowSelected)}}
         rowSelectionModel={selectedRow}
       />
       </Box>

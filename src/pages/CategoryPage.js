@@ -26,6 +26,7 @@ const CategoryPage = () => {
           }  
           else{
             resp=await getCategoriesProduct(id)
+            
           }
          
             if(!resp.error){
