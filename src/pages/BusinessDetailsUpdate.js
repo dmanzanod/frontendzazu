@@ -146,7 +146,7 @@ const BusinessDetailsUpdate = () => {
               fullWidth
               error={Boolean(formik.touched.name && formik.errors.name)}
               InputLabelProps={{ shrink: true }}
-              value={formik.values.name}
+              value={formik.values.name||""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
@@ -163,7 +163,7 @@ const BusinessDetailsUpdate = () => {
               variant="filled"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              value={formik.values.phone}
+              value={formik.values.phone||""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
@@ -180,7 +180,7 @@ const BusinessDetailsUpdate = () => {
               variant="filled"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              value={formik.values.email}
+              value={formik.values.email||""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
@@ -204,7 +204,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.address.country || ""}
+                  value={formik.values.address?.country || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -231,7 +231,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.address.state || ""}
+                  value={formik.values.address?.state || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -261,7 +261,7 @@ const BusinessDetailsUpdate = () => {
                   multiline
                   rows={8}
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.address.street || ""}
+                  value={formik.values.address?.street || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -290,7 +290,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.address.number || ""}
+                  value={formik.values.address?.number || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -322,7 +322,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.rrss.facebook || ""}
+                  value={formik.values.rrss?.facebook || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -348,7 +348,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.rrss.instagram || ""}
+                  value={formik.values.rrss?.instagram || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -367,7 +367,7 @@ const BusinessDetailsUpdate = () => {
                   variant="filled"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  value={formik.values.rrss.tiktok || ""}
+                  value={formik.values.rrss?.tiktok || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -386,13 +386,13 @@ const BusinessDetailsUpdate = () => {
               variant="filled"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              value={formik.values.rrss.twitter}
+              value={formik.values.rrss?.twitter||""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
           </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} className="grid__column">
+            <Grid item xs={12} sm={12} className="grid__column">
               <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "60%" } }}>
             <TextField
               id="web"
@@ -405,7 +405,7 @@ const BusinessDetailsUpdate = () => {
               variant="filled"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              value={formik.values.rrss.web}
+              value={formik.values.rrss?.web||""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
