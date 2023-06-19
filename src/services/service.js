@@ -3,7 +3,7 @@ import { AxiosInterceptor } from './axios'
 const url= process.env.REACT_APP_BASE_URL
 AxiosInterceptor()
 
-export const getQr= async(businessId)=>{
+export const getQr= async()=>{
     
     return await axios.get(`${localStorage.getItem('url')}`)
     .then((response)=>{

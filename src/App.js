@@ -21,6 +21,7 @@ import ChangePasswordPage from './pages/ChangePasswordPage';
 import HelpPage from './pages/HelpPage';
 import CreateProductPage from './pages/CreateProductPage';
 import ProductUpdatePage from './pages/ProductUpdatePage';
+import ReportPage from './pages/ReportPage';
 function App() {
   return (
     <Router>
@@ -41,6 +42,7 @@ function App() {
         <Route exact path='/newService' element={<ProtectedRouteServices redirectPath='/login'><CreateServicePage/></ProtectedRouteServices>}/>
         <Route exact path='/newProduct' element={<ProtectedRouteProduct redirectPath='/login'><CreateProductPage/></ProtectedRouteProduct>}/>
         <Route exact path='/businessDetailsUpdate/:id' element={<ProtectedRoute redirectPath='/login'><BusinessDetailsUpdate/></ProtectedRoute>}/>
+        <Route exact path='/report' element={<ProtectedRoute redirectPath='/login'><ReportPage/></ProtectedRoute>}/>
         <Route exact path='/bookingDetails/:id' element={<ProtectedRoute redirectPath='/login'><BookingDetailsPage/></ProtectedRoute>}/> 
       </Routes>
 

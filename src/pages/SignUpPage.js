@@ -13,6 +13,7 @@ import AlertComponent from '../components/AlertComponent';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TermsModalComponent from '../components/TermsModalComponent';
+import FooterComponent from '../components/FooterComponent';
 const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading,setLoading]=useState(false)
@@ -71,15 +72,21 @@ const SignUpPage = () => {
   })
   return (
     <ThemeProvider theme={theme}>
-    <Box className="backGround-shape" sx={{
+      <Box sx={{
+        display:'flex',
+        flexDirection:'column',
+        alignContent:'center',
+        minHeight:'100vh'
+      }}>
+<Box className="backGround-shape" sx={{
         display:'flex',
         alignItems:'center',
         justifyContent:'flex-start',
        gap:'24px',
-        alignItems:'center',
+        
         margin:'0',
         flexDirection:'column',
-        minHeight: '100vh',
+        flexGrow:1,
         position:'relative'
 
     }}>
@@ -245,43 +252,11 @@ const SignUpPage = () => {
 
         </Box>*/}
         
-        <Box 
-    component='footer'
-    
-    sx={{
-        width:'100%',
-        background: cyan[600],
-        height:'72px',
-        display: 'flex',
-        justifyContent:'center',
-        alignContent:'center',
-        gap:'24px',
-        position:'absolute',
-        bottom:0,
-        zIndex: (theme) => theme.zIndex.drawer + 1
-    }}>
-        <img className="bot" src={`${process.env.PUBLIC_URL}/bot.png`}/>
-        <Box>
-            
-        
-        <Box >
-        <IconButton>
-            <Link href='https://www.instagram.com/zazuservice_/' target={'_blank'} color={'secondary'} sx={{mt:0.5}}>
-            <InstagramIcon color={'secondary'}/>
-            </Link>
-        </IconButton>
-        <IconButton color={'secondary'} >
-            <Link href=" https://www.facebook.com/zazuservice" target={'_blank'} color={'secondary'} sx={{mt:0.5}}>
-            <FacebookIcon/>
-            </Link>
-        </IconButton>
         </Box>
-        <Typography variant="p" color={'white'}>Contáctanos</Typography>
-        </Box>
-    </Box>
-    <TermsModalComponent open={open} onClose={()=>setOpen(false)} />
-    </Box>
+      <FooterComponent/>
+      </Box>
     
+        <TermsModalComponent open={open} onClose={()=>setOpen(false)}/>
     </ThemeProvider>
   )
 }

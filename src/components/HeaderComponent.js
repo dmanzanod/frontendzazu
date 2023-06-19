@@ -11,12 +11,16 @@ const HeaderComponent = () => {
 
   const navigate= useNavigate()
  
- 
+ const handleClick=()=>{
+    handleClose()
+     logOut()
+    navigate('/login')
+ }
   const handleClose = () => {
     
     setAnchorEl(null)
-    logOut()
-    navigate('/login')
+    // logOut()
+    // navigate('/login')
   };
 
   const handleMenu = (event) => {
@@ -33,12 +37,15 @@ const HeaderComponent = () => {
             </Box>
           <Box sx={{display:"flex",cursor:'pointer', alignContent:"center", justifyContent:"flex-end", gap:"12px", width:"40%", paddingInline:'18px'}} onClick={handleMenu}>
           
-                <Avatar/>
+                
               
               <Typography variant="p" mt={2} color={'white'} >
             {localStorage.getItem('user')}
           </Typography>
-              <Menu
+             
+          
+          </Box>
+           <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
@@ -52,12 +59,11 @@ const HeaderComponent = () => {
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                onClick={handleClose}
               >
-                <MenuItem onClick={handleClose}>Cerrar Sesión</MenuItem>
+                <MenuItem onClick={handleClick}>Cerrar Sesión</MenuItem>
                
               </Menu>
-          
-          </Box>
         </Toolbar>
       </AppBar>
     
