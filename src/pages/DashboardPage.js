@@ -206,7 +206,7 @@ const DashboardPage = () => {
           flexDirection:'column',
           width:'100%',
           gap: '12px',
-          mb:10
+          mb:2
         }}>
           {totalSales && <TotalSalesComponent total={totalSales}/>}
           {totalBookings && <TotalBookingsComponent total={totalBookings}/>}
