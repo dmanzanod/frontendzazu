@@ -35,12 +35,17 @@ const NewCategoryModal = ({open, handleClose,created}) => {
                 setLoading(false)
                 setResult(`Ha ocurrido un error ${resp.error}`)
             }
-            created()
+           created()
 
         }
     })
+    const onClose=()=>{
+        setResult('')
+        formik.resetForm()
+        handleClose()
+       }
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
         <DialogTitle>
             Nueva Categoría
         </DialogTitle>
@@ -72,10 +77,10 @@ const NewCategoryModal = ({open, handleClose,created}) => {
         {result===''?
             <DialogActions sx={{justifyContent:'space-around'}}>
             <Button variant='contained' disabled={loading} onClick={formik.handleSubmit}>{loading?'Creando...':'Crear'}</Button>
-            <Button onClick={handleClose}>Cancelar</Button>
+            <Button onClick={onClose}>Cancelar</Button>
         </DialogActions>:
         <DialogActions>
-            <Button variant='contained' onClick={handleClose}>Continuar</Button>
+            <Button variant='contained' onClick={onClose}>Continuar</Button>
         </DialogActions>
         }
 

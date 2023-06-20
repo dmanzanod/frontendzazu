@@ -15,7 +15,7 @@ const InteractionBookingComponent = ({bookings,conversations,title}) => {
  
   const data=[{
     property:title.includes('Pedidos')?'Pedidos':'Reservas',
-    total:bookings.totalBookings || bookings.totalOrders
+    total:bookings.total || bookings.totalOrders
   },
 {
   property:"Conversaciones",

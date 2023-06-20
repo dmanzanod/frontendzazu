@@ -194,7 +194,7 @@ const DashboardPage = () => {
         
        {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        {totalBookings && totalInteractions? <InteractionBookingComponent title={type==='services'?'Conversaciones/Reservas':'Conversaciones/Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
+        {totalBookings && totalInteractions? <InteractionBookingComponent title={type==='services'?'Conversaciones - Reservas':'Conversaciones - Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
         
         {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
        
