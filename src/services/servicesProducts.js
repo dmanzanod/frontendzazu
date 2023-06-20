@@ -130,7 +130,48 @@ export const getWeeklyOrders= async(businessId)=>{
     
 
 }
+export const getPeriodOrders= async(period,businessId)=>{
+    const request={
+        period:period,
+        id:businessId
+    }
+    return await axios.post(`${url}/getOrdersPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
 
+}
+export const getTotalPeriodOrders= async(period,businessId)=>{
+    const request={
+        period:period,
+        id:businessId
+    }
+    return await axios.post(`${url}/getTotalOrdersPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
 //Categories
 export const getCategoriesProduct= async(businessId)=>{
     

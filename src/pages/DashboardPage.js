@@ -16,6 +16,8 @@ import { getConversationFlows, getConversationHistory, getInteractions, getInter
 import InteractionBookingComponent from '../components/InteractionBookingBarsComponent'
 import LineChartComponent from '../components/LineChartComponent'
 import EmptyComponent from '../components/EmptyComponent'
+import PeriodSalesTotalComponent from '../components/PeriodSalesTotalComponent'
+import SalesCountPeriodComponent from '../components/SalesCountPeriodComponent'
 const DashboardPage = () => {
   const [history,setHistory]=useState([])
   const[stats,setStats]=useState([])
@@ -210,6 +212,8 @@ const DashboardPage = () => {
         }}>
           {totalSales && <TotalSalesComponent total={totalSales}/>}
           {totalBookings && <TotalBookingsComponent total={totalBookings}/>}
+          <PeriodSalesTotalComponent type={type}/>
+          <SalesCountPeriodComponent type={type}/>
         </Box>
       </Box>
     </Principal>

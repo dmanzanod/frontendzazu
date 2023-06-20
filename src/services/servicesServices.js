@@ -129,6 +129,48 @@ export const getWeeklyBookings= async(businessId)=>{
     
 
 }
+export const getPeriodBookings= async(period,businessId)=>{
+    const request={
+        period:period,
+        id:businessId
+    }
+    return await axios.post(`${url}/getBookingsPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
+export const getTotalPeriodBookings= async(period,businessId)=>{
+    const request={
+        period:period,
+        id:businessId
+    }
+    return await axios.post(`${url}/getTotalBookingsPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
 //categories
 export const getCategories= async(businessId)=>{
     
