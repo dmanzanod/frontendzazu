@@ -49,7 +49,7 @@ const CategoryPage = () => {
       }
     };
     getBusinessCategories();
-  }, [id, created, updated, deleted]);
+  }, [id, created, updated, deleted,open]);
   return (
     <Principal>
       <Box

@@ -16,6 +16,8 @@ import { getConversationFlows, getConversationHistory, getInteractions, getInter
 import InteractionBookingComponent from '../components/InteractionBookingBarsComponent'
 import LineChartComponent from '../components/LineChartComponent'
 import EmptyComponent from '../components/EmptyComponent'
+import PeriodSalesTotalComponent from '../components/PeriodSalesTotalComponent'
+import SalesCountPeriodComponent from '../components/SalesCountPeriodComponent'
 const DashboardPage = () => {
   const [history,setHistory]=useState([])
   const[stats,setStats]=useState([])
@@ -194,7 +196,7 @@ const DashboardPage = () => {
         
        {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        {totalBookings && totalInteractions? <InteractionBookingComponent title={type==='services'?'Conversaciones/Reservas':'Conversaciones/Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
+        {totalBookings && totalInteractions? <InteractionBookingComponent title={type==='services'?'Conversaciones - Reservas':'Conversaciones - Pedidos'} bookings={totalBookings} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
         
         {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
        
@@ -210,6 +212,8 @@ const DashboardPage = () => {
         }}>
           {totalSales && <TotalSalesComponent total={totalSales}/>}
           {totalBookings && <TotalBookingsComponent total={totalBookings}/>}
+          <PeriodSalesTotalComponent type={type}/>
+          <SalesCountPeriodComponent type={type}/>
         </Box>
       </Box>
     </Principal>

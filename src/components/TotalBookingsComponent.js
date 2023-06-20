@@ -3,10 +3,12 @@ import { ThemeProvider } from 'styled-components'
 import theme from '../theme/theme'
 import { Box, Typography } from '@mui/material'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import { FormattedNumber, IntlProvider } from 'react-intl'
 const TotalBookingsComponent = ({total}) => {
   
   return (
     <ThemeProvider theme={theme}>
+      <IntlProvider locale="es" defaultLocale="es">
     <Box sx={{
         display:'flex',
         width: '100%',
@@ -19,10 +21,11 @@ const TotalBookingsComponent = ({total}) => {
     }}>
         <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
             <TrendingUpIcon/>
-            <Typography variant='h5'>Número total de ventas</Typography>
+            <Typography variant='h5'>Número total de ventas (Histórico)</Typography>
         </Box>
-        <Typography variant='h3' color={'primary'}>{total.total}</Typography>
+        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={total.total}/></Typography>
     </Box>
+    </IntlProvider>
 </ThemeProvider>
   )
 }

@@ -80,7 +80,7 @@ const UpdateServicePage = () => {
     <Principal>
     <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
         <Typography variant='h3' color={'primary'} sx={{mb:4}}>Actualizar Servicio</Typography>
-        <AlertComponent open={alert} message={message} handleClose={()=>setAlert(false)} severity={severity} route={'/products/643d4b1b9e19c3e7b5862152'}/>
+        <AlertComponent open={alert} message={message} handleClose={()=>setAlert(false)} severity={severity} route={`/products/${localStorage.getItem('Business')}`}/>
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
@@ -193,7 +193,7 @@ const UpdateServicePage = () => {
             <FormHelperText error>{formik.errors.details}</FormHelperText>
           )}
           </FormControl>
-          <Button disabled={loading} variant='contained' type='submit'>{loading?'Actualizando...':'Actualizar'}</Button>
+          <Button disabled={loading|| alert} variant='contained' type='submit'>{loading?'Actualizando...':'Actualizar'}</Button>
               {loading && <CircularProgress color="secondary" />}
             
 
