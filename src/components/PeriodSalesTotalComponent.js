@@ -1,32 +1,62 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
 import theme from '../theme/theme'
 import { Box, List, ListItem, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { getTotalPeriodBookings } from '../services/servicesServices';
 import { FormattedNumber, IntlProvider } from 'react-intl';
-const PeriodSalesTotalComponent = ({type}) => {
+import { getTotalPeriodOrders } from '../services/servicesProducts';
+import { useDispatch } from 'react-redux';
+import { addImagePeriodSales } from '../features/indicators/indicatorSlice';
+import { toPng } from 'html-to-image';
+const PeriodSalesTotalComponent = ({type,currency,initialValue}) => {
     const options=['month','trimester','semester']
     const optionsLabels=['mes','trimestre','semestre']
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedIndex, setSelectedIndex] = useState(1);
-    const[data,setData]=useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const[data,setData]=useState(initialValue)
+    const dispatch = useDispatch();
+  const elementRef = useRef();
     const open = Boolean(anchorEl);
+    console.log(data)
+    
     const getSales= async(index)=>{
         let resp
         if(type==='services'){
             resp= await getTotalPeriodBookings(options[index],localStorage.getItem('Business'))
         }
         else{
-            resp= await getTotalPeriodBookings(options[index],localStorage.getItem('Business'))
+            resp= await getTotalPeriodOrders(options[index],localStorage.getItem('Business'))
         }
         if(resp.success===true){
             setData(resp.total)
         }
-        else{
-            setData(0)
-        }
+        
     }
+     const captureElementAsImage = async () => {
+        try {
+          const element = elementRef.current;
+    
+          const imgDataUrl = await toPng(element,{pixelRatio:2});
+          const imgStats={
+            elWidth:element.offsetWidth,
+            elHeight:element.offsetHeight,
+            img:imgDataUrl
+          }
+          dispatch(addImagePeriodSales(imgStats));
+        } catch (error) {
+          // Handle error
+          console.log(error)
+        }
+      };
+    useEffect(()=>{
+     
+      
+        setTimeout(()=>{captureElementAsImage()},1000)
+        
+    
+      getSales(0)
+    },[])
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
       };
@@ -40,6 +70,7 @@ const PeriodSalesTotalComponent = ({type}) => {
       const handleClose = () => {
         setAnchorEl(null);
       };
+      
   return (
     <ThemeProvider theme={theme}>
         <IntlProvider locale="es" defaultLocale="es">
@@ -52,7 +83,11 @@ const PeriodSalesTotalComponent = ({type}) => {
             flexDirection:'column',
             alignItems:'center',
             gap:'24px'
-        }}>
+        }}
+        className='chart'
+        ref={elementRef}
+        >
+          
             <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
                 <MonetizationOnIcon/>
                 <Typography variant='h5'>Monto total de ventas por: </Typography>
@@ -100,7 +135,7 @@ const PeriodSalesTotalComponent = ({type}) => {
       </Menu>
     </div>
             </Box>
-            <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={data}/></Typography>
+            <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={data}/> {currency}</Typography>
         </Box>
         </IntlProvider>
     </ThemeProvider>

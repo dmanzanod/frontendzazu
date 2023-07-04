@@ -59,7 +59,7 @@ const ChangePasswordPage = () => {
     <ThemeProvider theme={theme}>
     <Box className="backGround-shape" sx={{
         display:'flex',
-        alignItems:'center',
+        
         justifyContent:'flex-start',
        gap:'24px',
         alignItems:'center',
@@ -123,8 +123,9 @@ const ChangePasswordPage = () => {
            {loading && <CircularProgress color='primary'/>}
             </form>
             </Paper>
-            <FooterComponent/>
+            
     </Box>
+    <FooterComponent/>
     </ThemeProvider>
   )
 }

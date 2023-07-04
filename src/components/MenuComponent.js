@@ -56,7 +56,7 @@ const MenuComponent = () => {
                 onClick={(event) => handleListItemClick(event, 0)}
                 >
                     <DashboardOutlinedIcon/>
-                  <ListItemText primary={'Tablero'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Dashboard'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>

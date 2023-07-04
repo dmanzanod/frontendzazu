@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Box } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
 import { ArgumentAxis, BarSeries,  ValueAxis } from '@devexpress/dx-react-chart-material-ui';
@@ -10,9 +10,34 @@ import {
   Title,
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
+import { useDispatch } from 'react-redux';
+import { addImageMonthlyBookings } from '../features/indicators/indicatorSlice';
+import { toPng } from 'html-to-image';
 
 const BarChartComponent = ({data,title}) => {
   console.log(data)
+  const dispatch = useDispatch();
+  const elementRef = useRef();
+  const captureElementAsImage = async () => {
+    try {
+      const element = elementRef.current;
+
+      const imgDataUrl = await toPng(element,{pixelRatio:2});
+      const imgStats={
+        elWidth:element.offsetWidth,
+        elHeight:element.offsetHeight,
+        img:imgDataUrl
+      }
+      dispatch(addImageMonthlyBookings(imgStats));
+    } catch (error) {
+      console.log(error)
+      // Handle error
+    }
+  };
+  useEffect(()=>{
+    setTimeout(()=>{captureElementAsImage()},1000)
+    
+  },[])
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{
@@ -25,11 +50,14 @@ const BarChartComponent = ({data,title}) => {
             backgroundColor:"#FFF",
             
             gap:"12px"
-
-        }}>
+          
+        }}
+        ref={elementRef}
+        className='chart'
+        >
             
             <Box >
-            <Paper >
+           
         <Chart
         
           data={data}
@@ -51,7 +79,7 @@ const BarChartComponent = ({data,title}) => {
           <Animation />
           
         </Chart>
-      </Paper>
+      
             </Box>
 
         </Box>

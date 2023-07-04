@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Box} from '@mui/material'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
 
@@ -11,7 +11,12 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
 import { Legend } from '@devexpress/dx-react-chart-material-ui';
+import { useDispatch } from 'react-redux';
+import { toPng } from 'html-to-image';
+import { addImage, addImageStats } from '../features/indicators/indicatorSlice';
 const ChartComponent = ({title,data,type}) => {
+  const dispatch = useDispatch();
+  const elementRef = useRef();
   const resultArray = Object.values(
     data.reduce((accumulator, item) => {
       const { serviceName, timesServiceAppears } = item;
@@ -20,8 +25,29 @@ const ChartComponent = ({title,data,type}) => {
       return accumulator;
     }, {})
   );
+  
+
+  const captureElementAsImage = async () => {
+    try {
+      const element = elementRef.current;
+
+      const imgDataUrl = await toPng(element,{pixelRatio:2});
+      const imgStats={
+        elWidth:element.offsetWidth,
+        elHeight:element.offsetHeight,
+        img:imgDataUrl
+      }
+      dispatch(addImageStats(imgStats));
+    } catch (error) {
+      // Handle error
+    }
+  };
+  useEffect(()=>{
+    setTimeout(()=>{captureElementAsImage()},1000)
+    
+  },[])
   return (    <ThemeProvider theme={theme}>
-        <Box sx={{
+        <Box className='chart' ref={elementRef} sx={{
             display:'flex',
             flexDirection:'column',
             justifyContent:'center',
@@ -35,7 +61,7 @@ const ChartComponent = ({title,data,type}) => {
         }}>
             
             <Box >
-            <Paper >
+            
         <Chart
         
           data={resultArray}
@@ -54,7 +80,7 @@ const ChartComponent = ({title,data,type}) => {
           <Animation />
           
         </Chart>
-      </Paper>
+     
             </Box>
 
         </Box>

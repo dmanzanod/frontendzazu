@@ -9,9 +9,6 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik';
 import {  signUp } from '../services/service';
 import AlertComponent from '../components/AlertComponent';
-
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import TermsModalComponent from '../components/TermsModalComponent';
 import FooterComponent from '../components/FooterComponent';
 const SignUpPage = () => {

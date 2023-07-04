@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Principal from './Principal'
-import { Box, Button, CircularProgress, FormControl, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { getCategories, newService } from '../services/servicesServices'
@@ -14,12 +14,19 @@ const CreateServicePage = () => {
     const [open,setOpen]=useState(false)
     const [loading,setLoading]=useState(false)
     const[alert,setAlert]=useState(false)
+    const[availableSpaces,setAvailableSpaces]=useState(false)
     const [severity,setSeverity]=useState('success')
     const [message,setMessage]=useState('Servicio creado exitosamente.')
     const navigate= useNavigate()
     
     const handleClose=()=>{
         setOpen(false)
+    }
+    const handleAvailableSpaces=(e)=>{
+        setAvailableSpaces(e.target.checked)
+        if(!e.target.checked){
+          formik.setFieldValue('availableSpaces',0)
+        }
     }
     const formik= useFormik({
         initialValues: {
@@ -29,6 +36,8 @@ const CreateServicePage = () => {
             details:"",
             price:0,
             coin:"",
+            availableSpaces:0,
+            state:true,
             categoryId:"",
             businessId:localStorage.getItem('Business')
 
@@ -37,8 +46,10 @@ const CreateServicePage = () => {
         validationSchema:Yup.object({
             name:Yup.string().required('El servicio necesita un nombre'),
             code:Yup.string(),
+            state:Yup.boolean(),
             description:Yup.string(),
             details:Yup.string(),
+            availableSpaces:Yup.number().integer('Los cupos deben ser positivos'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
             categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
@@ -89,7 +100,7 @@ const CreateServicePage = () => {
     <Principal>
         <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
         <Typography variant='h3' color={'primary'} sx={{mb:4}}>Nuevo Servicio</Typography>
-         {alert && <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)} route={'/products/643d4b1b9e19c3e7b5862152'}/>}
+         {alert && <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)} route={`/products/${localStorage.getItem('Business')}`}/>}
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
            
@@ -179,6 +190,20 @@ const CreateServicePage = () => {
             <FormHelperText error>{formik.errors.coin}</FormHelperText>
           )}
           </FormControl>
+          <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "50%" } }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={formik.values.state}
+                  name="state"
+                  checked={formik.values.state===true?true:false}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              }
+              label="Disponible"
+            />
+          </FormControl>
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
             <TextField id='description'
@@ -210,8 +235,39 @@ const CreateServicePage = () => {
             <FormHelperText error>{formik.errors.details}</FormHelperText>
           )}
           </FormControl>
+          <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "50%" } }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={formik.values.state}
+                  name="availableSpaces"
+                  
+                  onChange={handleAvailableSpaces}
+                 
+                />
+              }
+              label="Cupos disponibles?"
+            />
+          </FormControl>
+          {availableSpaces && 
+          <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
+            
+          <TextField
+          id='availableSpaces'
+          name='availableSpaces'
+          label='Número de cupos disponibles'
+          variant='filled'
+          InputLabelProps={{ shrink: true }}
+          value={formik.values.availableSpaces||''}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          />
+          {formik.touched.availableSpaces && formik.errors.availableSpaces && (
+          <FormHelperText error>{formik.errors.availableSpaces}</FormHelperText>
+        )}</FormControl>
+          }
           {loading&&<CircularProgress color="primary" />}
-          <Button disabled={loading} variant='contained' type='submit'>{loading?'Creando..':'Crear'}</Button>
+          <Button disabled={loading || alert} variant='contained' type='submit'>{loading?'Creando..':'Crear'}</Button>
 
             
 

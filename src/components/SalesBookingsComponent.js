@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import { ThemeProvider } from 'styled-components'
 import theme from '../theme/theme'
+import { FormattedNumber, IntlProvider } from 'react-intl'
 import { Box, Typography } from '@mui/material'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
-import { FormattedNumber, IntlProvider } from 'react-intl'
 import { useDispatch } from 'react-redux'
 import { toPng } from 'html-to-image'
-import { addImageTotalBookings } from '../features/indicators/indicatorSlice'
-const TotalBookingsComponent = ({total}) => {
+import { addImageSalesBookings } from '../features/indicators/indicatorSlice'
+const SalesBookingsComponent = ({totalSales,totalBookings}) => {
   const dispatch = useDispatch();
   const elementRef = useRef();
   const captureElementAsImage = async () => {
@@ -20,7 +20,7 @@ const TotalBookingsComponent = ({total}) => {
         elHeight:element.offsetHeight,
         img:imgDataUrl
       }
-      dispatch(addImageTotalBookings(imgStats));
+      dispatch(addImageSalesBookings(imgStats));
     } catch (error) {
       // Handle error
     }
@@ -48,13 +48,14 @@ const TotalBookingsComponent = ({total}) => {
     >
         <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
             <TrendingUpIcon/>
-            <Typography variant='h5'>Número total de ventas (Histórico)</Typography>
+            <Typography variant='h5'>Monto/Ventas</Typography>
         </Box>
-        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={total.total}/></Typography>
+        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={totalBookings.total===0?'0':totalSales.total/totalBookings.total}/></Typography>
     </Box>
     </IntlProvider>
 </ThemeProvider>
   )
+  
 }
 
-export default TotalBookingsComponent
+export default SalesBookingsComponent

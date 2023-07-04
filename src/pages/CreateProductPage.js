@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Principal from './Principal'
-import { Box, Button, CircularProgress, FormControl, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import AlertComponent from '../components/AlertComponent'
 import NewCategoryModal from '../components/NewCategoryModal'
 import { useFormik } from 'formik'
@@ -36,6 +36,7 @@ const CreateProductPage = () => {
             details:"",
             price:0,
             stock:0,
+            state:true,
             coin:"",
             image:image,
             categoryId:"",
@@ -48,6 +49,7 @@ const CreateProductPage = () => {
             code:Yup.string(),
             description:Yup.string(),
             details:Yup.string(),
+            state:Yup.boolean(),
             stock:Yup.number().integer('El stock debe ser positivo').required('El stock es requerido'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
@@ -109,7 +111,7 @@ const CreateProductPage = () => {
     <Principal>
         <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
         <Typography variant='h3' color={'primary'} sx={{mb:4}}>Nuevo Producto</Typography>
-         {alert && <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)} route={'/products/643d4b1b9e19c3e7b5862152'}/>}
+         {alert && <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)} route={`/products/${localStorage.getItem('Business')}`}/>}
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
            
@@ -185,6 +187,20 @@ const CreateProductPage = () => {
             {formik.touched.stock && formik.errors.stock && (
             <FormHelperText error>{formik.errors.stock}</FormHelperText>
           )}</FormControl>
+          <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "50%" } }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={formik.values.state}
+                  name="state"
+                  checked={formik.values.state===true?true:false}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              }
+              label="Disponible"
+            />
+          </FormControl>
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
             <TextField
@@ -277,7 +293,7 @@ const CreateProductPage = () => {
           )}
           </FormControl>
           {loading&&<CircularProgress color="primary" />}
-          <Button disabled={loading} variant='contained' type='submit'>{loading?'Creando..':'Crear'}</Button>
+          <Button disabled={loading || alert} variant='contained' type='submit'>{loading?'Creando..':'Crear'}</Button>
 
             
 
