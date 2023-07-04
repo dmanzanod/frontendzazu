@@ -74,3 +74,25 @@ export const getConversationHistory= async(businessId)=>{
     
 
 }
+
+export const getPeriodInteractions= async(period,businessId)=>{
+    const request={
+        period:period,
+        id:businessId
+    }
+    return await axios.post(`${url}/interactionsByPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}

@@ -104,8 +104,9 @@ const RequestNewPasswordPage = () => {
            {loading && <CircularProgress color='primary'/>}
             </form>
             </Paper>
-            <FooterComponent/>
+            
         </Box>
+        <FooterComponent/>
         </ThemeProvider>
   )
 }

@@ -11,8 +11,6 @@ import { useFormik } from 'formik';
 import { login } from '../services/service';
 import AlertComponent from '../components/AlertComponent';
 import { useNavigate } from 'react-router-dom';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import FooterComponent from '../components/FooterComponent';
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);

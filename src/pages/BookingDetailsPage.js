@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Principal from "./Principal";
 import { Box, Typography } from "@mui/material";
-import { DataGrid, esES } from "@mui/x-data-grid";
+import { DataGrid, esES,  GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from "@mui/x-data-grid";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBookings } from "../services/servicesServices";
-import { blue } from "@mui/material/colors";
+import { blue, cyan } from "@mui/material/colors";
 import { getOrders } from "../services/servicesProducts";
 const BookingDetailsPage = () => {
   const [bookings, setBookings] = useState([]);
@@ -50,6 +50,22 @@ const BookingDetailsPage = () => {
     { field: "time", headerName: "Hora" },
   ];
   const [selectedRow, setSelectedRow] = useState([]);
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer >
+        <GridToolbarColumnsButton sx={{color:cyan[900]}}/>
+        <GridToolbarFilterButton sx={{color:cyan[900]}}/>
+        <GridToolbarDensitySelector sx={{color:cyan[900]}}/>
+        <GridToolbarExport printOptions={{
+    hideFooter: true,
+    hideToolbar: true,
+  }}
+  sx={{color:cyan[900]}}
+  />
+      </GridToolbarContainer>
+    );
+  }
+  
   useEffect(() => {
     const getBusinessBookings = async () => {
       let resp;
@@ -88,6 +104,7 @@ const BookingDetailsPage = () => {
 
         
           <DataGrid
+          slots={{ toolbar: CustomToolbar }}
             sx={{
               mt: 2,
               marginInline: "auto",
@@ -98,6 +115,7 @@ const BookingDetailsPage = () => {
                 color: "primary.main",
               },
             }}
+         
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
             rows={bookings}
             getRowId={(row) => row._id}

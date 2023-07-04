@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { getCategoriesProduct, getProduct, updateProduct } from '../services/servicesProducts'
 import Principal from './Principal'
-import { Box, Button, CircularProgress, FormControl, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, FormHelperText, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import AlertComponent from '../components/AlertComponent'
 import { FileUploadOutlined } from '@mui/icons-material'
 const ProductUpdatePage = () => {
@@ -60,6 +60,7 @@ const ProductUpdatePage = () => {
             description:Yup.string(),
             details:Yup.string(),
             stock:Yup.number().integer('El stock debe ser positivo').required('El stock es requerido'),
+            state:Yup.boolean(),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
             image: Yup.mixed()
@@ -99,7 +100,7 @@ const ProductUpdatePage = () => {
     <Principal>
     <Box sx={{display:'flex', width:'100%', marginTop:'78px', marginBottom:'84px', paddingBlock:'12px',flexDirection:'column', alignItems:'center'}}>
         <Typography variant='h3' color={'primary'} sx={{mb:4}}>Actualizar Producto</Typography>
-        <AlertComponent open={alert} message={message} handleClose={()=>setAlert(false)} severity={severity} route={'/products/643d4b1b9e19c3e7b5862152'}/>
+        <AlertComponent open={alert} message={message} handleClose={()=>setAlert(false)} severity={severity} route={`/products/${localStorage.getItem('Business')}`}/>
         <form className='form__update' onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
@@ -167,6 +168,20 @@ const ProductUpdatePage = () => {
             {formik.touched.stock && formik.errors.stock && (
             <FormHelperText error>{formik.errors.stock}</FormHelperText>
           )}</FormControl>
+          <FormControl sx={{ width: { xs: "100%", sm: "60%", lg: "50%" } }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value={formik.values.state}
+                  name="state"
+                  checked={formik.values.state===true?true:false}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              }
+              label="Disponible"
+            />
+          </FormControl>
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             
             <TextField
@@ -261,7 +276,7 @@ const ProductUpdatePage = () => {
             <FormHelperText error>{formik.errors.details}</FormHelperText>
           )}
           </FormControl>
-          <Button disabled={loading} variant='contained' type='submit'>{loading?'Actualizando...':'Actualizar'}</Button>
+          <Button disabled={loading || alert} variant='contained' type='submit'>{loading?'Actualizando...':'Actualizar'}</Button>
               {loading && <CircularProgress color="secondary" />}
             
 

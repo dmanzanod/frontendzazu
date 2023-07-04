@@ -150,12 +150,51 @@ export const getPeriodBookings= async(period,businessId)=>{
     
 
 }
+export const getCurrencyService= async(businessId)=>{
+   
+    return await axios.get(`${url}/getCurrency/${businessId}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
 export const getTotalPeriodBookings= async(period,businessId)=>{
     const request={
         period:period,
         id:businessId
     }
     return await axios.post(`${url}/getTotalBookingsPeriod`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
+export const getBookingsForExport= async(id,properties)=>{
+    const request={
+        id:id,
+        properties:properties
+    }
+    return await axios.post(`${url}/exportBookings`,request)
     .then((response)=>{
         return response.data
     })
@@ -286,6 +325,7 @@ export const getService= async(id)=>{
 
 }
 export const newService=async(values)=>{
+    
     return await axios.post(`${url}/createServices`,values)
     .then((response)=>{
         return response.data

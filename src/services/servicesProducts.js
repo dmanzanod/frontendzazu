@@ -172,6 +172,27 @@ export const getTotalPeriodOrders= async(period,businessId)=>{
     
 
 }
+export const getOrdersForExport= async(id,properties)=>{
+    const request={
+        id:id,
+        properties:properties
+    }
+    return await axios.post(`${url}/exportOrders`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
 //Categories
 export const getCategoriesProduct= async(businessId)=>{
     
@@ -359,4 +380,23 @@ export const deleteProduct=async(id)=>{
             status:error.response.status
         }
     })
+}
+
+export const getCurrencyProduct= async(businessId)=>{
+   
+    return await axios.get(`${url}/getCurrencyProduct/${businessId}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
 }

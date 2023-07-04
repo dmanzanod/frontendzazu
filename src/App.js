@@ -22,8 +22,11 @@ import HelpPage from './pages/HelpPage';
 import CreateProductPage from './pages/CreateProductPage';
 import ProductUpdatePage from './pages/ProductUpdatePage';
 import ReportPage from './pages/ReportPage';
+import { Provider } from 'react-redux';
+import {store} from './app/store'
 function App() {
   return (
+    <Provider store={store}>
     <Router>
       <Routes>
         <Route exact path='/' element={<DashboardPage/>}/>
@@ -47,7 +50,7 @@ function App() {
       </Routes>
 
     </Router>
-      
+      </Provider>
    
   );
 }
