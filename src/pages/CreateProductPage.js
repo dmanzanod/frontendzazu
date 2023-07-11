@@ -53,19 +53,21 @@ const CreateProductPage = () => {
             stock:Yup.number().integer('El stock debe ser positivo').required('El stock es requerido'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
-            image: Yup.mixed()
-  .test("type", "Solo puede subir una imagen", function (value) {
-     if(value==='undefined' || value){
-       return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
-     }
-     else{
-        return true
-     }
+            image: Yup.mixed().nullable().test("type", "Solo puede subir una imagen",
+              function (value) {
+                if(value=='undefined' || value)
+                 { return value && (value.type === "image/jpg" || value.type === "image/jpeg");}
+                
+                else{
+                   return true
+                }
+        
   }),
             categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
         }),
         onSubmit:async(values)=>{
           
+          console.log(values)
             setLoading(true)
             const resp= await newProduct(values)
             if(resp.success){

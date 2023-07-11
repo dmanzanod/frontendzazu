@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Box} from '@mui/material'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
 
@@ -16,15 +16,31 @@ import { toPng } from 'html-to-image';
 import { addImage, addImageStats } from '../features/indicators/indicatorSlice';
 const ChartComponent = ({title,data,type}) => {
   const dispatch = useDispatch();
+  const [dataFormatted,setDataFormatted]=useState([])
+  const [valueAxis,setValueAxis]=useState('')
+  const[argumentField,setArgumentField]=useState('')
   const elementRef = useRef();
-  const resultArray = Object.values(
-    data.reduce((accumulator, item) => {
-      const { serviceName, timesServiceAppears } = item;
-      accumulator[serviceName] = accumulator[serviceName] || { serviceId: item.serviceId, serviceName, timesServiceAppears: 0 };
-      accumulator[serviceName].timesServiceAppears += timesServiceAppears;
-      return accumulator;
-    }, {})
-  );
+  console.log(data)
+  const notRepeatedData=()=>{
+    let resultArray=[]
+    
+      setArgumentField('serviceName')
+      setValueAxis("timesServiceAppears")
+      resultArray = Object.values(
+        data.reduce((accumulator, item) => {
+          const { serviceName, timesServiceAppears } = item;
+          accumulator[serviceName] = accumulator[serviceName] || { serviceId: item.serviceId, serviceName, timesServiceAppears: 0 };
+          accumulator[serviceName].timesServiceAppears += timesServiceAppears;
+          return accumulator;
+        }, {})
+      );
+      
+    
+      
+    
+    setDataFormatted(resultArray)
+  }
+ 
   
 
   const captureElementAsImage = async () => {
@@ -43,6 +59,7 @@ const ChartComponent = ({title,data,type}) => {
     }
   };
   useEffect(()=>{
+    notRepeatedData()
     setTimeout(()=>{captureElementAsImage()},1000)
     
   },[])
@@ -64,11 +81,11 @@ const ChartComponent = ({title,data,type}) => {
             
         <Chart
         
-          data={resultArray}
+          data={dataFormatted}
         >
           <PieSeries
-            valueField="timesServiceAppears"
-            argumentField="serviceName"
+            valueField={valueAxis}
+            argumentField={argumentField}
           /> 
           
          

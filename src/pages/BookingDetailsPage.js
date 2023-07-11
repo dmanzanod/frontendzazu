@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Principal from "./Principal";
 import { Box, Typography } from "@mui/material";
-import { DataGrid, esES,  GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  esES,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBookings } from "../services/servicesServices";
 import { blue, cyan } from "@mui/material/colors";
@@ -10,19 +18,23 @@ const BookingDetailsPage = () => {
   const [bookings, setBookings] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
+  const type = localStorage.getItem("type");
   const getServiceName = (params) => {
     return params.row.services.map((service) => service.name);
   };
   const getProductName = (params) => {
-    return params.row.products.map((product) => product.name);
+    
+    return params.row.products.map((product) => product.product.name);
   };
   const getCoin = (params) => {
-    return params.row.services[0].coin;
+    return type === "products"
+      ? params.row.products[0].coin
+      : params.row.services[0].coin;
   };
   const formatPrice = (params) => {
     return `${params.row.total} ${getCoin(params)}`;
   };
-  const type = localStorage.getItem("type");
+
   const columns = [
     { field: "name", width: "200", headerName: "Cliente" },
     { field: "phone", headerName: "Teléfono" },
@@ -52,20 +64,21 @@ const BookingDetailsPage = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   function CustomToolbar() {
     return (
-      <GridToolbarContainer >
-        <GridToolbarColumnsButton sx={{color:cyan[900]}}/>
-        <GridToolbarFilterButton sx={{color:cyan[900]}}/>
-        <GridToolbarDensitySelector sx={{color:cyan[900]}}/>
-        <GridToolbarExport printOptions={{
-    hideFooter: true,
-    hideToolbar: true,
-  }}
-  sx={{color:cyan[900]}}
-  />
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton sx={{ color: cyan[900] }} />
+        <GridToolbarFilterButton sx={{ color: cyan[900] }} />
+        <GridToolbarDensitySelector sx={{ color: cyan[900] }} />
+        <GridToolbarExport
+          printOptions={{
+            hideFooter: true,
+            hideToolbar: true,
+          }}
+          sx={{ color: cyan[900] }}
+        />
       </GridToolbarContainer>
     );
   }
-  
+
   useEffect(() => {
     const getBusinessBookings = async () => {
       let resp;
@@ -94,41 +107,38 @@ const BookingDetailsPage = () => {
           alignItems: "center",
           gap: "20px",
           backgroundColor: "#fff",
-          height:'100%',
-          paddingBottom:'24px'
+          height: "100%",
+          paddingBottom: "24px",
         }}
       >
         <Typography variant="h3" color="primary" sx={{ mt: 10 }}>
           {localStorage.getItem("type") === "services" ? "Reservas" : "Pedidos"}
         </Typography>
 
-        
-          <DataGrid
+        <DataGrid
           slots={{ toolbar: CustomToolbar }}
-            sx={{
-              mt: 2,
-              marginInline: "auto",
-              width:'75vw',
-              borderColor: "primary.light",
-              backgroundColor: blue[50],
-              "& .MuiDataGrid-cell:hover": {
-                color: "primary.main",
-              },
-            }}
-         
-            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-            rows={bookings}
-            getRowId={(row) => row._id}
-            columns={type === "services" ? columns : columnsOrders}
-            pageSize={3}
-            rowsPerPageOptions={[5]}
-            rowLength={10}
-            onRowSelectionModelChange={(newRowSelected) => {
-              setSelectedRow(newRowSelected);
-            }}
-            rowSelectionModel={selectedRow}
-          />
-      
+          sx={{
+            mt: 2,
+            marginInline: "auto",
+            width: "75vw",
+            borderColor: "primary.light",
+            backgroundColor: blue[50],
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+          }}
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+          rows={bookings}
+          getRowId={(row) => row._id}
+          columns={type === "services" ? columns : columnsOrders}
+          pageSize={3}
+          rowsPerPageOptions={[5]}
+          rowLength={10}
+          onRowSelectionModelChange={(newRowSelected) => {
+            setSelectedRow(newRowSelected);
+          }}
+          rowSelectionModel={selectedRow}
+        />
       </Box>
     </Principal>
   );
