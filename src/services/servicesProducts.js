@@ -321,6 +321,7 @@ export const newProduct=async(values)=>{
     formData.append('categoryId',values.categoryId)
     formData.append('businessId',values.businessId)
     formData.append('image',values.image)
+    formData.append('state',values.state)
     return await axios.post(`${url}/createProduct`,formData,{
         headers:{
             "Content-Type":'multipart/form-data'
