@@ -348,6 +348,8 @@ export const updateProduct=async(id,values)=>{
     formData.append('details',values.details)
     formData.append('price',values.price)
     formData.append('coin',values.coin)
+    
+    formData.append('state',values.state)
     formData.append('categoryId',values.categoryId)
     formData.append('businessId',values.businessId)
     formData.append('image',values.image)

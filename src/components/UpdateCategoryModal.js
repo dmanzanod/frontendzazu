@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { getCategory, updateCategory } from '../services/servicesServices'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, TextField } from '@mui/material'
 import AlertComponent from './AlertComponent'
-import { getCategoryProduct } from '../services/servicesProducts'
+import { getCategoryProduct, updateCategoryProduct } from '../services/servicesProducts'
 const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
    
     const [category,setCategory]=useState({})
@@ -44,7 +44,15 @@ const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
         }),
         onSubmit:async(values)=>{
             setLoading(true)
-            const resp= await updateCategory(id,values)
+            let resp
+            if(localStorage.getItem('type')==='services'){
+
+            
+            resp= await updateCategory(id,values)
+        }
+            else{
+                resp= await updateCategoryProduct(id,values)
+            }
             
             if(!resp.error){
                 setLoading(false)
@@ -68,7 +76,7 @@ const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
             Actualizar Categoría
         </DialogTitle>
         <DialogContent>
-            <AlertComponent open={alert} message={result} severity={severity} handleClose={()=>setAlert(false)}/>
+            <AlertComponent open={alert} message={result} severity={severity} handleClose={()=>{setAlert(false);handleClose()}}/>
             <form onSubmit={formik.handleSubmit}>
             <FormControl sx={{ width:'100%'}}>
             
@@ -88,7 +96,7 @@ const UpdateCategoryModal = ({id,open,handleClose, updated}) => {
           </FormControl>
 
         <DialogActions sx={{justifyContent:'space-around'}}>
-            <Button variant='contained' type='submit' disabled={loading}>{loading?'Actualizando...':'Actualizar'}</Button>
+            <Button variant='contained' type='submit' disabled={loading || alert}>{loading?'Actualizando...':'Actualizar'}</Button>
             <Button onClick={handleClose}>Cancelar</Button>
         </DialogActions>
         </form>

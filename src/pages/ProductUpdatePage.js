@@ -63,7 +63,7 @@ const ProductUpdatePage = () => {
             state:Yup.boolean(),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
-            image: Yup.mixed()
+            image: Yup.mixed().nullable()
   .test("type", "Solo puede subir una imagen", function (value) {
      if(value=='undefined' || value){
        return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
