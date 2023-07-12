@@ -28,11 +28,11 @@ const BookingDetailsPage = () => {
   };
   const getCoin = (params) => {
     return type === "products"
-      ? params.row.products[0].coin
+      ? params.row.products[0].product.coin
       : params.row.services[0].coin;
   };
   const formatPrice = (params) => {
-    return `${params.row.total} ${getCoin(params)}`;
+    return `${params.row.total.toLocaleString()} ${getCoin(params)}`;
   };
 
   const columns = [
@@ -95,6 +95,7 @@ const BookingDetailsPage = () => {
           navigate("/login");
         }
       }
+      console.log(resp)
     };
     getBusinessBookings();
   }, [id]);
