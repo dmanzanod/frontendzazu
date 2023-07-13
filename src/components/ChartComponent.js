@@ -69,7 +69,7 @@ const ChartComponent = ({title,data,type}) => {
             flexDirection:'column',
             justifyContent:'center',
             width: '100%',
-          
+            overflowY:"scroll",
             borderRadius:"20px",
             backgroundColor:"#FFF",
             
@@ -80,7 +80,7 @@ const ChartComponent = ({title,data,type}) => {
             <Box >
             
         <Chart
-        
+        // className='pie__overflow'
           data={dataFormatted}
         >
           <PieSeries
