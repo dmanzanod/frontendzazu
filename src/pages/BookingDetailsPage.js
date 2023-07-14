@@ -27,14 +27,26 @@ const BookingDetailsPage = () => {
     return params.row.products.map((product) => product.product.name);
   };
   const getCoin = (params) => {
+    
     return type === "products"
-      ? params.row.products[0].product.coin
-      : params.row.services[0].coin;
+      ? params.row.products[0]?.product.coin
+      : params.row.services[0]?.coin;
   };
   const formatPrice = (params) => {
     return `${params.row.total.toLocaleString()} ${getCoin(params)}`;
   };
+  const formatTime=(params)=>{
+   
+    let dateFromMongoDB = new Date(params.row.time); // Example date from MongoDB
+    
+// Adjust the time zone offset
+const timeZoneOffset = new Date().getTimezoneOffset();
+const adjustedDate = new Date(dateFromMongoDB.getTime() - timeZoneOffset * 60000);
 
+// Display the adjusted date in a specific format
+return adjustedDate.toLocaleTimeString();
+
+  }
   const columns = [
     { field: "name", width: "200", headerName: "Cliente" },
     { field: "phone", headerName: "Teléfono" },
@@ -46,7 +58,7 @@ const BookingDetailsPage = () => {
     },
     { field: "total", headerName: "Precio", valueGetter: formatPrice },
     { field: "date", headerName: "Fecha" },
-    { field: "time", headerName: "Hora" },
+    { field: "time", headerName: "Hora",valueGetter:formatTime },
   ];
   const columnsOrders = [
     { field: "name", width: "200", headerName: "Cliente" },
@@ -59,7 +71,7 @@ const BookingDetailsPage = () => {
     },
     { field: "total", headerName: "Precio", valueGetter: formatPrice },
     { field: "date", headerName: "Fecha" },
-    { field: "time", headerName: "Hora" },
+    { field: "time", headerName: "Hora",valueGetter:formatTime },
   ];
   const [selectedRow, setSelectedRow] = useState([]);
   function CustomToolbar() {

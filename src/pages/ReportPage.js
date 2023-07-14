@@ -10,6 +10,8 @@ import * as XLSX from "xlsx";
 import { exportMultipleChartsToPdf } from "../services/utils";
 import { useSelector } from "react-redux";
 import { selectImages } from "../features/indicators/indicatorSlice";
+import { getBookingsForExport } from "../services/servicesServices";
+import { getOrdersForExport } from "../services/servicesProducts";
 const ReportPage = () => {
   const [bookings, setBookings] = useState([]);
   const images = useSelector(selectImages)
@@ -27,8 +29,19 @@ const fileType =
     FileSaver.saveAs(data, fileName + fileExtension);
   };
   useEffect(() => {
- 
-
+    const getInfoToExport=async()=>{
+      let resp
+      if(localStorage.getItem('type')==='services'){
+        resp= await getBookingsForExport(localStorage.geeItem('Business'),properties)
+      }
+      else{
+        resp = await getOrdersForExport(localStorage.getItem('Business',properties))
+      }
+      if(!resp.error){
+        setBookings(resp)
+      }
+    }
+    getInfoToExport()
   },[]);
   return (
     <Principal>
@@ -94,7 +107,7 @@ const fileType =
           >
             <Dataset />
            
-              <Typography variant="body1">Reservas</Typography>
+              <Typography variant="body1">{localStorage.getItem("type")==="services"?"Reservas":"Pedidos"}</Typography>
             
             
           </Box>
@@ -112,7 +125,7 @@ const fileType =
             <PictureAsPdf />
             <Typography variant="body1">Indicadores</Typography>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -124,7 +137,7 @@ const fileType =
           >
             <PictureAsPdf />
             <Typography variant="body1">Catálogo</Typography>
-          </Box>
+          </Box> */}
         </Box>
       </Paper>
     </Principal>
