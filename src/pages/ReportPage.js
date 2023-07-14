@@ -38,6 +38,7 @@ const fileType =
         resp = await getOrdersForExport(localStorage.getItem('Business',properties))
       }
       if(!resp.error){
+        console.log(resp)
         setBookings(resp)
       }
     }
