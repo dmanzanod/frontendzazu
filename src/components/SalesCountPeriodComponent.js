@@ -81,7 +81,7 @@ const SalesCountPeriodComponent = ({initialValue,type}) => {
     >
         <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
             <TrendingUpIcon/>
-            <Typography variant='h5'>Número total de ventas por: </Typography>
+            <Typography variant='h5' sx={{fontSize:{xs:'1rem',lg:'1.28rem'}}}>Número total de ventas por: </Typography>
                 <div>
       <List
         component="nav"
@@ -126,7 +126,7 @@ const SalesCountPeriodComponent = ({initialValue,type}) => {
       </Menu>
     </div>
         </Box>
-        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={data}/></Typography>
+        <Typography variant='h3' sx={{fontSize:{xs:'2rem',lg:'2.5rem'}}} color={'primary'}><FormattedNumber style="decimal" value={data}/></Typography>
     </Box>
     </IntlProvider>
 </ThemeProvider>

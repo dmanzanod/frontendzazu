@@ -49,9 +49,9 @@ const TotalSalesComponent = ({total, currency}) => {
         >
             <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
                 <MonetizationOnIcon/>
-                <Typography variant='h5'>Monto total de ventas (Histórico)</Typography>
+                <Typography variant='h5' sx={{fontSize:{xs:'1rem',lg:'1.28rem'}}}>Monto total de ventas (Histórico)</Typography>
             </Box>
-            <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={total.total}/> {currency}</Typography>
+            <Typography variant='h3' color={'primary'} sx={{fontSize:{xs:'2rem',lg:'2.5rem'}}}><FormattedNumber style="decimal" value={total.total}/> {currency}</Typography>
         </Box>
         </IntlProvider>
     </ThemeProvider>
