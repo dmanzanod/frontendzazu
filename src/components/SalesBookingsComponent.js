@@ -48,9 +48,9 @@ const SalesBookingsComponent = ({totalSales,totalBookings}) => {
     >
         <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
             <TrendingUpIcon/>
-            <Typography variant='h5'>Monto/Ventas</Typography>
+            <Typography variant='h5' sx={{fontSize:{xs:'1rem',lg:'1.28rem'}}}>Ticket promedio</Typography>
         </Box>
-        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={totalBookings.total===0?'0':totalSales.total/totalBookings.total}/></Typography>
+        <Typography variant='h3' sx={{fontSize:{xs:'2rem',lg:'2.5rem'}}} color={'primary'}>{totalBookings.total===0?'0':Math.round(parseFloat(totalSales.total/totalBookings.total)).toLocaleString('es')}</Typography>
     </Box>
     </IntlProvider>
 </ThemeProvider>

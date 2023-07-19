@@ -48,9 +48,9 @@ const TotalBookingsComponent = ({total}) => {
     >
         <Box sx={{display:'flex', gap:'12px', alignItems:'center', justifyContent:'center'}}>
             <TrendingUpIcon/>
-            <Typography variant='h5'>Número total de ventas (Histórico)</Typography>
+            <Typography variant='h5' sx={{fontSize:{xs:'1rem',lg:'1.28rem'}}}>Número total de ventas (Histórico)</Typography>
         </Box>
-        <Typography variant='h3' color={'primary'}><FormattedNumber style="decimal" value={total.total}/></Typography>
+        <Typography variant='h3' color={'primary'} sx={{fontSize:{xs:'2rem',lg:'2.5rem'}}}><FormattedNumber style="decimal" value={total.total}/></Typography>
     </Box>
     </IntlProvider>
 </ThemeProvider>

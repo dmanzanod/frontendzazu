@@ -209,7 +209,8 @@ const DashboardPage = () => {
       
   return (
     <Principal>
-        <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:2,md:3}, display:"grid", backgroundColor:"#F4F3FA", mt:'72px',gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px"}}>
+      
+        <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:1,md:3}, display:"grid", backgroundColor:"#F4F3FA",gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px",mt:'72px'}}>
         
        {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
         {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
@@ -220,23 +221,18 @@ const DashboardPage = () => {
         <Box sx={{
           display:'flex',
           flexDirection:'column',
-          width:'100%',
+          width:{xs:'100%',sm:'100%'},
           gap: '12px',
-          mb:2
+          mb:2,
+          backgroundColor:'#fff',
+          borderRadius:'15px'
         }}>
 
         
        {<PeriodSalesTotalComponent type={type} initialValue={salesMonth} currency={currency}/>}
         {bookingsMonth &&  <SalesCountPeriodComponent type={type} initialValue={bookingsMonth.total}/>}
         {totalBookings && totalSales && <SalesBookingsComponent totalBookings={totalBookings} totalSales={totalSales}/>}
-        </Box>
-        <Box sx={{
-          display:'flex',
-          flexDirection:'column',
-          width:'100%',
-          gap: '12px',
-          mb:2
-        }}>
+        
           {totalSales && <TotalSalesComponent total={totalSales} currency={currency}/>}
           {totalBookings && <TotalBookingsComponent total={totalBookings}/>}
          

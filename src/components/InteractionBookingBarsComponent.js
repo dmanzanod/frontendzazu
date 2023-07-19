@@ -3,32 +3,38 @@ import { Box, List, ListItem, ListItemText, Menu, MenuItem, Typography } from '@
 import React, { useEffect, useRef, useState } from 'react'
 import theme from '../theme/theme'
 import Paper from '@mui/material/Paper';
-import { ArgumentAxis, BarSeries,  ValueAxis } from '@devexpress/dx-react-chart-material-ui';
-import {
-  Chart,
-  
-  Title,
-} from '@devexpress/dx-react-chart-material-ui';
-import { Animation} from '@devexpress/dx-react-chart';
+
 import { getPeriodBookings } from '../services/servicesServices';
 import { getPeriodOrders } from '../services/servicesProducts';
 import { getPeriodInteractions } from '../services/servicesInteractions';
 import { useDispatch } from 'react-redux';
 import { toPng } from 'html-to-image';
 import { addImageConversationsBookings } from '../features/indicators/indicatorSlice';
+import { Chart } from 'primereact/chart';
 
 const InteractionBookingComponent = ({type,bookings,conversations,title}) => {
- const[dataPeriod,setDataPeriod]=useState(bookings.total)
- const[interactionsPeriod,setInteractionsPeriod]=useState(conversations.total)
-  const data=[{
-    property:title.includes('Pedidos')?'Pedidos':'Reservas',
-    total:dataPeriod
-  },
-{
-  property:"Conversaciones",
-  total:interactionsPeriod
-}]
+ 
+ const typeBusiness= title.includes('Pedidos')?'Pedidos':'Reservas'
+ const [data,setData]=useState({
+    labels:[typeBusiness,'Conversaciones'],
+    datasets:[
+      {
+        label:'Número de conversaciones-'+typeBusiness,
+        backgroundColor: '#42A5F5',
+        data:[bookings.total,conversations.total]
+      }
+    ]
+    
+  })
+
 const options=['month','trimester','semester']
+const [optionsChart,setOptionsChart]= useState({
+  scales: {
+      y: {
+          beginAtZero: true
+      }
+  }
+})
     const optionsLabels=['mes','trimestre','semestre']
     const dispatch = useDispatch();
     const elementRef = useRef();
@@ -44,19 +50,19 @@ const getSales= async(index)=>{
         resp= await getPeriodOrders(options[index],localStorage.getItem('Business'))
     }
     if(resp.success===true){
-        setDataPeriod(resp.total)
+        return resp.total
     }
     else{
-        setDataPeriod(0)
+        return 0
     }
 }
 const getInteractions= async(index)=>{
     const resp= await getPeriodInteractions(options[index],localStorage.getItem('Business'))
     if(resp.success===true){
-        setInteractionsPeriod(resp.total)
+        return resp.total
     }
     else{
-        setInteractionsPeriod(0)
+        return 0
     }
 }
 const handleClickListItem = (event) => {
@@ -65,14 +71,26 @@ const handleClickListItem = (event) => {
 
   const handleMenuItemClick = async (event, index) => {
     setSelectedIndex(index);
-    await getSales(index)
-    await getInteractions(index)
+    const resp=await getSales(index)
+    const respInteractions=await getInteractions(index)
+    setData({
+      labels:[typeBusiness,'Conversaciones'],
+      datasets:[
+        {
+          label:'Número de conversaciones-'+typeBusiness,
+          backgroundColor: '#42A5F5',
+          data:[resp,respInteractions]
+        }
+      ]
+      
+    })
     setAnchorEl(null);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const captureElementAsImage = async () => {
     try {
       const element = elementRef.current;
@@ -95,20 +113,23 @@ const handleClickListItem = (event) => {
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{
-            display:'flex',
-            flexDirection:'column',
-            justifyContent:'center',
-            width: '100%',
-            boxShadow:'none',
+           display:'flex',
+           flexDirection:'column',
+           justifyContent:'center',
+           
+           width:{xs:'98%',sm:'100%'},
+           paddingInline:'12px',
             borderRadius:"20px",
-            backgroundColor:"#FFF",
-            
-            gap:"12px"
+           backgroundColor:"#FFF",
+           paddingTop:"24px",
+            gap:"24px"
+
 
         }}
         className='chart'
         ref={elementRef}
         >
+          <Typography variant='h4' sx={{alignSelf:'center',fontSize:{xs:'1.4rem',sm:'1.8rem'}}}>{typeBusiness}-Conversaciones</Typography>
           <Box sx={{
             display:'flex',
             paddingInline:'24px',
@@ -162,31 +183,7 @@ const handleClickListItem = (event) => {
         ))}
       </Menu>
             </Box>
-            <Box >
-           
-        <Chart
-        
-          data={data}
-        >
-           
-          
-           <ArgumentAxis />
-          <ValueAxis max={7} />
-
-          <BarSeries
-            valueField="total"
-            argumentField="property"
-          />
-          
-          <Title
-            text={title}
-          />
-          
-          <Animation />
-          
-        </Chart>
-    
-            </Box>
+            <Chart className='chart__width' type="bar" data={data}  options={optionsChart}/>
 
         </Box>
 

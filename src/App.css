@@ -54,6 +54,6 @@ background-color:#D3F6DE;
   object-fit:cover;
   
 }
-.pie__overflow{
-  height:fit-content !important;
+.chart__width{
+  width:100%;
 }
