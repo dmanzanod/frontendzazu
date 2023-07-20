@@ -59,7 +59,7 @@ const DeleteCategoryModal = ({open,handleClose,id,deleted}) => {
         </DialogTitle>
         {result===''?
         <DialogContent>
-            <Typography variant='h5' >Se eliminará la categoría <strong>{category.name}</strong>.</Typography>
+            <Typography variant='h5' >Se eliminará la categoría <strong>{category.name}</strong> y todos los productos asociados a ésta.</Typography>
             <Typography variant='h6'> Esta acción no se puede deshacer</Typography>
             
             
