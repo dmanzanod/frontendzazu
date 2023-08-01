@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import WorkIcon from '@mui/icons-material/Work'
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
+import { CalendarIcon } from '@mui/x-date-pickers';
 const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
@@ -24,7 +25,7 @@ const MenuComponent = () => {
       setExpand(!expand)
     }
     const handleSubList=(index)=>{
-      const subRoutes=[`/categories/${localStorage.getItem('Business')}`,`/products/${localStorage.getItem('Business')}`,`/bookingDetails/${localStorage.getItem('Business')}`,`/businessDetailsUpdate/${localStorage.getItem('Business')}`]
+      const subRoutes=[`/categories/${localStorage.getItem('Business')}`,`/products/${localStorage.getItem('Business')}`,`/bookingDetails/${localStorage.getItem('Business')}`,`/businessDetailsUpdate/${localStorage.getItem('Business')}`,'/schedule']
       navigate(subRoutes[index])
     }
   const handleListItemClick = (event, index) => {
@@ -106,6 +107,12 @@ const MenuComponent = () => {
             </ListItemIcon>
             <ListItemText primary="Información" />
           </ListItemButton>
+          {localStorage.getItem('type')==='services'&&<ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(4)}>
+            <ListItemIcon>
+              <CalendarIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Agenda" />
+          </ListItemButton>}
           
         </List>
       </Collapse>

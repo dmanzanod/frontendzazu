@@ -24,6 +24,7 @@ import ProductUpdatePage from './pages/ProductUpdatePage';
 import ReportPage from './pages/ReportPage';
 import { Provider } from 'react-redux';
 import {store} from './app/store'
+import SchedulePage from './pages/SchedulePage';
 function App() {
   return (
     <Provider store={store}>
@@ -41,6 +42,7 @@ function App() {
         <Route exact path='/products/:id' element={<ProtectedRoute redirectPath='/login'><ProductService/></ProtectedRoute>}/>
         <Route exact path='/categoryUpdate/:id' element={<ProtectedRoute redirectPath='/login'><UpdateCategoryPage/></ProtectedRoute>}/>
         <Route exact path='/serviceUpdate/:id' element={<ProtectedRouteServices redirectPath='/login'><UpdateServicePage/></ProtectedRouteServices>}/>
+        <Route exact path="/schedule" element={<SchedulePage/>}/>
         <Route exact path='/productUpdate/:id' element={<ProtectedRouteProduct redirectPath='/login'><ProductUpdatePage/></ProtectedRouteProduct>}/>
         <Route exact path='/newService' element={<ProtectedRouteServices redirectPath='/login'><CreateServicePage/></ProtectedRouteServices>}/>
         <Route exact path='/newProduct' element={<ProtectedRouteProduct redirectPath='/login'><CreateProductPage/></ProtectedRouteProduct>}/>

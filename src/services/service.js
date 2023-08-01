@@ -70,6 +70,21 @@ export const login=async(values)=>{
         }
     })
 }
+export const saveSchedule=async(values)=>{
+    return await axios.post(`${url}/newSchedule`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
 export const signUp=async(values)=>{
     return await axios.post(`${url}/signUp`,values)
     .then((response)=>{
