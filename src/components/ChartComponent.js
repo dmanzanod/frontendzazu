@@ -87,7 +87,7 @@ const ChartComponent = ({title,data,type}) => {
   };
   useEffect(()=>{
     const format=formatData()
-    
+    console.log(data)
     setDataFormatted(format)
     setOptions(optionsChart)
     setTimeout(()=>{captureElementAsImage()},1000)
