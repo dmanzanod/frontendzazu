@@ -20,11 +20,11 @@ const BookingDetailsPage = () => {
   const navigate = useNavigate();
   const type = localStorage.getItem("type");
   const getServiceName = (params) => {
-    return params.row.services.map((service) => service.name);
+    return params.row.services.map((service) => service?.name);
   };
   const getProductName = (params) => {
     
-    return params.row.products.map((product) => product.product.name);
+    return params.row.products.map((product) => product.product?.name);
   };
   const getCoin = (params) => {
     
