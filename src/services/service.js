@@ -71,7 +71,7 @@ export const login=async(values)=>{
     })
 }
 export const saveSchedule=async(values)=>{
-    return await axios.post(`${url}/newSchedule`,values)
+    return await axios.post(`${url}/newSimpleSchedule`,values)
     .then((response)=>{
         return response.data
     })
@@ -85,6 +85,40 @@ export const saveSchedule=async(values)=>{
         }
     })
 }
+
+export const getSimpleScheduleByBussinesId = async(id)=>{
+    return await axios.get(`${url}/getSimpleSchedule/${id}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
+export const updateSimpleSchedule = async (id,value)=>{
+    return await axios.post(`${url}/updateSimpleSchedules/${id}`,value)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
+
 export const signUp=async(values)=>{
     return await axios.post(`${url}/signUp`,values)
     .then((response)=>{

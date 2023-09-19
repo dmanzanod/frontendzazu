@@ -32,7 +32,7 @@ const fileType =
     const getInfoToExport=async()=>{
       let resp
       if(localStorage.getItem('type')==='services'){
-        resp= await getBookingsForExport(localStorage.geeItem('Business'),properties)
+        resp= await getBookingsForExport(localStorage.getItem('Business'),properties)
       }
       else{
         resp = await getOrdersForExport(localStorage.getItem('Business',properties))

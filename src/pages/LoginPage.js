@@ -43,7 +43,9 @@ const LoginPage = () => {
         localStorage.setItem('Business',resp.data.businessId)
         localStorage.setItem('user',resp.data.name)
         localStorage.setItem('type',resp.data.type)
+        localStorage.setItem('ScheduleId',resp.data.scheduleId)
         localStorage.setItem('url',resp.data.url)
+        console.log(`${resp.data.url}`)
         navigate('/')
         
       }
