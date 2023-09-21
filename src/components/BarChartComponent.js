@@ -61,7 +61,7 @@ const BarChartComponent = ({data,title}) => {
   useEffect(()=>{
     const format=formatData()
     setDataFormatted(format)
-    setTimeout(()=>{captureElementAsImage()},1000)
+    setTimeout(()=>{captureElementAsImage()},2000)
     
   },[])
   return (

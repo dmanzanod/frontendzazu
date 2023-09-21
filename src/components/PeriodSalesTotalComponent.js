@@ -53,12 +53,8 @@ const PeriodSalesTotalComponent = ({type,currency,initialValue}) => {
         }
       };
     useEffect(()=>{
-     
-      
-        setTimeout(()=>{captureElementAsImage()},1000)
-        
-    
-      getSales(0)
+        setTimeout(()=>{captureElementAsImage()},2000)
+        getSales(0)
     },[])
     const handleClickListItem = (event) => {
         setAnchorEl(event.currentTarget);
