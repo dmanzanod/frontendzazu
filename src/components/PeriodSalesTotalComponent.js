@@ -36,7 +36,10 @@ const PeriodSalesTotalComponent = ({type,currency,initialValue}) => {
      const captureElementAsImage = async () => {
         try {
           const element = elementRef.current;
-    
+          if (!element) {
+            console.error("Element is null or undefined");
+            return;
+          }
           const imgDataUrl = await toPng(element,{pixelRatio:2});
           const imgStats={
             elWidth:element.offsetWidth,
