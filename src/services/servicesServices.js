@@ -36,8 +36,6 @@ export const getBookings= async(businessId)=>{
             status:error.response.status
         }
     })
-    
-
 }
 export const getTotalSales= async(businessId)=>{
     

@@ -25,6 +25,7 @@ import ReportPage from './pages/ReportPage';
 import { Provider } from 'react-redux';
 import {store} from './app/store'
 import SchedulePage from './pages/SchedulePage';
+import ExcelUploadPage from './pages/ExcelUploadPage';
 function App() {
   return (
     <Provider store={store}>
@@ -49,6 +50,7 @@ function App() {
         <Route exact path='/businessDetailsUpdate/:id' element={<ProtectedRoute redirectPath='/login'><BusinessDetailsUpdate/></ProtectedRoute>}/>
         <Route exact path='/report' element={<ProtectedRoute redirectPath='/login'><ReportPage/></ProtectedRoute>}/>
         <Route exact path='/bookingDetails/:id' element={<ProtectedRoute redirectPath='/login'><BookingDetailsPage/></ProtectedRoute>}/> 
+        <Route exact path='/excelUpload' element={<ProtectedRoute redirectPath='/login'><ExcelUploadPage/></ProtectedRoute>}></Route>
       </Routes>
 
     </Router>

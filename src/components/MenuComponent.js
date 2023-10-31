@@ -13,11 +13,13 @@ import WorkIcon from '@mui/icons-material/Work'
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import { CalendarIcon } from '@mui/x-date-pickers';
+import ExcelUploadIcon from '@mui/icons-material/CloudUpload'
+
 const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1);
-    const routes=['/','/qr','/crud','/report','/help']
+    const routes=['/','/qr','/crud','/report','/help','/excelUpload']
     const navigate=useNavigate()
     const location=useLocation()
     const handleExpand=()=>{
@@ -107,13 +109,26 @@ const MenuComponent = () => {
             </ListItemIcon>
             <ListItemText primary="Información" />
           </ListItemButton>
-          {localStorage.getItem('type')==='services'&&<ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(4)}>
+          {
+            localStorage.getItem('type')==='services'&&<ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(4)}>
             <ListItemIcon>
               <CalendarIcon/>
             </ListItemIcon>
             <ListItemText primary="Agenda" />
-          </ListItemButton>}
+            </ListItemButton>
+          }
           
+            <ListItemButton
+              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 5)}
+            >
+              <ListItemIcon>
+              <ExcelUploadIcon />
+            </ListItemIcon>
+              
+              <ListItemText primary={'Cargar Excel'}/>
+            </ListItemButton>
+          
+
         </List>
       </Collapse>
             <ListItem  disablePadding>
@@ -127,14 +142,14 @@ const MenuComponent = () => {
               </ListItem>
             <ListItem  disablePadding>
                 <ListItemButton 
-                onClick={(event) => handleListItemClick(event, 4)}
-                
+                onClick={(event) => handleListItemClick(event, 4)}       
                 >
                     <ContactSupportOutlinedIcon/>
                   <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
-                </ListItemButton>
-                
+                </ListItemButton>               
               </ListItem>
+
+            
           </List>
           
         </Box>

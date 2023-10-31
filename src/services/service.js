@@ -18,9 +18,26 @@ export const getQr= async()=>{
             status:error.response? error.response.status:500
         }
     })
-    
-
 }
+
+// Excel Upload
+export const uploadExcel = async (businessId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return await axios.post(`${url}/uploadExcel/${businessId}`, formData)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return {
+        error: error.response.data.message,
+        code: error.code,
+        name: error.name,
+        status: error.response.status,
+      };
+    });
+};
 
 export const getBusinessById= async(id)=>{
     
