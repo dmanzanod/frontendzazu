@@ -12,6 +12,7 @@ import {
 } from "@mui/x-data-grid";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBookings } from "../services/servicesServices";
+import { getBusinessById } from "../services/service";
 import { blue, cyan } from "@mui/material/colors";
 import { getOrders } from "../services/servicesProducts";
 const BookingDetailsPage = () => {
@@ -35,18 +36,46 @@ const BookingDetailsPage = () => {
   const formatPrice = (params) => {
     return `${params.row.total.toLocaleString()} ${getCoin(params)}`;
   };
-  const formatTime=(params)=>{
-   
-    let dateFromMongoDB = new Date(params.row.time); // Example date from MongoDB
+  // const formatTime=(params)=>{
     
-// Adjust the time zone offset
-const timeZoneOffset = new Date().getTimezoneOffset();
-const adjustedDate = new Date(dateFromMongoDB.getTime() - timeZoneOffset * 60000);
+  //   let dateFromMongoDB = new Date(params.row.time); // Example date from MongoDB
+  //   console.log(`Time in MongoDB ${dateFromMongoDB}`)
+  //   // Adjust the time zone offset
+  //   const timeZoneOffset = new Date().getTimezoneOffset();
+  //   const adjustedDate = new Date(dateFromMongoDB.getTime() - timeZoneOffset * 60000);
 
-// Display the adjusted date in a specific format
-return adjustedDate.toLocaleTimeString();
+  //   // Display the adjusted date in a specific format
+  //   return adjustedDate.toLocaleTimeString();
 
-  }
+  // }
+  const formatTime = (params) => {
+    // Split the time string into hours, minutes, and seconds
+    const [hours, minutes, seconds] = params.row.time.split(':');
+  
+    // Create a Date object with the current year, month, and day
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const day = currentDate.getDate();
+  
+    // Create a new Date object with the extracted time and current date
+    const timeWithDate = new Date(year, month, day, hours, minutes, seconds);
+  
+    // Format the time using the user's browser time zone
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      //timeZoneName: 'short',
+    };
+  
+    const formattedTime = timeWithDate.toLocaleTimeString(undefined, options);
+  
+    return formattedTime;
+  };
+  
+
+  
   const columns = [
     { field: "name", width: "200", headerName: "Cliente" },
     { field: "phone", headerName: "Teléfono" },
