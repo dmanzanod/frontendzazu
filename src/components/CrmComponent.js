@@ -84,7 +84,7 @@
     return (
     
         <div style={{ textAlign: 'center' }}>
-          <h1>CRM Data Funnel Chart</h1>
+          <h1>CRM</h1>
           <div style={{ margin: '0 auto', width: 'fit-content' }} ref={chartContainer}></div>
         </div>
  

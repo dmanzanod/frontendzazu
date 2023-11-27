@@ -29,7 +29,7 @@ const HeaderComponent = () => {
   return (
     <ThemeProvider theme={theme}>
         
-        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1,background: 'linear-gradient(90deg, rgba(246,207,43,1) 0%, rgba(0,190,201,1) 100%)' }} >
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1,background: 'linear-gradient(90deg, #0c045c 0%, #442ce4 100%)' }} >
         <Toolbar sx={{display:"flex",alignContent:"center",justifyContent:"space-between"}}>
 
             <Box sx={{width:"70%", paddingInline:'16px'}}>
