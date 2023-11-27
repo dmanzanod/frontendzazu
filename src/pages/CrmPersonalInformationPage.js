@@ -12,6 +12,7 @@ const CrmPersonalInformationPage = () => {
       try {
         const response = await getCrmDataByYear(2023, localStorage.getItem('Business'));
         if (response.success) {
+            console.log(response.data)
           setContacts(response.data);
         } else {
           // Handle error in fetching data
