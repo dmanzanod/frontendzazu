@@ -14,12 +14,13 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import { CalendarIcon } from '@mui/x-date-pickers';
 import ExcelUploadIcon from '@mui/icons-material/CloudUpload'
-
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import Groups3Icon from '@mui/icons-material/Groups3';
 const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1);
-    const routes=['/','/qr','/crud','/report','/help','/excelUpload']
+    const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation']
     const navigate=useNavigate()
     const location=useLocation()
     const handleExpand=()=>{
@@ -127,7 +128,7 @@ const MenuComponent = () => {
               
               <ListItemText primary={'Cargar Excel'}/>
             </ListItemButton>
-          
+
 
         </List>
       </Collapse>
@@ -140,6 +141,7 @@ const MenuComponent = () => {
                   <ListItemText primary={'Reportes'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
                 </ListItemButton>
               </ListItem>
+            
             <ListItem  disablePadding>
                 <ListItemButton 
                 onClick={(event) => handleListItemClick(event, 4)}       
@@ -150,6 +152,24 @@ const MenuComponent = () => {
               </ListItem>
 
             
+            <ListItem  disablePadding>
+              <ListItemButton
+              onClick={(event) => handleListItemClick(event, 6)}
+            >
+              <Groups3Icon />            
+              <ListItemText primary={'Datos CRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+            </ListItemButton>
+            </ListItem>
+
+            <ListItem  disablePadding>
+              <ListItemButton
+              onClick={(event) => handleListItemClick(event, 7)}
+            >
+              <PeopleOutlineIcon />            
+              <ListItemText primary={'ContactosCRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+            </ListItemButton>
+            </ListItem>
+
           </List>
           
         </Box>

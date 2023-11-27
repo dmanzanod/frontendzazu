@@ -39,6 +39,21 @@ export const uploadExcel = async (businessId, file) => {
     });
 };
 
+export const getCrmDataByYear = async(year,businessId)=>{
+    return await axios.get(`${url}/getCrmDataByYear/${businessId}/${year}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const getBusinessById= async(id)=>{
     
     return await axios.get(`${url}/getBusiness/${id}`)

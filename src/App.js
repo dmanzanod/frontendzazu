@@ -26,6 +26,8 @@ import { Provider } from 'react-redux';
 import {store} from './app/store'
 import SchedulePage from './pages/SchedulePage';
 import ExcelUploadPage from './pages/ExcelUploadPage';
+import CRMPage from './pages/CrmDataPage';
+import CrmPersonalInformationPage from './pages/CrmPersonalInformationPage';
 function App() {
   return (
     <Provider store={store}>
@@ -51,6 +53,8 @@ function App() {
         <Route exact path='/report' element={<ProtectedRoute redirectPath='/login'><ReportPage/></ProtectedRoute>}/>
         <Route exact path='/bookingDetails/:id' element={<ProtectedRoute redirectPath='/login'><BookingDetailsPage/></ProtectedRoute>}/> 
         <Route exact path='/excelUpload' element={<ProtectedRoute redirectPath='/login'><ExcelUploadPage/></ProtectedRoute>}></Route>
+        <Route exact path='/crmData' element={<ProtectedRoute redirectPath='/login'><CRMPage/></ProtectedRoute>}></Route>
+        <Route exact path='/crmPersonalInformation' element={<ProtectedRoute redirectPath='/login'><CrmPersonalInformationPage></CrmPersonalInformationPage></ProtectedRoute>}></Route>
       </Routes>
 
     </Router>

@@ -173,9 +173,26 @@ const LoginPage = () => {
         
         
 
+    </Box >
+    <Box
+      component='footer'
+     sx={{
+    width: '100%',
+    background: cyan[600],
+    height: '72px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    gap: '24px',
+    zIndex: (theme) => theme.zIndex.drawer + 1,
+    boxShadow: '0px -5px 50px rgba(0, 0, 0, 0.1)', // Add this line for upper shadow
+  }}
+>
+<FooterComponent/>
+</Box>
+
+    
     </Box>
-     <FooterComponent/>
-      </Box>
     
    
     </ThemeProvider>

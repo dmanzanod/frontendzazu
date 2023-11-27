@@ -4,18 +4,18 @@ const theme = createTheme({
     typography: {
         // In Chinese and Japanese the characters are usually larger,
         // so a smaller fontsize may be appropriate.
-        fontSize: 12,
+        fontSize: 14,
       },
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#00bec9',
+      main: '#0c045c',
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       
-      main: '#fcc302',
+      main: '#0c045c',
       // dark: will be calculated from palette.secondary.main,
       
     },

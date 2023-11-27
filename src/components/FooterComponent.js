@@ -13,7 +13,7 @@ const FooterComponent = () => {
     
     sx={{
         width:'100%',
-        background: cyan[600],
+        background: '#442ce4',
         height:'72px',
         display: 'flex',
         justifyContent:'center',
@@ -28,7 +28,7 @@ const FooterComponent = () => {
         
         <Box >
         <IconButton>
-            <Link href='https://www.instagram.com/zazuservice_/' target={'_blank'} color={'secondary'} sx={{mt:0.5}}>
+            <Link href='https://www.instagram.com/zazuservice/' target={'_blank'} color={'secondary'} sx={{mt:0.5}}>
             <InstagramIcon color={'secondary'}/>
             </Link>
         </IconButton>
