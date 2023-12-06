@@ -155,16 +155,6 @@ const MenuComponent = () => {
               </ListItem>
             
             <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleListItemClick(event, 4)}       
-                >
-                    <ContactSupportOutlinedIcon/>
-                  <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
-                </ListItemButton>               
-              </ListItem>
-
-            
-            <ListItem  disablePadding>
               <ListItemButton
               onClick={(event) => handleListItemClick(event, 6)}
             >
@@ -182,7 +172,15 @@ const MenuComponent = () => {
             </ListItemButton>
             </ListItem>
 
-          
+            <ListItem  disablePadding>
+                <ListItemButton 
+                onClick={(event) => handleListItemClick(event, 4)}       
+                >
+                    <ContactSupportOutlinedIcon/>
+                  <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                </ListItemButton>               
+              </ListItem>
+              
           </List>
           
         </Box>

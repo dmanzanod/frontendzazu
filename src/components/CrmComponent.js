@@ -59,6 +59,7 @@
         mainFlow: 'Inicio conversacion',
         BuyFlow: 'Compras o Reservas',
         morningSelectionFlow: 'Seleccionando horarios',
+        botSelectionFlow: 'Inicio conversacion'
         // Add other flows as needed
       };
     
