@@ -20,7 +20,7 @@ const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1);
-    const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation']
+    const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText']
     const navigate=useNavigate()
     const location=useLocation()
     const handleExpand=()=>{
@@ -129,6 +129,18 @@ const MenuComponent = () => {
               <ListItemText primary={'Cargar Excel'}/>
             </ListItemButton>
 
+           
+              <ListItemButton
+              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 8)}
+            >
+              <ListItemIcon>
+              <ExcelUploadIcon />
+            </ListItemIcon>
+              
+              <ListItemText primary={'Cargar texto'}/>
+            </ListItemButton>
+           
+
 
         </List>
       </Collapse>
@@ -170,6 +182,7 @@ const MenuComponent = () => {
             </ListItemButton>
             </ListItem>
 
+          
           </List>
           
         </Box>

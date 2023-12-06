@@ -28,6 +28,7 @@ import SchedulePage from './pages/SchedulePage';
 import ExcelUploadPage from './pages/ExcelUploadPage';
 import CRMPage from './pages/CrmDataPage';
 import CrmPersonalInformationPage from './pages/CrmPersonalInformationPage';
+import FileUploadTextPage from './pages/FileUploadTextPage';
 function App() {
   return (
     <Provider store={store}>
@@ -55,6 +56,7 @@ function App() {
         <Route exact path='/excelUpload' element={<ProtectedRoute redirectPath='/login'><ExcelUploadPage/></ProtectedRoute>}></Route>
         <Route exact path='/crmData' element={<ProtectedRoute redirectPath='/login'><CRMPage/></ProtectedRoute>}></Route>
         <Route exact path='/crmPersonalInformation' element={<ProtectedRoute redirectPath='/login'><CrmPersonalInformationPage></CrmPersonalInformationPage></ProtectedRoute>}></Route>
+        <Route exact path='/fileUploadText' element={<ProtectedRoute redirectPath='/login'><FileUploadTextPage></FileUploadTextPage></ProtectedRoute>}></Route>
       </Routes>
 
     </Router>

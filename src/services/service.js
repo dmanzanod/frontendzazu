@@ -211,6 +211,41 @@ export const changePassword=async(id,token,values)=>{
         }
     })
 }
+const clearAxiosInterceptors = () => {
+    axios.interceptors.request.eject(AxiosInterceptor.requestHandler);
+    axios.interceptors.response.eject(AxiosInterceptor.responseHandler);
+  };
+  
+export const uploadFileText = async (file, onUploadProgress) => {
+    clearAxiosInterceptors();
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    try {
+      const response = await axios.post(`${localStorage.getItem('url')}/uploadFile`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress,
+      });
+  
+      if (response && response.data) {
+        return response.data; // Return response data if available
+      } else {
+        // Handle case when response data is undefined or empty
+        return { error: 'No data received from server' };
+      }
+    } catch (error) {
+      return {
+        error: error.response ? error.response.data.message : 'Unknown error',
+        code: error.code,
+        name: error.name,
+        status: error.response ? error.response.status : 'Unknown status',
+      };
+    }
+  };
+
+
 export const logOut=()=>{
     localStorage.removeItem('user')
     localStorage.removeItem('Business')
