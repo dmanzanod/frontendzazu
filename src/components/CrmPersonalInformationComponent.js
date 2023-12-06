@@ -49,6 +49,9 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       if (flow === 'morningSelectionFlow') {
         return 'Seleccionando horarios';
       }
+      if (flow === 'botSelectionFlow') {
+        return 'Inicio conversacion';
+      }
       // Add other conditions if needed for different flows
       return flow; // Return the flow itself if no specific condition matches
     };
@@ -78,7 +81,7 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
             </Typography>
             <Select value={selectedFlow} onChange={(e) => filterContactsByFlow(e.target.value)}>
               <MenuItem value=''>Mostrar todo</MenuItem>
-              <MenuItem value="mainFlow">Filtrar por inicio de conversacion</MenuItem>
+              <MenuItem value="botSelectionFlow">Filtrar por inicio de conversacion</MenuItem>
               <MenuItem value="morningSelectionFlow">Filtrar por seleccion de Horarios</MenuItem>
               <MenuItem value="BuyFlow">Filtrar por reserva o compra de productos</MenuItem>
               {/* Add more items for other flows as needed */}
