@@ -33,7 +33,7 @@ const NewCategoryModal = ({open, handleClose,created}) => {
             }
             else{
                 setLoading(false)
-                setResult(`Ha ocurrido un error ${resp.error}`)
+                setResult(`Ha ocurrido un error de tipo ${resp.code}`)
             }
            created()
 

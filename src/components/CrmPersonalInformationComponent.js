@@ -9,12 +9,14 @@ import {
   Select,
   MenuItem,
   Typography,
+  TextField,
+  Button
 } from "@mui/material";
 
 const CrmPersonalInformationComponent = ({ contacts }) => {
     const [groupedContacts, setGroupedContacts] = useState({});
     const [selectedFlow, setSelectedFlow] = useState("");
-  
+    const [message, setMessage] = useState("");
     useEffect(() => {
       const groupContactsByFlow = () => {
         const grouped = {};
@@ -67,7 +69,14 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       // Add other conditions if needed for different flows
       return flow; // Return the flow itself if no specific condition matches
     };
-  
+    
+    const sendMessage = () => {
+      // Here you can use the 'message' state variable to send the message to the endpoint
+      // Use it as needed, for example, send an API request with the 'message' content
+      console.log("Sending message:", message);
+      // You can add your API call logic here
+    };
+
     return (
       <div style={{ overflowX: 'auto', maxWidth: '100%' }}>
         <div style={{ padding: '40px 10px 20px', textAlign: 'center' }}>
@@ -117,9 +126,10 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
                     <TableCell style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
                         Contact: {contact.userId}
                         <br />
-                        Fecha: {contact.createdAt ? `Fecha: ${contact.createdAt.slice(0, 10)}` : 'No date available'}
+                        Fecha: {contact.createdAt ? ` ${contact.createdAt.slice(0, 10)}` : 'No date available'}
                         <br />
                         Ultimo mensaje enviado: {contact.lastProduct}
+                        
                     </TableCell>
                     </TableRow>
                 ))}
@@ -128,7 +138,19 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
                 </TableContainer>
               </div>
             ))}
+           
           </div>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <TextField
+          label="Escribe tu mensaje"
+          variant="outlined"
+          size="small"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          style={{ marginRight: '10px', width: '250px' }}
+        />
+        <Button variant="contained" onClick={sendMessage}>Enviar mensajes</Button>
+      </div>
         </div>
       </div>
     );
