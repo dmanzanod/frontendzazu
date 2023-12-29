@@ -60,7 +60,9 @@
         BuyFlow: 'Compras o Reservas',
         morningSelectionFlow: 'Seleccionando horarios',
         botSelectionFlow: 'Inicio conversacion',
-        directContactFlow: 'Contacto con asesor'
+        directContactFlow: 'Contacto con asesor',
+        cursoHorario:'Cursos y horarios',
+        preciosMensualidad:'Precios de la mensualidad'
         // Add other flows as needed
       };
     

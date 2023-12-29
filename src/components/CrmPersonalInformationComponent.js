@@ -58,6 +58,12 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       if (flow === 'directContactFlow') {
         return 'Contacto con asesor';
       }
+      if (flow === 'preciosMensualidad') {
+        return 'Precio de la mensualidad';
+      }
+      if (flow === 'cursoHorario') {
+        return 'Cursos y horarios';
+      }
       // Add other conditions if needed for different flows
       return flow; // Return the flow itself if no specific condition matches
     };
