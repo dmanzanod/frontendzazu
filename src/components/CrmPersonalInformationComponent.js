@@ -96,7 +96,7 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
   
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         <Typography variant="subtitle1" style={{ marginRight: '10px' }}>
-          Filter:
+          Filtro:
         </Typography>
         <Select value={selectedFlow} onChange={(e) => filterContactsByFlow(e.target.value)}>
           <MenuItem value=''>Mostrar todo</MenuItem>
@@ -135,7 +135,7 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
                 {contactsForFlow.map((contact, index) => (
                     <TableRow key={index}>
                     <TableCell style={{ maxWidth: '100px', wordWrap: 'break-word' }}>
-                        Contact: {contact.userId}
+                        Contacto: {contact.userId}
                         <br />
                         Fecha: {contact.createdAt ? ` ${contact.createdAt.slice(0, 10)}` : 'No date available'}
                         <br />
