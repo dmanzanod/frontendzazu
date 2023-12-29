@@ -59,7 +59,8 @@
         mainFlow: 'Inicio conversacion',
         BuyFlow: 'Compras o Reservas',
         morningSelectionFlow: 'Seleccionando horarios',
-        botSelectionFlow: 'Inicio conversacion'
+        botSelectionFlow: 'Inicio conversacion',
+        directContactFlow: 'Contacto con asesor'
         // Add other flows as needed
       };
     

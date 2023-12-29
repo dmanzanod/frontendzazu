@@ -17,6 +17,7 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
     const [groupedContacts, setGroupedContacts] = useState({});
     const [selectedFlow, setSelectedFlow] = useState("");
     const [message, setMessage] = useState("");
+    const uniqueFlows = Array.from(new Set(contacts.map((contact) => contact.lastFlow)));
     useEffect(() => {
       const groupContactsByFlow = () => {
         const grouped = {};
@@ -54,6 +55,9 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       if (flow === 'botSelectionFlow') {
         return 'Inicio conversacion';
       }
+      if (flow === 'directContactFlow') {
+        return 'Contacto con asesor';
+      }
       // Add other conditions if needed for different flows
       return flow; // Return the flow itself if no specific condition matches
     };
@@ -84,18 +88,19 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       Lista de contactos
     </Typography>
   
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-            <Typography variant="subtitle1" style={{ marginRight: '10px' }}>
-              Filter:
-            </Typography>
-            <Select value={selectedFlow} onChange={(e) => filterContactsByFlow(e.target.value)}>
-              <MenuItem value=''>Mostrar todo</MenuItem>
-              <MenuItem value="botSelectionFlow">Filtrar por inicio de conversacion</MenuItem>
-              <MenuItem value="morningSelectionFlow">Filtrar por seleccion de Horarios</MenuItem>
-              <MenuItem value="BuyFlow">Filtrar por reserva o compra de productos</MenuItem>
-              {/* Add more items for other flows as needed */}
-            </Select>
-          </div>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <Typography variant="subtitle1" style={{ marginRight: '10px' }}>
+          Filter:
+        </Typography>
+        <Select value={selectedFlow} onChange={(e) => filterContactsByFlow(e.target.value)}>
+          <MenuItem value=''>Mostrar todo</MenuItem>
+          {uniqueFlows.map((flow) => (
+            <MenuItem key={flow} value={flow}>
+              {getFlowText(flow)}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
   
           <div
             style={{
