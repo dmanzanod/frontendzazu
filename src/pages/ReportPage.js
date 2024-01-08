@@ -53,12 +53,14 @@ const fileType =
       });
       const formattedData = updatedData.map(entry => {
         const date = new Date(entry.CreatedAt);
-        const formattedDate = `${date.toLocaleDateString('es-BO')} ${date.getHours()}:${date.getMinutes()}`;
+        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+        const formattedDate = `${date.toLocaleDateString('es-BO')} ${date.getHours()}:${minutes}`;
         return {
           ...entry,
           CreatedAt: formattedDate,
         };
       });
+      
       // Convert the response data into an Excel file
       const ws = XLSX.utils.json_to_sheet(formattedData); // Convert JSON data to a worksheet
       
