@@ -17,7 +17,6 @@ const ReportPage = () => {
   const [bookings, setBookings] = useState([]);
   const images = useSelector(selectImages)
   const elements=Object.values(images.images)
-  console.log(elements)
   const properties = ["name", "phone", "date", "time", "total", "createdAt"];
 const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -35,7 +34,6 @@ const fileType =
       const properties = ['userId', 'lastProduct', 'lastFlow', 'createdAt'];
 
       const response = await getCrmInfoExport(id, properties);
-      console.log(JSON.stringify(response))
       const flowMappings = {
         "morningSelectionFlow": "Seleccionando horarios",
         "BuyFlow": "Compras o Reservas",
@@ -112,7 +110,6 @@ const fileType =
         resp = await getOrdersForExport(localStorage.getItem('Business',properties))
       }
       if(!resp.error){
-        console.log(resp)
         setBookings(resp)
       }
     }
