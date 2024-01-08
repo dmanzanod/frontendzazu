@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Principal from "./Principal";
 import { Box, Paper, Typography } from "@mui/material";
-import { Dataset, PictureAsPdf } from "@mui/icons-material";
+import { Dataset, PictureAsPdf, DatasetLinked} from "@mui/icons-material";
 
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { selectImages } from "../features/indicators/indicatorSlice";
 import { getBookingsForExport } from "../services/servicesServices";
 import { getOrdersForExport } from "../services/servicesProducts";
+import { getCrmInfoExport } from "../services/servicesServices";
 const ReportPage = () => {
   const [bookings, setBookings] = useState([]);
   const images = useSelector(selectImages)
@@ -27,6 +28,77 @@ const fileType =
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
+  };
+  const handleExportData = async () => {
+    try {
+      const id = localStorage.getItem('Business');
+      const properties = ['userId', 'lastProduct', 'lastFlow', 'createdAt'];
+
+      const response = await getCrmInfoExport(id, properties);
+      console.log(JSON.stringify(response))
+      const flowMappings = {
+        "morningSelectionFlow": "Seleccionando horarios",
+        "BuyFlow": "Compras o Reservas",
+        "botSelectionFlow": "Inicio conversacion",
+        // Add more mappings as needed
+      };
+      const updatedData = response.map(entry => {
+        if (entry.LastFlow in flowMappings) {
+          return {
+            ...entry,
+            LastFlow: flowMappings[entry.LastFlow]
+          };
+        }
+        return entry;
+      });
+      const formattedData = updatedData.map(entry => {
+        const date = new Date(entry.CreatedAt);
+        const formattedDate = `${date.toLocaleDateString('es-BO')} ${date.getHours()}:${date.getMinutes()}`;
+        return {
+          ...entry,
+          CreatedAt: formattedDate,
+        };
+      });
+      // Convert the response data into an Excel file
+      const ws = XLSX.utils.json_to_sheet(formattedData); // Convert JSON data to a worksheet
+      
+      const firstRow = ws[XLSX.utils.encode_cell({ r: 0, c: 0 })];
+      if (firstRow && firstRow.v === 'UserId') {
+        firstRow.v = 'Usuario';
+      }
+
+      // Change the second row property from 'lastProduct' to 'Ultimo mensaje'
+      const secondRow = ws[XLSX.utils.encode_cell({ r: 0, c: 1 })];
+      if (secondRow && secondRow.v === 'LastProduct') {
+        secondRow.v = 'Ultimo mensaje';
+      }
+
+      // Change the first row property from 'lastFlow' to 'Flujo actual'
+      const thirdRow = ws[XLSX.utils.encode_cell({ r: 0, c: 2 })];
+      if (thirdRow && thirdRow.v === 'LastFlow') {
+        thirdRow.v = 'Flujo actual';
+      }
+
+      // Change the first row property from 'createdAt' to 'Creado en'
+      const fourthRow = ws[XLSX.utils.encode_cell({ r: 0, c: 3 })];
+      if (fourthRow && fourthRow.v === 'CreatedAt') {
+        fourthRow.v = 'Creado en';
+      }
+
+      const wb = XLSX.utils.book_new(); // Create a new workbook
+      
+      XLSX.utils.book_append_sheet(wb, ws, 'CrmData'); // Add the worksheet to the workbook
+      
+      // Generate the Excel file
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      
+      // Trigger file download
+      FileSaver.saveAs(data, 'crm_data.xlsx');
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      // Handle error (show error message, etc.)
+    }
   };
   useEffect(() => {
     const getInfoToExport=async()=>{
@@ -126,6 +198,20 @@ const fileType =
             <PictureAsPdf />
             <Typography variant="body1">Indicadores</Typography>
           </Box>
+          <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "12px",
+            cursor: "pointer",
+          }}
+          onClick={()=>handleExportData()}
+          >
+          <DatasetLinked/>
+          <Typography variant="body1">CRM Info</Typography>
+        </Box>
           {/* <Box
             sx={{
               display: "flex",

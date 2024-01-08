@@ -10,7 +10,8 @@ const CrmPersonalInformationPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getCrmDataByYear(2023, localStorage.getItem('Business'));
+        const currentYear = new Date().getFullYear();
+        const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
         if (response.success) {
           setContacts(response.data);
         } else {

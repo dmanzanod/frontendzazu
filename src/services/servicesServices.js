@@ -205,9 +205,29 @@ export const getBookingsForExport= async(id,properties)=>{
             status:error.response.status
         }
     })
-    
-
 }
+//CrmInfoExport
+export const getCrmInfoExport = async(id,properties)=>{
+    const request={
+        id:id,
+        properties:properties
+    }
+    return await axios.post(`${url}/exportCrmInfo`,request)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
+
 //categories
 export const getCategories= async(businessId)=>{
     
