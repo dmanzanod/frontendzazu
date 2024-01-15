@@ -4,6 +4,7 @@ import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
+import ContactsIcon from '@mui/icons-material/Contacts';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -14,11 +15,13 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import { CalendarIcon } from '@mui/x-date-pickers';
 import ExcelUploadIcon from '@mui/icons-material/CloudUpload'
+import { UploadFile } from '@mui/icons-material';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import Groups3Icon from '@mui/icons-material/Groups3';
 const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
+    const [expandCRM, setExpandCRM] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(1);
     const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText']
     const navigate=useNavigate()
@@ -27,6 +30,12 @@ const MenuComponent = () => {
       setSelectedIndex(2)
       setExpand(!expand)
     }
+    
+    const handleExpandCRM = () => {
+      setExpandCRM(!expandCRM);
+      setSelectedIndex(6); // Update the selected index when "CRM" is clicked
+  };
+
     const handleSubList=(index)=>{
       const subRoutes=[`/categories/${localStorage.getItem('Business')}`,`/products/${localStorage.getItem('Business')}`,`/bookingDetails/${localStorage.getItem('Business')}`,`/businessDetailsUpdate/${localStorage.getItem('Business')}`,'/schedule']
       navigate(subRoutes[index])
@@ -134,15 +143,48 @@ const MenuComponent = () => {
               sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 8)}
             >
               <ListItemIcon>
-              <ExcelUploadIcon />
+              <UploadFile />
             </ListItemIcon>
               
               <ListItemText primary={'Cargar texto'}/>
             </ListItemButton>
-           
-
-
         </List>
+      </Collapse>
+      <ListItem  disablePadding>
+                <ListItemButton 
+                onClick={(event) => handleExpandCRM()}
+                
+                >
+                    <ContactsIcon/>
+                  <ListItemText primary={'CRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  {expand ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+              </ListItem>
+        <Collapse in={expandCRM} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+            <ListItem  disablePadding>
+              <ListItemButton
+              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 6)}
+            >
+              <ListItemIcon>
+              <Groups3Icon /> 
+              </ListItemIcon>           
+              <ListItemText primary={'Datos CRM'} />
+            </ListItemButton>
+            </ListItem>
+
+            <ListItem  disablePadding>
+              <ListItemButton
+              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 7)}
+            >
+              <ListItemIcon>
+              <PeopleOutlineIcon />
+              </ListItemIcon>            
+              <ListItemText primary={'Contactos CRM'} />
+            </ListItemButton>
+            </ListItem>
+
+            </List>
       </Collapse>
             <ListItem  disablePadding>
                 <ListItemButton 
@@ -153,25 +195,6 @@ const MenuComponent = () => {
                   <ListItemText primary={'Reportes'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
                 </ListItemButton>
               </ListItem>
-            
-            <ListItem  disablePadding>
-              <ListItemButton
-              onClick={(event) => handleListItemClick(event, 6)}
-            >
-              <Groups3Icon />            
-              <ListItemText primary={'Datos CRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
-            </ListItemButton>
-            </ListItem>
-
-            <ListItem  disablePadding>
-              <ListItemButton
-              onClick={(event) => handleListItemClick(event, 7)}
-            >
-              <PeopleOutlineIcon />            
-              <ListItemText primary={'ContactosCRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
-            </ListItemButton>
-            </ListItem>
-
             <ListItem  disablePadding>
                 <ListItemButton 
                 onClick={(event) => handleListItemClick(event, 4)}       

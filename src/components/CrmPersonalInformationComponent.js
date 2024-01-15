@@ -64,20 +64,11 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       if (flow === 'cursoHorario') {
         return 'Cursos y horarios';
       }
-      // Add other conditions if needed for different flows
-      return flow; // Return the flow itself if no specific condition matches
+      return flow; 
     };
   
     const filterContactsByFlow = (flow) => {
       setSelectedFlow(flow);
-    };
-  
-    const getFlowInsideCell = (flow) => {
-      if (flow === 'scheduleFlow') {
-        return 'Registrando horario';
-      }
-      // Add other conditions if needed for different flows
-      return flow; // Return the flow itself if no specific condition matches
     };
     
     const sendMessage = () => {
@@ -152,16 +143,16 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
            
           </div>
           <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <TextField
-          label="Escribe tu mensaje"
-          variant="outlined"
-          size="small"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          style={{ marginRight: '10px', width: '250px' }}
-        />
-        <Button variant="contained" onClick={sendMessage}>Enviar mensajes</Button>
-      </div>
+            <TextField
+              label="Escribe tu mensaje"
+              variant="outlined"
+              size="small"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              style={{ marginRight: '10px', width: '250px' }}
+            />
+            <Button variant="contained" onClick={sendMessage}>Enviar mensajes</Button>
+          </div>
         </div>
       </div>
     );
