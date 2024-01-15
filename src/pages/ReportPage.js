@@ -15,6 +15,7 @@ import { getOrdersForExport } from "../services/servicesProducts";
 import { getCrmInfoExport } from "../services/servicesServices";
 const ReportPage = () => {
   const [bookings, setBookings] = useState([]);
+  const [noCRMData, setNoCRMData] = useState(false);
   const images = useSelector(selectImages)
   const elements=Object.values(images.images)
   const properties = ["name", "phone", "date", "time", "total", "createdAt"];
@@ -34,17 +35,27 @@ const fileType =
       const properties = ['userId', 'lastProduct', 'lastFlow', 'createdAt'];
 
       const response = await getCrmInfoExport(id, properties);
+      console.log(JSON.stringify(response))
+      if (response.length === 0) {
+        setNoCRMData(true);
+        return; // No need to proceed further
+      }
       const flowMappings = {
         "morningSelectionFlow": "Seleccionando horarios",
         "BuyFlow": "Compras o Reservas",
         "botSelectionFlow": "Inicio conversacion",
+        "mainFlow": "Inicio conversacion",
+        "preciosMensualidad":"Seleccionó precios",
+        "cursoHorario":"Seleccionó horarios",
+        "directContactFlow":"Seleccionó contacto directo",
         // Add more mappings as needed
       };
       const updatedData = response.map(entry => {
+        const flowMappingExists = entry.LastFlow in flowMappings;
         if (entry.LastFlow in flowMappings) {
           return {
             ...entry,
-            LastFlow: flowMappings[entry.LastFlow]
+            LastFlow: flowMappingExists ? flowMappings[entry.LastFlow] : entry.LastFlow
           };
         }
         return entry;
@@ -117,6 +128,11 @@ const fileType =
   },[]);
   return (
     <Principal>
+      {noCRMData ? (
+        <Typography variant="body1" color="error">
+          No se encuentran datos CRM
+        </Typography>
+      ) : null}
       <Box
         sx={{
           backgroundColor: "#F4F3FA",
@@ -180,7 +196,7 @@ const fileType =
             <Dataset />
            
               <Typography variant="body1">{localStorage.getItem("type")==="services"?"Reservas":"Pedidos"}</Typography>
-            
+              
             
           </Box>
           <Box
