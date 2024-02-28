@@ -267,6 +267,7 @@ const ProductUpdatePage = () => {
             name='details'
             label='Detalles'
             variant='filled'
+            multiline
             InputLabelProps={{ shrink: true }}
             value={formik.values.details||''}
             onChange={formik.handleChange}
