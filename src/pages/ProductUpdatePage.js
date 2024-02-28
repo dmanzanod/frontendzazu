@@ -65,11 +65,10 @@ const ProductUpdatePage = () => {
             coin:Yup.string().required('Especifique una moneda'),
             image: Yup.mixed().nullable()
   .test("type", "Solo puede subir una imagen", function (value) {
-     if(value=='undefined' || value){
+     if (!value) {
+       return true; // Allow empty value
+     } else {
        return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
-     }
-     else{
-        return true
      }
   }),
             categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
@@ -214,7 +213,7 @@ const ProductUpdatePage = () => {
           <FormControl sx={{display:'flex',flexDirection:{xs:'column',lg:'row'}, gap:'12px', width:{xs:'100%', sm:'60%', lg:'50%'}}}>
           {product.image && !image &&
           <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
-            <img className='image__product' src={`${process.env.REACT_APP_BASE_URL_IMAGES}${product.image.replace('\\','/')}`} alt='prodImage'/>
+            <img className='image__product' src={`${product.image}`} alt='prodImage'/>
           </Box>}
           {image&&
           <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
@@ -223,7 +222,7 @@ const ProductUpdatePage = () => {
           <TextField
           sx={{alignSelf:{xs:'flex-start',lg:'flex-end'}, width:{xs:'100%',lg:'50%'}}}
       variant="filled"
-      value={image?.name || product.image?.split('\\')[1] || ''}          
+      value={image?.name || product.image || ''}          
       type="text"
       label='Imagen'
       InputLabelProps={{ shrink: true }}
