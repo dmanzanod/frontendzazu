@@ -26,6 +26,7 @@ const ProductService = () => {
       headerName: "Categoría",
       valueGetter: getCategoryName,
     },
+    { field: "description", width: "200", headerName: "Descripción"},
     { field: "price", headerName: "Precio", valueGetter: formatPrice },
     {
       field: "operations",
@@ -41,6 +42,7 @@ const ProductService = () => {
   const columnsProducts = [
     { field: "name", width: "200", headerName: "Nombre" },
     { field: "stock", width: "200", headerName: "Stock" },
+    { field: "description", width: "300", headerName: "Descripción"},
     {
       field: "category",
       width: "200",
