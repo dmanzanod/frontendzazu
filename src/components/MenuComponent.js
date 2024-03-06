@@ -23,7 +23,7 @@ const MenuComponent = () => {
     const [expand, setExpand]=useState(false)
     const [expandCRM, setExpandCRM] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(1);
-    const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText']
+    const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText','/contactList']
     const navigate=useNavigate()
     const location=useLocation()
     const handleExpand=()=>{
@@ -176,6 +176,17 @@ const MenuComponent = () => {
             <ListItem  disablePadding>
               <ListItemButton
               sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 7)}
+            >
+              <ListItemIcon>
+              <PeopleOutlineIcon />
+              </ListItemIcon>            
+              <ListItemText primary={'Mensajes CRM'} />
+            </ListItemButton>
+            </ListItem>
+
+            <ListItem  disablePadding>
+              <ListItemButton
+              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 9)}
             >
               <ListItemIcon>
               <PeopleOutlineIcon />

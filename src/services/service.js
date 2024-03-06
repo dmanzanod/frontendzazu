@@ -3,6 +3,26 @@ import { AxiosInterceptor } from './axios'
 const url= process.env.REACT_APP_BASE_URL
 AxiosInterceptor()
 
+export const sendBulkMessages = async (urlMessages, values) => {
+    try {
+      const response = await axios.post(`${urlMessages}/sendMessages`, values, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      return response.data;
+    } catch (error) {
+      return {
+        error: error.message,
+        code: error.code,
+        name: error.name,
+        status: error.response ? error.response.status : null,
+      };
+    }
+  };
+  
+
 export const getQr= async()=>{
     
     return await axios.get(`${localStorage.getItem('url')}`)
@@ -20,6 +40,25 @@ export const getQr= async()=>{
     })
 }
 
+export const authAdminVerification = async () => {
+    try {
+      const response = await axios.get(`${url}/isAdmin`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('Auth')}`,
+        },
+      });
+  
+      return response.data;
+    } catch (error) {
+      return {
+        error: error.response.data.message,
+        code: error.code,
+        name: error.name,
+        status: error.response.status,
+      };
+    }
+  };
+  
 // Excel Upload
 export const uploadExcel = async (businessId, file) => {
   const formData = new FormData();
@@ -41,6 +80,21 @@ export const uploadExcel = async (businessId, file) => {
 
 export const getCrmDataByYear = async(year,businessId)=>{
     return await axios.get(`${url}/getCrmDataByYear/${businessId}/${year}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
+export const getInfoCrmData = async(businessId)=>{
+    return await axios.get(`${url}/getContactsCrm/${businessId}`)
     .then((response)=>{
         return response.data
     })
