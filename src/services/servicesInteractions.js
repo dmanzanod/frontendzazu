@@ -38,6 +38,25 @@ export const getInteractionsByWeek= async(businessId)=>{
     
 
 }
+
+export const getInteractionsByMonth= async(businessId)=>{
+    
+    return await axios.get(`${url}/InteractionsByMonth/${businessId}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return {
+            error: error.response.data.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+    
+
+}
 export const getConversationFlows= async(businessId)=>{
     
     return await axios.get(`${url}/Flows/${businessId}`)

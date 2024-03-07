@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import Principal from './Principal';
-import { Box } from '@mui/material';
-import CRMComponent from '../components/CrmComponent';
+  // CRMPage.js
+  import React from 'react';
+  import Principal from './Principal';
+  import { Box } from '@mui/material';
+  import CRMComponent from '../components/CrmComponent';
 
-const CRMPage = () => {
-  return (
-    <Principal>
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center', // Aligns items at the center vertically
-          flexDirection: 'column',
-          //backgroundColor: '#F4F3FA',
-          paddingTop: '72px', // Adjust the padding to create space for the header
-        }}
-      >
-        <div style={{ marginTop: '32px', fontSize: '18px' }}></div>
+  const CRMPage = () => {
+    return (
+      <Principal>
         <Box
           sx={{
-            width: '80%', // Adjust the width of the CRMComponent container
-            maxWidth: '1200px', // Maximum width for responsiveness
+            flexGrow: 1,
+            display: 'grid',
+            backgroundColor: '#F4F3FA',
+            gridRowGap: '32px',
+            gridTemplateRows: { xs: '1fr', sm: '1fr' },
+            gridTemplateColumns: { xs: '1fr', sm: '1fr' },
+            gridColumnGap: '24px',
+            mt: '40px',
+            minWidth: '100%',
+            minHeight:'100%'
           }}
         >
-          <CRMComponent />
+          
+            <CRMComponent />
+          
         </Box>
-        <div style={{ marginTop: '32px', fontSize: '18px' }}></div>
-      </Box>
-    </Principal>
-  );
-};
+      </Principal>
+    );
+  };
 
-export default CRMPage;
+  export default CRMPage;
