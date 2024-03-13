@@ -46,11 +46,13 @@ const ProductUpdatePage = () => {
         getProductById()
         getBusinessCategories()
     },[id])
-    const  handleUpload=(event)=>{
-      formik.setFieldValue('image',event.target.files[0])
-      setPreviewImage(URL.createObjectURL(event.target.files[0]))
-      setImage(event.target.files[0])
-    }
+    const handleUpload = (event) => {
+      const file = event.target.files[0];
+      formik.setFieldValue('image', file);
+      setPreviewImage(URL.createObjectURL(file));
+      setImage(file);
+    };
+    
     const formik= useFormik({
         initialValues: {...product},
         enableReinitialize: true,
@@ -65,7 +67,7 @@ const ProductUpdatePage = () => {
             coin:Yup.string().required('Especifique una moneda'),
             image: Yup.mixed().nullable()
   .test("type", "Solo puede subir una imagen", function (value) {
-     if (!value) {
+     if (!image) {
        return true; // Allow empty value
      } else {
        return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
