@@ -12,13 +12,21 @@ import { login } from '../services/service';
 import AlertComponent from '../components/AlertComponent';
 import { useNavigate } from 'react-router-dom';
 import FooterComponent from '../components/FooterComponent';
+import {authAdminVerification} from '../services/service'
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading,setLoading]=useState(false)
     const [alert,setAlert]=useState(false)
     const [message,setMessage]=useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
     const [severity,setSeverity]=useState('error')
     const navigate =useNavigate()
+    const handleCheckboxChange = (checked) => {
+      setIsAdmin(checked);
+    };
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
@@ -35,7 +43,7 @@ const LoginPage = () => {
     }),
     onSubmit:async(values)=>{
       setLoading(true)
-      const resp= await login(values)
+      const resp= await login(values) //Aqui pode ksagregar el isAdmin value , verificar esto cuando se cree el modelo y la nueva clase de usuario
       
       if(resp.success){
         setLoading(false)
@@ -45,8 +53,14 @@ const LoginPage = () => {
         localStorage.setItem('type',resp.data.type)
         localStorage.setItem('ScheduleId',resp.data.scheduleId)
         localStorage.setItem('url',resp.data.url)
-        console.log(`${resp.data.url}`)
+        localStorage.setItem('BusinessType', resp.data.BusinessType)
         navigate('/')
+        //const isAdminResp = await authAdminVerification();
+        // if(isAdminResp.role === 'admin'){
+        //   navigate('/dashboardAdmin');
+        // }else{
+        //   navigate('/');
+        // }
         
       }
       else{
@@ -144,6 +158,13 @@ const LoginPage = () => {
               </InputAdornment>
             }
           />
+           {/* <div>
+              <FormControlLabel
+                control={<Checkbox />}
+                label="Administrador de grupo"
+                onChange={(e) => handleCheckboxChange(e.target.checked)}
+              />
+            </div> */}
           {formik.touched.password && formik.errors.password && <FormHelperText error>{formik.errors.password}</FormHelperText>}
           </FormControl>
           </div>
