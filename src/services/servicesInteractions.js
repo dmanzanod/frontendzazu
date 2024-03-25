@@ -39,9 +39,8 @@ export const getInteractionsByWeek= async(businessId)=>{
 
 }
 
-export const getInteractionsByMonth= async(businessId)=>{
-    
-    return await axios.get(`${url}/InteractionsByMonth/${businessId}`)
+export const getInteractionsByMonth= async(businessId,month)=>{
+    return await axios.get(`${url}/InteractionsByMonth/${businessId}/${month}`)
     .then((response)=>{
         return response.data
     })

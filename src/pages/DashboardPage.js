@@ -12,19 +12,26 @@ import TotalBookingsComponent from '../components/TotalBookingsComponent'
 import TotalSalesComponent from '../components/TotalSalesComponent'
 import {  getCurrencyProduct, getMonthlyOrders, getPeriodOrders, getProductsStats, getTotalOrders, getTotalPeriodOrders, getTotalSalesProducts } from '../services/servicesProducts'
 import {  getCurrencyService, getMonthlyBookings, getPeriodBookings, getServicesStats, getTotalBookings, getTotalPeriodBookings, getTotalSales } from '../services/servicesServices'
-import { getConversationFlows, getInteractions, getInteractionsByWeek, getPeriodInteractions } from '../services/servicesInteractions'
+import { getConversationFlows, getInteractions, getInteractionsByMonth, getInteractionsByWeek, getPeriodInteractions } from '../services/servicesInteractions'
 import InteractionBookingComponent from '../components/InteractionBookingBarsComponent'
 import LineChartComponent from '../components/LineChartComponent'
 import EmptyComponent from '../components/EmptyComponent'
 import PeriodSalesTotalComponent from '../components/PeriodSalesTotalComponent'
 import SalesCountPeriodComponent from '../components/SalesCountPeriodComponent'
 import SalesBookingsComponent from '../components/SalesBookingsComponent'
+import BarChartDataComponent from '../components/ChartConversacionMensualComponent'
+import BarChartHighToLowComponent from '../components/ComponentsChartsAssist/BarChartHightToLow'
+import LineChartMonthlyComponent from '../components/ComponentsChartsAssist/LineChartMonthlyComponent'
+import CrmDashboardComponent from '../components/ComponentsChartsAssist/CrmDashboardComponent'
+import DualBarChartComponent from '../components/ComponentsChartsAssist/DualBarChartComponent'
+
 const DashboardPage = () => {
   
   const[stats,setStats]=useState([])
   const [totalSales,setTotalSales]=useState()
   const[totalBookings,setTotalBookings]=useState()
   const[weeklyInteractions,setWeeklyInteractions]=useState([])
+  const[monthlyInteractions,setMonthlyInteractions]=useState([])
   const[totalInteractions,setTotalInteractions]=useState()
   const[bookingsMonth,setbookingsMonth]=useState(0)
   const[monthlyBookings,setMonthlyBookings]=useState([])
@@ -32,6 +39,24 @@ const DashboardPage = () => {
   const [currency,setCurrency]=useState('')
   const [salesMonth,setSalesMonth]=useState(0)
   const type=localStorage.getItem('type')
+  let BusinessType = localStorage.getItem('BusinessType');
+  if (BusinessType === "undefined") {
+    BusinessType = "";
+  } else if (!BusinessType) {
+    BusinessType = ""; // Handle case where BusinessType is null or undefined
+  }
+  const data = [
+    { label: 'Item 1', value: 10 },
+    { label: 'Item 2', value: 20 },
+    { label: 'Item 3', value: 30 },
+    { label: 'Item 4', value: 30 },
+    { label: 'Item 5', value: 30 },
+    { label: 'Item 6', value: 30 },
+    { label: 'Productos', value: 1000 },
+    { label: 'Curso de 3 a 7', value: 300 },
+    { label: 'Curso de 5 a 10', value: 150 },
+    // Add more data as needed
+  ];
   const months=[
     {id:1,name:'Enero'},
     {id:2,name:'Febrero'},
@@ -193,6 +218,18 @@ const DashboardPage = () => {
         }
       }
     }
+    const getBusinessInteractionsByMonth=async()=>{
+      const resp = await getInteractionsByMonth(localStorage.getItem('Business')) 
+      if(resp.success===true){
+        setMonthlyInteractions(resp.data)
+      }
+      else{
+        if(resp.status===403){
+          logOut()
+          navigate('/login')
+        }
+      }
+    }
     
     
    getBusinessCurrency()
@@ -201,45 +238,71 @@ const DashboardPage = () => {
     getMonthInteractions()
     getBookingsMonthly()
     getBusinessInteractionsByWeek()
+    getBusinessInteractionsByMonth()
     getSalesMonth()
     getSalesNumber()
     getMonthBookings()
   },[])
    
-      
   return (
     <Principal>
-      
-        <Box component="main" sx={{ flexGrow: 1, p:{xs:1,sm:1,md:3}, display:"grid", backgroundColor:"#F4F3FA",gridRowGap:"32px", gridTemplateRows:{xs:"repeat(4,1fr)",sm:"repeat(2,1fr)"}, gridTemplateColumns:{xs:"1fr",sm:"1fr 1fr"},gridColumnGap:"24px",mt:'72px'}}>
-        
-       {stats.length>0? <ChartComponent title={type==='services'?'Servicios':'Productos'} data={stats} type={'bar'}/>:<EmptyComponent title={type==='services'?'Servicios':'Productos'}/>}
-        {monthlyBookings.length>0&&<BarChartComponent title={'Total de Ventas'} data={monthlyBookings}/>}
-        {bookingsMonth && totalInteractions? <InteractionBookingComponent type={type} title={type==='services'?'Conversaciones - Reservas':'Conversaciones - Pedidos'} bookings={bookingsMonth} conversations={totalInteractions}/>:<EmptyComponent title={'Conversaciones/'+type==='services'?'Reservas':'Pedidos'}/>}
-        
-        {weeklyInteractions.length>0&&<LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions}/>}
-       
-        <Box sx={{
-          display:'flex',
-          flexDirection:'column',
-          width:{xs:'100%',sm:'100%'},
-          gap: '12px',
-          mb:2,
-          backgroundColor:'#fff',
-          borderRadius:'15px'
-        }}>
-
-        
-       {<PeriodSalesTotalComponent type={type} initialValue={salesMonth} currency={currency}/>}
-        {bookingsMonth &&  <SalesCountPeriodComponent type={type} initialValue={bookingsMonth.total}/>}
-        {totalBookings && totalSales && <SalesBookingsComponent totalBookings={totalBookings} totalSales={totalSales}/>}
-        
-          {totalSales && <TotalSalesComponent total={totalSales} currency={currency}/>}
-          {totalBookings && <TotalBookingsComponent total={totalBookings}/>}
-         
-        </Box>
+      <Box component="main" sx={{ flexGrow: 1, p: { xs: 1, sm: 1, md: 3 }, display: "grid", backgroundColor: "#F4F3FA", gridRowGap: "32px", gridColumnGap: "24px", mt: '72px', gridTemplateColumns: BusinessType === "Asistente virtual cba" ? "1fr" : {xs:"1fr",sm:"1fr 1fr"}, gridTemplateRows: BusinessType === "Asistente virtual cba" ? "auto" : { xs: "repeat(4,1fr)", sm: "repeat(2,1fr)" } }}>
+        {BusinessType === "" && (
+          <React.Fragment>
+            {stats.length > 0 ? <ChartComponent title={type === 'services' ? 'Servicios' : 'Productos'} data={stats} type={'bar'} /> : <EmptyComponent title={type === 'services' ? 'Servicios' : 'Productos'} />}
+            {monthlyBookings.length > 0 && <BarChartComponent title={'Total de Ventas'} data={monthlyBookings} />}
+            {bookingsMonth && totalInteractions ? <InteractionBookingComponent type={type} title={type === 'services' ? 'Conversaciones - Reservas' : 'Conversaciones - Pedidos'} bookings={bookingsMonth} conversations={totalInteractions} /> : <EmptyComponent title={'Conversaciones/' + (type === 'services' ? 'Reservas' : 'Pedidos')} />}
+            {weeklyInteractions.length > 0 && <LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions} />}
+          </React.Fragment>
+        )}
+        {BusinessType === "" && (
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: { xs: '100%', sm: '100%' },
+            gap: '12px',
+            mb: 2,
+            backgroundColor: '#fff',
+            borderRadius: '15px'
+          }}>
+            {
+              // Conditional rendering starts here
+              <React.Fragment>
+                {<PeriodSalesTotalComponent type={type} initialValue={salesMonth} currency={currency} />}
+                {bookingsMonth && <SalesCountPeriodComponent type={type} initialValue={bookingsMonth.total} />}
+                {totalBookings && totalSales && <SalesBookingsComponent totalBookings={totalBookings} totalSales={totalSales} />}
+                {totalSales && <TotalSalesComponent total={totalSales} currency={currency} />}
+                {totalBookings && <TotalBookingsComponent total={totalBookings} />}
+              </React.Fragment>
+              // Conditional rendering ends here
+            }
+          </Box>
+        )}
+        {BusinessType === "Asistente virtual cba" && (
+          <React.Fragment>
+            <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
+              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "BuyFlow" />
+            </Box>
+            <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
+              {weeklyInteractions.length > 0 && (
+                <LineChartMonthlyComponent title={'Conversaciones mensuales'} data={monthlyInteractions} />
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: { xs: '100%', sm: '100%' }, height: "auto", gap: '24px'  }}>
+              {/* First BarChartHighToLowComponent */}
+              <Box sx={{ width: '50%' }}>
+                {<BarChartHighToLowComponent title={'Categoria'} data={data} filterCondition = "categoryFlow" />}
+              </Box>
+              {/* Second BarChartHighToLowComponent */}
+              <Box sx={{ width: '50%' }}>
+                {<DualBarChartComponent title={'Conversaciones vs Consultas'}/>}
+              </Box>
+            </Box>
+              <CrmDashboardComponent></CrmDashboardComponent>
+          </React.Fragment>
+        )}
       </Box>
     </Principal>
   )
 }
-
 export default DashboardPage
