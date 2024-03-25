@@ -87,6 +87,8 @@ const CRMComponent = () => {
       directContactFlow: 'Contacto con asesor',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
+      categoryFlow: 'Categorías',
+      inscripcionFlow:'Programas',
     };
 
     return flowNames[flow] || flow;
@@ -151,11 +153,13 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
     const flowMappings = {
         "morningSelectionFlow": "Seleccionando horarios",
         "BuyFlow": "Compras o Reservas",
-        "botSelectionFlow": "Inicio conversacion",
-        "mainFlow": "Inicio conversacion",
+        "botSelectionFlow": "Inicio conversación",
+        "mainFlow": "Inicio conversación",
         "preciosMensualidad": "Seleccionó precios",
         "cursoHorario": "Seleccionó horarios",
         "directContactFlow": "Seleccionó contacto directo",
+        'categoryFlow': 'Categorías',
+        'inscripcionFlow':'Programas',
         // Add more mappings as needed
     };
 
@@ -207,7 +211,7 @@ const translateHeader = (header) => {
         "lastProduct": "Ultimo mensaje",
         "lastFlow": "Flujo actual",
         "createdAt": "Creado en",
-        // Add more translations as needed
+        "lastCateogry": 'Categoría',
     };
 
     return translations[header] || header;

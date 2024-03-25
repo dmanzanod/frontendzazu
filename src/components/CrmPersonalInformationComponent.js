@@ -58,6 +58,12 @@ const CrmPersonalInformationComponent = ({ contacts }) => {
       if (flow === 'directContactFlow') {
         return 'Contacto con asesor';
       }
+      if(flow === 'categoryFlow'){
+        return 'Categorías'
+      }
+      if(flow === 'inscripcionFlow'){
+        return 'Programas'
+      }
       if (flow === 'preciosMensualidad') {
         return 'Precio de la mensualidad';
       }
