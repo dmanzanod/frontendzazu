@@ -195,7 +195,7 @@ const DualBarChartComponent = ({ title }) => {
                     </div>
                 </Modal>
                 <VictoryChart width={getBoxWidth() * 0.8} height={250} domainPadding={{ x: 90 }}>
-                    <VictoryAxis dependentAxis />
+                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     <VictoryAxis tickFormat={["Inicio de conversación", "Consultas"]} />
                     <VictoryBar
                         data={[{ x: "Inicio de conversación", y: mainFlowData }]}

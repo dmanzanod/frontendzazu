@@ -26,7 +26,9 @@ import CrmDashboardComponent from '../components/ComponentsChartsAssist/CrmDashb
 import DualBarChartComponent from '../components/ComponentsChartsAssist/DualBarChartComponent'
 
 const DashboardPage = () => {
-  
+  const currentDate = new Date();
+  const currentMonthIndex = currentDate.getMonth(); 
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex + 1);
   const[stats,setStats]=useState([])
   const [totalSales,setTotalSales]=useState()
   const[totalBookings,setTotalBookings]=useState()
@@ -219,7 +221,7 @@ const DashboardPage = () => {
       }
     }
     const getBusinessInteractionsByMonth=async()=>{
-      const resp = await getInteractionsByMonth(localStorage.getItem('Business')) 
+      const resp = await getInteractionsByMonth(localStorage.getItem('Business'),selectedMonth) 
       if(resp.success===true){
         setMonthlyInteractions(resp.data)
       }
@@ -281,7 +283,7 @@ const DashboardPage = () => {
         {BusinessType === "Asistente virtual cba" && (
           <React.Fragment>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
-              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "inscripcionFlow" />
+              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "BuyFlow" />
             </Box>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
               {weeklyInteractions.length > 0 && (

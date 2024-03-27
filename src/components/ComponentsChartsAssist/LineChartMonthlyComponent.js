@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const LineChartMonthlyComponent = ({ title }) => {
   const currentDate = new Date();
-const currentMonthIndex = currentDate.getMonth(); 
+  const currentMonthIndex = currentDate.getMonth(); 
   const [chartData, setChartData] = useState({});
   const [monthlyInteractions, setMonthlyInteractions] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex + 1); // Initial selected month is 1 (January)
