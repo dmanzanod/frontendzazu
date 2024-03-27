@@ -283,11 +283,11 @@ const DashboardPage = () => {
         {BusinessType === "Asistente virtual cba" && (
           <React.Fragment>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
-              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "BuyFlow" />
+              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "inscripcionFlow" />
             </Box>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
               {weeklyInteractions.length > 0 && (
-                <LineChartMonthlyComponent title={'Conversaciones mensuales'} data={monthlyInteractions} />
+                <LineChartMonthlyComponent title={'Conversaciones mensuales'}/>
               )}
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: { xs: '100%', sm: '100%' }, height: "auto", gap: '24px'  }}>

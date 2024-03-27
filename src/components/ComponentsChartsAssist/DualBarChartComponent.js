@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { VictoryChart, VictoryBar, VictoryAxis } from 'victory';
+import { VictoryChart, VictoryBar, VictoryAxis, VictoryTooltip } from 'victory';
 import { ThemeProvider } from '@emotion/react';
 import { Box, Typography, Modal, Button, IconButton, TextField,Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import theme from '../../theme/theme';
@@ -198,6 +198,16 @@ const DualBarChartComponent = ({ title }) => {
                     <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     <VictoryAxis tickFormat={["Inicio de conversación", "Consultas"]} />
                     <VictoryBar
+                        labels={({ datum }) => `${datum.y
+                        }`}
+                        labelComponent={<VictoryTooltip 
+                            cornerRadius={5}
+                            pointerLength={0}
+                            flyoutStyle={{
+                                fill: "white",
+                            }}
+                            dy={-10} 
+                        />}
                         data={[{ x: "Inicio de conversación", y: mainFlowData }]}
                         barWidth={50}
                         alignment="middle"
@@ -208,6 +218,16 @@ const DualBarChartComponent = ({ title }) => {
                         }}
                     />
                     <VictoryBar
+                        labels={({ datum }) => `${datum.y
+                        }`}
+                        labelComponent={<VictoryTooltip 
+                            cornerRadius={5}
+                            pointerLength={0}
+                            flyoutStyle={{
+                                fill: "white",
+                            }}
+                            dy={-10} 
+                        />}
                         data={[{ x: "Consultas", y: consultaData }]}
                         barWidth={50}
                         alignment="middle"

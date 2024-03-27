@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { VictoryChart, VictoryBar, VictoryAxis } from 'victory';
+import { VictoryChart, VictoryBar, VictoryAxis,VictoryTooltip } from 'victory';
 import { ThemeProvider } from '@emotion/react';
 import { Box, Typography, Modal, TextField, Button,IconButton, FormControl,InputLabel,Select,MenuItem } from '@mui/material';
 import theme from '../../theme/theme';
@@ -22,6 +22,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
     const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
     const dispatch = useDispatch();
     const elementRef = useRef();
+    const [randomColors, setRandomColors] = useState([]);
 
 
     const captureElementAsImage = async () => {
@@ -133,7 +134,16 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         }
         return Math.min(600, numDataPoints * 10);
     };
-    
+    const generateRandomColors = () => {
+        const colors = [];
+        for (let i = 0; i < categories.length; i++) {
+            colors.push(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`);
+        }
+        return colors;
+    };
+    useEffect(() => {
+        setRandomColors(generateRandomColors());
+    }, [categories]);
     const colorScale = scaleOrdinal()
         .domain(categories)
         .range(['#FF5733', '#33FF57', '#3366FF', '#FFFF00', '#FF00FF', '#00FFFF']);
@@ -216,7 +226,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                     </div>
                 </Modal>
                 <VictoryChart width={getBoxWidth() * 0.8} height={250} domainPadding={{ x: getDomainPadding() }}>
-                    <VictoryAxis dependentAxis />
+                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     {selectedCategory === "" && (
                         <VictoryAxis // Define the x-axis
                             tickValues={sortedData.slice(0, 5).map(data => data.lastProduct)} // Use tickValues to specify the values for the first 5 bars
@@ -230,21 +240,37 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                         />
                     )}
                     <VictoryBar
+                        labels={({ datum }) => `${datum.quantity
+                        }`}
+                        labelComponent={<VictoryTooltip 
+                            cornerRadius={5}
+                            pointerLength={0}
+                            flyoutStyle={{
+                                fill: "white",
+                            }}
+                            dy={-10} 
+                        />}
                         data={selectedCategory === "" ? sortedData.slice(0, 5) : sortedData}
                         minBarWidth={50}
                         barWidth={50}
                         style={{
                             data: {
-                                fill: ({ datum }) => {
+                                fill: ({ index }) => {
                                     if (selectedCategory === "") {
                                         // If no category is selected, use random colors for each bar
-                                        return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+                                        return randomColors[index % randomColors.length];
                                     } else {
                                         // If a specific category is selected, use the color corresponding to that category for all bars
                                         return getCategoryColor(selectedCategory);
                                     }
                                 }
+                            },
+                            labels: {
+                                fill: 'black',
+                                fontSize: 15, 
+                                fontWeight: 'bold',
                             }
+                    
                         }}
                         x="lastProduct"
                         y="quantity"
