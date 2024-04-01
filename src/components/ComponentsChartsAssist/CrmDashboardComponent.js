@@ -66,7 +66,7 @@ const CrmDashboardComponent = () => {
     const flowNames = {
       scheduleFlow: 'Horarios',
       pricesFlow: 'Compra',
-      mainFlow: 'Inicio conversacion',
+      mainFlow: 'Inicio conversación',
       BuyFlow: 'Compras o Reservas',
       morningSelectionFlow: 'Seleccionando horarios',
       botSelectionFlow: 'Inicio conversación',
