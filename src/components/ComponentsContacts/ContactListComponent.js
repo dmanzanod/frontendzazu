@@ -14,14 +14,15 @@ import {
   Button,
   Modal,
 } from '@mui/material';
-import { People as PeopleIcon, ArrowDropDown } from '@mui/icons-material';
+import { People as PeopleIcon, ArrowDropDown, KeyboardArrowLeft, KeyboardArrowRight, Search } from '@mui/icons-material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
-import {es} from 'date-fns/locale'
+import { es } from 'date-fns/locale';
 import { parse } from 'date-fns';
+
 const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortAnchorEl, setSortAnchorEl] = useState(null);
@@ -38,40 +39,47 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
   const [indexOfFirstContact, setIndexOfFirstContact] = useState(0);
   const [indexOfLastContact, setIndexOfLastContact] = useState(contactsPerPage);
   const [totalPages, setTotalPages] = useState(1);
+  const [goToPage, setGoToPage] = useState('');
+  const [isGoToPageModalOpen, setIsGoToPageModalOpen] = useState(false);
 
-  const handleApplyDateRange = () => {
-    // Close the modal after applying the date range
-    handleCloseDateRangeModal();
-    const startDate = selectedStartDate ? new Date(selectedStartDate) : null;
-    let endDate = selectedEndDate ? new Date(selectedEndDate) : null;
-    if (endDate) {
-      endDate.setHours(23, 59, 59, 999);
-    }
-  
-    // Filter the contacts based on the selected date range
-    const filteredContacts = contacts.filter((contact) => {
-      const contactDate = parse(contact.creadoEn, 'dd/MM/yyyy HH:mm', new Date());
-      // Check if the contactDate is within the selected range
-      return (
-        (!startDate || contactDate >= startDate) &&
-        (!endDate || contactDate <= endDate)
-      );
-    });
-  
-    // Update total pages based on filtered contacts
-    const newTotalPages = Math.ceil(filteredContacts.length / contactsPerPage);
-    setTotalPages(newTotalPages);
-  
-    // Update contacts for the current page
-    const newIndexOfFirstContact = (currentPage - 1) * contactsPerPage;
-    const newIndexOfLastContact = currentPage * contactsPerPage;
-  
-    setCurrentContacts(filteredContacts.slice(newIndexOfFirstContact, newIndexOfLastContact));
-    setIndexOfFirstContact(newIndexOfFirstContact);
-    setIndexOfLastContact(newIndexOfLastContact);
+  const getUniqueFlujoValues = () => {
+    const uniqueValues = [...new Set(contacts.map(contact => contact.flujo))];
+    setUniqueFlujoValues(uniqueValues);
   };
+
+  useEffect(() => {
+    // Calculate unique flujo values when contacts change
+    getUniqueFlujoValues();
+  }, [contacts]);
   
-  
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    const updatedSelection = isChecked ? contacts.map((contact) => contact.id) : [];
+    handleToggle(updatedSelection);
+  };
+
+  const handleGoToPage = () => {
+    const pageNumber = parseInt(goToPage);
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+      setIsGoToPageModalOpen(false);
+      setGoToPage('');
+    } else {
+      // Display an error message or handle invalid page number
+      console.error('Invalid page number');
+    }
+  };
+
+  const handleMenuItemClick = (newOrder) => {
+    setOrder(newOrder);
+    setSortAnchorEl(null);
+  };
+
+  const handleFlujoFilterChange = (event) => {
+    setSelectedFlujo(event.target.value);
+    setAnchorEl(null);
+  };
+
   const handleOpenDateRangeModal = () => {
     setDateRangeModalOpen(true);
   };
@@ -92,24 +100,7 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (newOrder) => {
-    setOrder(newOrder);
-    setSortAnchorEl(null);
-  };
-
   const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSelectAll = (event) => {
-    const isChecked = event.target.checked;
-    const updatedSelection = isChecked ? contacts.map((contact) => contact.id) : [];
-
-    handleToggle(updatedSelection);
-  };
-
-  const handleFlujoFilterChange = (event) => {
-    setSelectedFlujo(event.target.value);
     setAnchorEl(null);
   };
 
@@ -121,7 +112,6 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-  // Combine sorting and initial page setup into a single useEffect
   useEffect(() => {
     const sortedContactsArray = contacts.slice().sort((a, b) => {
       const aValue = a.name.toLowerCase();
@@ -131,61 +121,49 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
 
     setSortedContacts(sortedContactsArray);
 
-    // Set indices based on the current page
-    setIndexOfFirstContact(0); // Set to 0 for the first page
-    setIndexOfLastContact(contactsPerPage);
-    setCurrentPage(1); // Set the current page to 1 initially
-  }, [contacts, order, contactsPerPage]);
-
-  // Combine selectedFlujo filtering and total pages calculation
-  useEffect(() => {
-    const sortedAndFilteredContacts = sortedContacts.filter((contact) =>
-      selectedFlujo ? contact.flujo === selectedFlujo : true
-    );
-
-    const newTotalPages = Math.ceil(sortedAndFilteredContacts.length / contactsPerPage);
-
+    const filteredAndSortedContacts = applyFilters(sortedContactsArray);
+    const newTotalPages = Math.ceil(filteredAndSortedContacts.length / contactsPerPage);
     setTotalPages(newTotalPages);
 
     const newIndexOfFirstContact = (currentPage - 1) * contactsPerPage;
     const newIndexOfLastContact = currentPage * contactsPerPage;
+    setCurrentContacts(filteredAndSortedContacts.slice(newIndexOfFirstContact, newIndexOfLastContact));
+    setIndexOfFirstContact(newIndexOfFirstContact);
+    setIndexOfLastContact(newIndexOfLastContact);
+  }, [contacts, order, selectedFlujo, selectedStartDate, selectedEndDate, currentPage]);
 
-    setCurrentContacts(sortedAndFilteredContacts.slice(newIndexOfFirstContact, newIndexOfLastContact));
-
-    setCurrentPage((prevPage) => Math.min(prevPage, newTotalPages));
-  }, [sortedContacts, selectedFlujo, currentPage, contactsPerPage]);
-
-  useEffect(() => {
-      handleApplyDateRange();
-  }, [currentPage]); // Include applyDateRangeEffect in the dependencies
-  
-
-  useEffect(() => {
-    const updatedUniqueFlujoValues = [...new Set(sortedContacts.map((contact) => contact.flujo))];
-
-    if (!arraysAreEqual(updatedUniqueFlujoValues, uniqueFlujoValues)) {
-      setUniqueFlujoValues(updatedUniqueFlujoValues);
-    }
-  }, [sortedContacts]);
-
-  const arraysAreEqual = (arr1, arr2) => {
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-  
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) {
-        return false;
-      }
-    }
-  
-    return true;
+  const handleResetDateRange = () => {
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+    setDateRangeModalOpen(false);
   };
+
+  const applyFilters = (contactsArray) => {
+    let filteredContacts = contactsArray;
+    if (selectedFlujo) {
+      filteredContacts = filteredContacts.filter((contact) => contact.flujo === selectedFlujo);
+    }
+    if (selectedStartDate && selectedEndDate) {
+      const startDate = new Date(selectedStartDate);
+      const endDate = new Date(selectedEndDate);
+      endDate.setHours(23, 59, 59, 999);
+      filteredContacts = filteredContacts.filter((contact) => {
+        const contactDate = parse(contact.creadoEn, 'dd/MM/yyyy HH:mm', new Date());
+        return contactDate >= startDate && contactDate <= endDate;
+      });
+    }
+    return filteredContacts;
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedFlujo, selectedStartDate, selectedEndDate]);
 
   return (
     <div>
       <TableContainer component={Paper}>
-      <Table align="middle" hover="true" responsive="true">
+        <Table align="middle" hover="true" responsive="true">
+          {/* Table header */}
           <TableHead>
             <TableRow>
               <TableCell style={{ width: '48px' }} className="text-center">
@@ -197,23 +175,24 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
               </TableCell>
               <TableCell>
                 Nombre
-                <IconButton onClick={(event) => { setSortAnchorEl(event.currentTarget); }}>
+                <IconButton onClick={(event) => setSortAnchorEl(event.currentTarget)}>
                   <ArrowDropDown />
-                </IconButton>   
+                </IconButton>
+                {/* Sorting options */}
                 <Menu anchorEl={sortAnchorEl} open={Boolean(sortAnchorEl)} onClose={handleClose}>
                   <MenuItem onClick={() => handleMenuItemClick('asc')}>A-Z</MenuItem>
                   <MenuItem onClick={() => handleMenuItemClick('desc')}>Z-A</MenuItem>
                 </Menu>
               </TableCell>
               <TableCell>Telefono</TableCell>
-              <TableCell>Flujo
-              <IconButton onClick={handleFilterClick}>
+              <TableCell>
+                Flujo
+                <IconButton onClick={handleFilterClick}>
                   <ArrowDropDown />
                 </IconButton>
+                {/* Flujo filter */}
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                  <MenuItem onClick={() => handleFlujoFilterChange({ target: { value: '' } })}>
-                    Todos
-                  </MenuItem>
+                  <MenuItem onClick={() => handleFlujoFilterChange({ target: { value: '' } })}>Todos</MenuItem>
                   {uniqueFlujoValues.map((value) => (
                     <MenuItem key={value} onClick={() => handleFlujoFilterChange({ target: { value } })}>
                       {value}
@@ -226,10 +205,12 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
                 <IconButton onClick={handleOpenDateRangeModal}>
                   <CalendarTodayIcon />
                 </IconButton>
+                {/* Date range modal */}
                 <Modal open={isDateRangeModalOpen} onClose={handleCloseDateRangeModal}>
+                  {/* Date range selection */}
                   <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-                     <DatePicker
+                      <DatePicker
                         value={selectedStartDate}
                         onChange={handleStartDateChange}
                         texts={{ selectDate: 'Seleccionar fecha', openDatePicker: 'Abrir selector de fecha' }}
@@ -240,7 +221,7 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
                             margin="normal"
                             helperText=""
                             label="Inicio"
-                            id="start-date-input" 
+                            id="start-date-input"
                           />
                         )}
                       />
@@ -256,14 +237,14 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
                             margin="normal"
                             helperText=""
                             label="Fin"
-                            id="end-date-input" 
+                            id="end-date-input"
                           />
                         )}
                       />
                     </LocalizationProvider>
                     <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
-                      <Button variant="contained" color="primary"  onClick={handleApplyDateRange}>
-                        Aplicar rango de fechas
+                    <Button variant="contained" color="primary" onClick={handleResetDateRange}>
+                        Reestablecer
                       </Button>
                     </div>
                   </div>
@@ -271,6 +252,7 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
               </TableCell>
             </TableRow>
           </TableHead>
+          {/* Table body */}
           <TableBody>
             {currentContacts.map((contact) => (
               <TableRow key={contact.id}>
@@ -290,25 +272,39 @@ const ContactListComponent = ({ contacts, selectedContacts, handleToggle }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Pagination */}
       <div style={{ marginTop: '10px', textAlign: 'center' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-        >
-          Anterior
-        </Button>
-        <span style={{ margin: '0 10px' }}>{`Pagina ${currentPage} de ${totalPages}`}</span>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-        >
-          Siguiente
-        </Button>
+        <IconButton color="primary" onClick={handlePrevPage} disabled={currentPage === 1}>
+          <KeyboardArrowLeft />
+        </IconButton>
+        <span style={{ margin: '0 10px' }}>{`Página ${currentPage} de ${totalPages}`}</span>
+        <IconButton color="primary" onClick={() => setIsGoToPageModalOpen(true)}>
+          <Search />
+        </IconButton>
+        <IconButton color="primary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+          <KeyboardArrowRight />
+        </IconButton>
       </div>
+
+      {/* Go to page modal */}
+      <Modal open={isGoToPageModalOpen} onClose={() => setIsGoToPageModalOpen(false)}>
+        <form onSubmit={(e) => { e.preventDefault(); handleGoToPage(); setIsGoToPageModalOpen(false); }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+            <TextField
+              label="Numero de pagina"
+              variant="outlined"
+              value={goToPage}
+              onChange={(e) => setGoToPage(e.target.value)}
+              fullWidth
+            />
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+            <Button type="submit" variant="contained" color="primary">
+              Ir
+            </Button>
+            </div>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
