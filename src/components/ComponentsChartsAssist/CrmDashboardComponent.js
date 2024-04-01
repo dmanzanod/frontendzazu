@@ -38,6 +38,8 @@ const CrmDashboardComponent = () => {
   }, [crmData]);
 
   const processData = (data) => {
+    const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Inscripciones'];
+  
     const flowMap = {};
     data.forEach((entry) => {
       const { lastFlow } = entry;
@@ -47,10 +49,13 @@ const CrmDashboardComponent = () => {
       flowMap[lastFlow]++;
     });
   
-    // Prioritize flows with "botSelectionFlow" or "mainFlow"
+    // Prioritize flows based on predefined order
     const prioritizeFlows = (a, b) => {
-      if (a.label === 'Inicio conversación') return -1;
-      if (b.label === 'Inicio conversación') return 1;
+      const indexA = flowPriorities.indexOf(a.label);
+      const indexB = flowPriorities.indexOf(b.label);
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
       return b.value - a.value;
     };
   
@@ -58,9 +63,11 @@ const CrmDashboardComponent = () => {
       label: getFlowText(label),
       value,
     }));
+  
     formattedData.sort(prioritizeFlows);
     return formattedData;
   };
+  
   
   const getFlowText = (flow) => {
     const flowNames = {
@@ -74,7 +81,7 @@ const CrmDashboardComponent = () => {
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categoría',
-      inscripcionFlow:'Programas',
+      inscripcionFlow:'Inscripciones',
     };
 
     return flowNames[flow] || flow;
@@ -108,7 +115,7 @@ const CrmDashboardComponent = () => {
       "cursoHorario": "Seleccionó horarios",
       "directContactFlow": "Seleccionó contacto directo",
       'categoryFlow': 'Categoría',
-      'inscripcionFlow':'Programas',
+      'inscripcionFlow':'Inscripciones',
       // Add more mappings as needed
     };
 
