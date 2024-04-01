@@ -67,28 +67,37 @@ const CRMComponent = () => {
       }
       flowMap[lastFlow]++;
     });
-
+  
     const formattedData = Object.entries(flowMap).map(([label, value]) => ({
       label: getFlowText(label),
       value,
     }));
-    formattedData.sort((a, b) => b.value - a.value);
+  
+    // Sort the data to ensure "Inicio conversación" is at the top and "Inscripciones" at the bottom
+    formattedData.sort((a, b) => {
+      if (a.label === 'Inicio conversación') return -1;
+      if (b.label === 'Inicio conversación') return 1;
+      if (a.label === 'Inscripciones') return 1;
+      if (b.label === 'Inscripciones') return -1;
+      return b.value - a.value;
+    });
+  
     return formattedData;
   };
-
+  
   const getFlowText = (flow) => {
     const flowNames = {
       scheduleFlow: 'Horarios',
       pricesFlow: 'Compra',
-      mainFlow: 'Inicio conversacion',
+      mainFlow: 'Inicio conversación',
       BuyFlow: 'Compras o Reservas',
       morningSelectionFlow: 'Seleccionando horarios',
-      botSelectionFlow: 'Inicio conversacion',
+      botSelectionFlow: 'Inicio conversación',
       directContactFlow: 'Contacto con asesor',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categorías',
-      inscripcionFlow:'Programas',
+      inscripcionFlow:'Inscripciones',
     };
 
     return flowNames[flow] || flow;
@@ -159,7 +168,7 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
         "cursoHorario": "Seleccionó horarios",
         "directContactFlow": "Seleccionó contacto directo",
         'categoryFlow': 'Categorías',
-        'inscripcionFlow':'Programas',
+        'inscripcionFlow':'Inscripciones',
         // Add more mappings as needed
     };
 
