@@ -46,15 +46,22 @@ const CrmDashboardComponent = () => {
       }
       flowMap[lastFlow]++;
     });
-
+  
+    // Prioritize flows with "botSelectionFlow" or "mainFlow"
+    const prioritizeFlows = (a, b) => {
+      if (a.label === 'Inicio conversación') return -1;
+      if (b.label === 'Inicio conversación') return 1;
+      return b.value - a.value;
+    };
+  
     const formattedData = Object.entries(flowMap).map(([label, value]) => ({
       label: getFlowText(label),
       value,
     }));
-    formattedData.sort((a, b) => b.value - a.value);
+    formattedData.sort(prioritizeFlows);
     return formattedData;
   };
-
+  
   const getFlowText = (flow) => {
     const flowNames = {
       scheduleFlow: 'Horarios',
