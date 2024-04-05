@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, CircularProgress, Typography, LinearProgress } from '@mui/material';
+import { Box, Button, CircularProgress, Typography, LinearProgress, Modal } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate } from 'react-router-dom';
 import Principal from './Principal';
@@ -9,6 +9,7 @@ const FileUploadTextPage = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadComplete, setUploadComplete] = useState(false); // State to track upload completion
   const navigate = useNavigate();
   const fileInputRef = useRef(null); // Reference to file input element
 
@@ -33,6 +34,7 @@ const FileUploadTextPage = () => {
         } else {
           setLoading(false);
           console.log('File uploaded successfully');
+          setUploadComplete(true); // Set upload complete to true
           setFile(null);
           fileInputRef.current.value = null; // Clear file input value to enable selecting a new file
         }
@@ -42,7 +44,10 @@ const FileUploadTextPage = () => {
       }
     }
   };
-  
+
+  const closeModal = () => {
+    setUploadComplete(false);
+  };
 
   return (
     <Principal>
@@ -94,6 +99,25 @@ const FileUploadTextPage = () => {
             <LinearProgress variant="determinate" value={uploadProgress} />
           </Box>
         )}
+        <Modal open={uploadComplete} onClose={closeModal}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <h2>
+              Archivo subido
+            </h2>
+            <Button onClick={closeModal}>Cerrar</Button>
+          </Box>
+        </Modal>
       </Box>
     </Principal>
   );
