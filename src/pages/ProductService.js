@@ -14,7 +14,6 @@ const ProductService = () => {
   const getCategoryName = (params) => {
     return params.row.categoryId.name;
   };
-
   const formatPrice = (params) => {
     return `${params.row.price} ${params.row.coin}`;
   };
@@ -27,6 +26,7 @@ const ProductService = () => {
       valueGetter: getCategoryName,
     },
     { field: "description", width: "200", headerName: "Descripción"},
+    { field: "code", width: "300", headerName: "Código"},
     { field: "price", headerName: "Precio", valueGetter: formatPrice },
     {
       field: "operations",
@@ -41,8 +41,9 @@ const ProductService = () => {
   ];
   const columnsProducts = [
     { field: "name", width: "200", headerName: "Nombre" },
-    { field: "stock", width: "200", headerName: "Stock" },
+    // { field: "stock", width: "200", headerName: "Stock" },
     { field: "description", width: "300", headerName: "Descripción"},
+    { field: "code", width: "150", headerName: "Código"},
     {
       field: "category",
       width: "200",
