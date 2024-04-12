@@ -108,7 +108,7 @@ const MenuComponent = () => {
             </ListItemIcon>
             <ListItemText primary={localStorage.getItem('type')==='services'?"Servicios":"Productos"} />
           </ListItemButton>
-          {BusinessType !== "AsistenteCba" && (
+          {BusinessType !== "Asistente virtual cba" && (
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
             <ListItemIcon>
               <ListAltIcon/>
