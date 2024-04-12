@@ -38,7 +38,7 @@ const CrmDashboardComponent = () => {
   }, [crmData]);
 
   const processData = (data) => {
-    const flowPriorities = ['Inicio conversación', 'Categoría', 'Inscripciones'];
+    const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Inscripciones'];
   
     const flowMap = {};
     data.forEach((entry) => {
@@ -48,8 +48,11 @@ const CrmDashboardComponent = () => {
       }
       if (lastFlow !== 'directContactFlow') {
         flowMap[lastFlow]++;
-    }
+      }
     });
+  
+    // Filter out entries with a value of 0
+    const filteredData = Object.entries(flowMap).filter(([_, value]) => value !== 0);
   
     // Prioritize flows based on predefined order
     const prioritizeFlows = (a, b) => {
@@ -61,7 +64,7 @@ const CrmDashboardComponent = () => {
       return b.value - a.value;
     };
   
-    const formattedData = Object.entries(flowMap).map(([label, value]) => ({
+    const formattedData = filteredData.map(([label, value]) => ({
       label: getFlowText(label),
       value,
     }));
@@ -69,7 +72,6 @@ const CrmDashboardComponent = () => {
     formattedData.sort(prioritizeFlows);
     return formattedData;
   };
-  
   
   const getFlowText = (flow) => {
     const flowNames = {
