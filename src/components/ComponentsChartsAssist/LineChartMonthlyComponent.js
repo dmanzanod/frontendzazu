@@ -5,11 +5,13 @@ import { useDispatch } from 'react-redux';
 import { addImageConversations } from '../../features/indicators/indicatorSlice';
 import { Chart } from 'primereact/chart';
 import { getInteractionsByMonth } from '../../services/servicesInteractions';
+import { getCrmByMonth } from '../../services/service';
 import { logOut } from '../../services/service';
 import { useNavigate } from 'react-router-dom';
 
 const LineChartMonthlyComponent = ({ title }) => {
   const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
   const currentMonthIndex = currentDate.getMonth(); 
   const [chartData, setChartData] = useState({});
   const [monthlyInteractions, setMonthlyInteractions] = useState([]);
@@ -61,7 +63,7 @@ const LineChartMonthlyComponent = ({ title }) => {
 
     const fetchData = async () => {
       try {
-        const resp = await getInteractionsByMonth(localStorage.getItem('Business'), selectedMonth);
+        const resp = await getCrmByMonth(localStorage.getItem('Business'),currentYear, selectedMonth);
         if (resp.success === true) {
           setMonthlyInteractions(resp.data);
           updateChartData(resp.data);

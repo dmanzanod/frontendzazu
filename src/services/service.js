@@ -93,6 +93,21 @@ export const getCrmDataByYear = async(year,businessId)=>{
     })
 }
 
+export const getCrmByMonth = async(businessId,year,month)=>{
+    return await axios.get(`${url}/getCrmDataByMonth/${businessId}/${year}/${month}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const getInfoCrmData = async(businessId)=>{
     return await axios.get(`${url}/getContactsCrm/${businessId}`)
     .then((response)=>{

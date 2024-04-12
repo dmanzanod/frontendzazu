@@ -23,6 +23,7 @@ const MenuComponent = () => {
     const [expand, setExpand]=useState(false)
     const [expandCRM, setExpandCRM] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(1);
+    const BusinessType = localStorage.getItem('BusinessType');
     const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText','/contactList']
     const navigate=useNavigate()
     const location=useLocation()
@@ -107,12 +108,14 @@ const MenuComponent = () => {
             </ListItemIcon>
             <ListItemText primary={localStorage.getItem('type')==='services'?"Servicios":"Productos"} />
           </ListItemButton>
+          {BusinessType !== "AsistenteCba" && (
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
             <ListItemIcon>
               <ListAltIcon/>
             </ListItemIcon>
             <ListItemText primary={localStorage.getItem('type')==='services'?"Reservas":"Pedidos"} />
           </ListItemButton>
+          )}
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(3)}>
             <ListItemIcon>
               <WorkIcon/>
