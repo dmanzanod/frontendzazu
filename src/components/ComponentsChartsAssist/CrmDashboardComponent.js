@@ -46,7 +46,9 @@ const CrmDashboardComponent = () => {
       if (!flowMap[lastFlow]) {
         flowMap[lastFlow] = 0;
       }
-      flowMap[lastFlow]++;
+      if (lastFlow !== 'directContactFlow') {
+        flowMap[lastFlow]++;
+    }
     });
   
     // Prioritize flows based on predefined order
