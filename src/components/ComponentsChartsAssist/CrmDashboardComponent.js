@@ -38,7 +38,7 @@ const CrmDashboardComponent = () => {
   }, [crmData]);
 
   const processData = (data) => {
-    const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Inscripciones'];
+    const flowPriorities = ['Inicio conversación', 'Categoría', 'Inscripciones'];
   
     const flowMap = {};
     data.forEach((entry) => {
