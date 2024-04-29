@@ -6,7 +6,7 @@ import ChartComponent from '../components/ChartComponent'
 import BarChartComponent from '../components/BarChartComponent'
 
 import Principal from './Principal'
-import { logOut } from '../services/service'
+import { logOut, getUniqueCrmByCategory } from '../services/service'
 import { useNavigate } from 'react-router-dom'
 import TotalBookingsComponent from '../components/TotalBookingsComponent'
 import TotalSalesComponent from '../components/TotalSalesComponent'
@@ -24,11 +24,13 @@ import BarChartHighToLowComponent from '../components/ComponentsChartsAssist/Bar
 import LineChartMonthlyComponent from '../components/ComponentsChartsAssist/LineChartMonthlyComponent'
 import CrmDashboardComponent from '../components/ComponentsChartsAssist/CrmDashboardComponent'
 import DualBarChartComponent from '../components/ComponentsChartsAssist/DualBarChartComponent'
+import BarChartCategoriaComponent from '../components/ComponentsChartsAssist/BarChartCategoriasComponent'
 
 const DashboardPage = () => {
   const currentDate = new Date();
   const currentMonthIndex = currentDate.getMonth(); 
   const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex + 1);
+  const [uniqueCategory, setUniqueCategories]= useState(0);
   const[stats,setStats]=useState([])
   const [totalSales,setTotalSales]=useState()
   const[totalBookings,setTotalBookings]=useState()
@@ -42,23 +44,13 @@ const DashboardPage = () => {
   const [salesMonth,setSalesMonth]=useState(0)
   const type=localStorage.getItem('type')
   let BusinessType = localStorage.getItem('BusinessType');
+  
   if (BusinessType === "undefined") {
     BusinessType = "";
   } else if (!BusinessType) {
-    BusinessType = ""; // Handle case where BusinessType is null or undefined
+    BusinessType = "";
   }
-  const data = [
-    { label: 'Item 1', value: 10 },
-    { label: 'Item 2', value: 20 },
-    { label: 'Item 3', value: 30 },
-    { label: 'Item 4', value: 30 },
-    { label: 'Item 5', value: 30 },
-    { label: 'Item 6', value: 30 },
-    { label: 'Productos', value: 1000 },
-    { label: 'Curso de 3 a 7', value: 300 },
-    { label: 'Curso de 5 a 10', value: 150 },
-    // Add more data as needed
-  ];
+
   const months=[
     {id:1,name:'Enero'},
     {id:2,name:'Febrero'},
@@ -78,6 +70,8 @@ const DashboardPage = () => {
       navigate('/login')
     }
     const getBusinessCurrency=async()=>{
+      const uniqueCategories = await getUniqueCrmByCategory(localStorage.getItem('Business'));
+      setUniqueCategories(uniqueCategories.count)
       let resp
       if(type==='services'){
         resp= await getCurrencyService(localStorage.getItem('Business'))
@@ -85,7 +79,6 @@ const DashboardPage = () => {
       else{
         resp= await getCurrencyProduct(localStorage.getItem('Business'))
       }
-      console.log(resp)
       if(resp.success===true){
         setCurrency(resp.coin)
       }
@@ -234,7 +227,7 @@ const DashboardPage = () => {
     }
     
     
-   getBusinessCurrency()
+    getBusinessCurrency()
     getProductsData()
     getSales()
     getMonthInteractions()
@@ -283,17 +276,17 @@ const DashboardPage = () => {
         {BusinessType === "Asistente virtual cba" && (
           <React.Fragment>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
-              <BarChartHighToLowComponent title={'Programas'} data={data} filterCondition = "inscripcionFlow" />
+              <BarChartHighToLowComponent title={'Programas'} filterCondition = "inscripcionFlow" />
             </Box>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
               {weeklyInteractions.length > 0 && (
                 <LineChartMonthlyComponent title={'Conversaciones mensuales'}/>
               )}
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', width: { xs: '100%', sm: '100%' }, height: "auto", gap: '24px'  }}>
+            <Box sx={{ display: 'flex', flexDirection: uniqueCategory > 5 ? 'column' : 'row', width: { xs: '100%', sm: '100%' }, height: "auto", gap: '24px'  }}>
               {/* First BarChartHighToLowComponent */}
-              <Box sx={{ width: '50%' }}>
-                {<BarChartHighToLowComponent title={'Categoria'} data={data} filterCondition = "categoryFlow" />}
+              <Box sx={{ width: uniqueCategory > 5 ? { xs: '100%', sm: '100%' } : '50%' }}>
+                {<BarChartCategoriaComponent title={'Categoria'} filterCondition = "categoryFlow" />}
               </Box>
               {/* Second BarChartHighToLowComponent */}
               <Box sx={{ width: '50%' }}>

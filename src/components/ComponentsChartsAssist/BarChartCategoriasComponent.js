@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { VictoryChart, VictoryBar, VictoryAxis,VictoryTooltip, VictoryZoomContainer, VictoryBrushContainer } from 'victory';
+import { VictoryChart, VictoryBar, VictoryAxis,VictoryTooltip } from 'victory';
 import { ThemeProvider } from '@emotion/react';
 import { Box, Typography, Modal, TextField, Button,IconButton, FormControl,InputLabel,Select,MenuItem } from '@mui/material';
 import theme from '../../theme/theme';
@@ -13,7 +13,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { group, scaleOrdinal } from 'd3';
 
-const BarChartHighToLowComponent = ({ title, filterCondition }) => {
+const BarChartCategoriaComponent = ({ title, filterCondition }) => {
     const [sortedData, setSortedData] = useState([]);
     const [selectedStartDate, setSelectedStartDate] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -22,44 +22,8 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
     const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
     const dispatch = useDispatch();
     const elementRef = useRef();
+    const businessId = localStorage.getItem('Business');
     const [randomColors, setRandomColors] = useState([]);
-    const [startIndex, setStartIndex] = useState(0);
-    const [slicedDataByCategory, setSlicedDataByCategory] = useState({});
-
-    useEffect(() => {
-        if (selectedCategory !== "") {
-            const newDataByCategory = {};
-            categories.forEach(category => {
-                
-                newDataByCategory[category] = sortedData.slice(startIndex, startIndex + 5);
-            });
-            setSlicedDataByCategory(newDataByCategory);
-        }
-    }, [selectedCategory, sortedData, startIndex, categories]);
-
-    useEffect(() => {
-        if (selectedCategory !== "") {
-            // Reset startIndex to 0 when a new category is selected
-            setStartIndex(0);
-        }
-    }, [selectedCategory]);
-
-    const handleNextClick = () => {
-        
-        let maxIndex;
-        if (selectedCategory === "") {
-            maxIndex = Math.min(startIndex + 5, sortedData.length);
-        } else {
-            const remainingData = sortedData.length - startIndex;
-            maxIndex = Math.min(startIndex + 5, startIndex + remainingData);
-        }
-        setStartIndex(maxIndex);
-    };
-    
-    
-    const handlePrevClick = () => {
-        setStartIndex(Math.max(startIndex - 5, 0));
-    };
 
     const captureElementAsImage = async () => {
         try {
@@ -81,7 +45,6 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
             try {
                 const currentYear = new Date().getFullYear();
                 const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
-
                 if (response.success) {
                     let filteredData = response.data.filter(entry => entry.lastFlow === filterCondition);
                     const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
@@ -209,7 +172,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                     borderRadius: '20px',
                     backgroundColor: '#FFF',
                     gap: '15px',
-                    height: '700px',
+                    height: '500px',
                     width: '100%',
                 }}
                 className="chart"
@@ -223,20 +186,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                         <CalendarTodayIcon />
                     </IconButton>
                 </Box>
-                <FormControl style={{ marginTop: '20px', width: '100%' }}>
-                <InputLabel key="category-select-label" id="category-select-label">Categoria</InputLabel>
-                    <Select
-                        labelId="category-select-label"
-                        id="category-select"
-                        value={selectedCategory} 
-                        onChange={(event) => setSelectedCategory(event.target.value)}
-                    >
-                            <MenuItem key="All" value="">Todos</MenuItem>
-                                {categories.map((category, index) => (
-                            <MenuItem key={index} value={category}>{category}</MenuItem>
-                            ))}
-                    </Select>
-                </FormControl>
+                
                 <Modal open={isDateRangeModalOpen} onClose={handleCloseDateRangeModal}>
                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -261,17 +211,17 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                         </div>
                     </div>
                 </Modal>
-                <VictoryChart width={getBoxWidth() * 0.8} height={350} domainPadding={{ x: getDomainPadding() }} >
+                <VictoryChart width={getBoxWidth() * 0.8} height={250} domainPadding={{ x: getDomainPadding() }}>
                     <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     {selectedCategory === "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.slice(0, 5).map(data => data.lastProduct)} // Use tickValues to specify the values for the first 5 bars
+                            tickValues={sortedData.map(data => data.lastProduct)} // Use tickValues to specify the values for the first 5 bars
                             tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
                         />
                     )}
                     {selectedCategory !== "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={slicedDataByCategory[selectedCategory]?.map(data => data.lastProduct)}
+                            tickValues={sortedData.map(data => data.lastProduct)} // Use tickValues to specify the values for all bars
                             tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
                         />
                     )}
@@ -286,9 +236,9 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                             }}
                             dy={-10} 
                         />}
-                        data={selectedCategory === "" ? sortedData.slice(0, 5) : slicedDataByCategory[selectedCategory] || []}
+                        data={sortedData}
                         minBarWidth={50}
-                        barWidth={100}
+                        barWidth={50}
                         style={{
                             data: {
                                 fill: ({ index }) => {
@@ -312,24 +262,9 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                         y="quantity"
                     />
                 </VictoryChart>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        marginTop: '20px',
-                    }}
-                >
-                    {/* Previous button */}
-                    <Button onClick={handlePrevClick}>Anterior</Button>
-
-                    {/* Next button */}
-                    <Button onClick={handleNextClick}>Siguiente</Button>
-                </Box>
             </Box>
-            
         </ThemeProvider>
     );
 };
 
-export default BarChartHighToLowComponent;
+export default BarChartCategoriaComponent;
