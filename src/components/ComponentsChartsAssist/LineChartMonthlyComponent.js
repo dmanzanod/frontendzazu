@@ -28,6 +28,8 @@ const LineChartMonthlyComponent = ({ title }) => {
     whatToDoFlow: 'Menu',
     botSelectionFlow: 'Inicio conversación',
     categoryFlow: "Categorias",
+    directContactFlow:"Contacto con asesor",
+    inscripcionFlow:'Inscripción'
     // Add more mappings as needed
   };
   const updateChartDataOutside = (datasets) => {
