@@ -1,14 +1,75 @@
 import React, { useState, useEffect, useRef } from 'react';
 import D3Funnel from 'd3-funnel';
-import { getCrmDataByYear } from '../../services/service';
+import { getCrmDataByYear, getTotalCrmDataByDates } from '../../services/service';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { Button, Modal, TextField } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const CrmDashboardComponent = () => {
   const [crmData, setCrmData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('day');
   const [crmDataByYear, setCrmDataByYear] = useState([]);
   const chartContainer = useRef(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
+  const [showNoDataModal,setShowNoDataModal] = useState(false);
+  const handleOpenDateRangeModal = () => {
+    setDateRangeModalOpen(true);
+  };
+
+  const handleCloseDateRangeModal = () => {
+    setDateRangeModalOpen(false);
+  };
+
+  const handleStartDateChange = (newDate) => {
+    setSelectedStartDate(newDate);
+  };
+
+  const handleEndDateChange = (newDate) => {
+    setSelectedEndDate(newDate);
+  };
+  const handleApplyDateRange = async () => {
+    try {
+      const currentYear = new Date().getFullYear();
+      const response = await getTotalCrmDataByDates(currentYear, localStorage.getItem('Business'),selectedStartDate,selectedEndDate);
+      console.log("response data \n",response.data)
+      if (response.success) {
+        if (response.data.length === 0) {
+          setShowNoDataModal(true);
+          return;
+        }
+        setCrmData(response.data);
+        setCrmDataByYear(response.data);
+      } else {
+        // Handle error in fetching data
+      }
+    } catch (error) {
+      // Handle error in fetching data
+    }
+    setDateRangeModalOpen(false);
+  };
+  
+  const handleResetData = async () => {
+    try {
+      const currentYear = new Date().getFullYear();
+      const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
+      setSelectedStartDate(null);
+      setSelectedEndDate(null); 
+      setDateRangeModalOpen(false); 
+      if (response.success) {
+        setCrmData(response.data);
+        setCrmDataByYear(response.data);
+      } else {
+        // Handle error in fetching data
+      }
+    } catch (error) {
+      // Handle error in fetching data
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +92,7 @@ const CrmDashboardComponent = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Entro a use effect para dibujar ")
     if (chartContainer.current && crmData.length > 0) {
       const processedData = processData(crmData);
       drawFunnelChart(chartContainer, processedData, 1);
@@ -214,33 +276,45 @@ const CrmDashboardComponent = () => {
       container.current.innerHTML = '<p>No se encuentran datos del CRM</p>';
     }
   };
-
-  const getStartOfWeek = (date) => {
-    const startOfWeek = new Date(date);
-    startOfWeek.setDate(date.getDate() - date.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-    return startOfWeek.getTime();
-  };
-
-  const getEndOfWeek = (date) => {
-    const endOfWeek = new Date(date);
-    endOfWeek.setDate(date.getDate() + (6 - date.getDay()));
-    endOfWeek.setHours(23, 59, 59, 999);
-    return endOfWeek.getTime();
-  };
-
-  const getStartOfMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getTime();
-  };
-
-  const getEndOfMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999).getTime();
-  };
-
   return (
     <div style={{ textAlign: 'center', marginTop: '60px', width: '100%' }}>
       <h1 style={{ alignSelf: 'center', flex: '1' }}>CRM</h1>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+         <Button onClick={handleOpenDateRangeModal}>Filtrar por fecha</Button>
+      {/*Modal for error message*/}
+      <Modal open={showNoDataModal} onClose={() => setShowNoDataModal(false)}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+          <p>No existen datos</p>
+        </div>
+      </Modal>
+      {/* Date range modal */}
+      <Modal open={isDateRangeModalOpen} onClose={handleCloseDateRangeModal}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Start Date"
+              value={selectedStartDate}
+              onChange={handleStartDateChange}
+              renderInput={(props) => <TextField {...props} variant="standard" margin="normal" />}
+            />
+            <span style={{ margin: '20px', display: 'inline-block', lineHeight: '1.5' }}> - </span>
+            <DatePicker
+              label="End Date"
+              value={selectedEndDate}
+              onChange={handleEndDateChange}
+              renderInput={(props) => <TextField {...props} variant="standard" margin="normal" />}
+            />
+          </LocalizationProvider>
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+            <Button variant="contained" color="primary" onClick={handleApplyDateRange} style={{ marginRight: '30px' }}>
+              Aplicar
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleResetData}>
+              Reestablecer
+            </Button>
+          </div>
+        </div>
+      </Modal>
         <div style={{ width: '100%', maxWidth: '100%', margin: '30px', paddingTop: '20px' }} ref={chartContainer}></div>
       </div>
     </div>

@@ -215,14 +215,24 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     {selectedCategory === "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.map(data => data.lastProduct)} // Use tickValues to specify the values for the first 5 bars
-                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
+                            tickValues={sortedData.map(data => data.lastProduct)}
+                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
+                            style={{
+                                tickLabels: {
+                                  fontSize: 10, 
+                                },
+                            }}
                         />
                     )}
                     {selectedCategory !== "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.map(data => data.lastProduct)} // Use tickValues to specify the values for all bars
-                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
+                            tickValues={sortedData.map(data => data.lastProduct)}
+                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
+                            style={{
+                                tickLabels: {
+                                  fontSize: 10, 
+                                },
+                            }}
                         />
                     )}
                     <VictoryBar

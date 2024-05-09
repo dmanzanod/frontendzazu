@@ -93,6 +93,42 @@ export const getCrmDataByYear = async(year,businessId)=>{
     })
 }
 
+export const getTotalCrmDataByDates = async (year, businessId, selectedStartDate, selectedEndDate) => {
+    const requestData = {
+        selectedStartDate: selectedStartDate,
+        selectedEndDate: selectedEndDate
+    };
+
+    return await axios.post(`${url}/getTotalCrmDataByDates/${businessId}/${year}`, requestData)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            return {
+                error: error.message,
+                code: error.code,
+                name: error.name,
+                status: error.response ? error.response.status : null
+            };
+        });
+};
+
+
+export const getCrmByFlow = async(businessId,field)=>{
+    return await axios.get(`${url}/getUniqueValuesByFields/${businessId}/${field}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const getUniqueCrmByCategory = async(businessId)=>{
     return await axios.get(`${url}/getUniqueCrmByCategory/${businessId}`)
     .then((response)=>{
@@ -109,8 +145,8 @@ export const getUniqueCrmByCategory = async(businessId)=>{
 }
 
 
-export const getCrmByMonth = async(businessId,year,month)=>{
-    return await axios.get(`${url}/getCrmDataByMonth/${businessId}/${year}/${month}`)
+export const getCrmByMonth = async(businessId,year,month,flow)=>{
+    return await axios.get(`${url}/getCrmDataByMonth/${businessId}/${year}/${month}/${flow}`)
     .then((response)=>{
         return response.data
     })

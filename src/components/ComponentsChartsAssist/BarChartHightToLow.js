@@ -25,7 +25,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
     const [randomColors, setRandomColors] = useState([]);
     const [startIndex, setStartIndex] = useState(0);
     const [slicedDataByCategory, setSlicedDataByCategory] = useState({});
-
+    const [categoryChanged, setCategoryChanged] = useState(false);
     useEffect(() => {
         if (selectedCategory !== "") {
             const newDataByCategory = {};
@@ -87,14 +87,6 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                     const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
                     const filteredCategories = uniqueCategories.filter(category => category !== null && category !== undefined);
                     setCategories(filteredCategories);
-                    if (selectedStartDate && selectedEndDate) {
-                        const startDate = new Date(selectedStartDate);
-                        const endDate = new Date(selectedEndDate);
-                        filteredData = filteredData.filter(entry => {
-                            const entryDate = new Date(entry.createdAt);
-                            return entryDate >= startDate && entryDate <= endDate;
-                        });
-                    }
                     if (selectedCategory) {
                         filteredData = filteredData.filter(entry => entry.lastCategory === selectedCategory);
                     }
@@ -111,7 +103,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         };
 
         fetchData();
-    }, [filterCondition, selectedStartDate, selectedEndDate,selectedCategory]);
+    }, [filterCondition,selectedCategory,categoryChanged]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -119,6 +111,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         }, 1000);
     }, []);
 
+    
     const groupDataByLastProduct = (data) => {
         return data.reduce((groups, entry) => {
             const key = entry.lastProduct;
@@ -149,6 +142,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
     };
 
     const handleStartDateChange = (newDate) => {
+        console.log(newDate)
         setSelectedStartDate(newDate);
     };
 
@@ -160,8 +154,43 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         setSelectedStartDate(null);
         setSelectedEndDate(null); 
         setDateRangeModalOpen(false); 
+        setCategoryChanged(prev => !prev)
     };
     
+    const applyDateSelectionData = async () =>{
+        try {
+            const currentYear = new Date().getFullYear();
+            const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
+
+            if (response.success) {
+                let filteredData = response.data.filter(entry => entry.lastFlow === filterCondition);
+                const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
+                const filteredCategories = uniqueCategories.filter(category => category !== null && category !== undefined);
+                setCategories(filteredCategories);
+                if (selectedStartDate && selectedEndDate) {
+                    const startDate = new Date(selectedStartDate);
+                    const endDate = new Date(selectedEndDate);
+                    console.log(startDate," - Endate - ", endDate)
+                    filteredData = filteredData.filter(entry => {
+                        const entryDate = new Date(entry.createdAt);
+                        return entryDate >= startDate && entryDate <= endDate;
+                    });
+                }
+                if (selectedCategory) {
+                    filteredData = filteredData.filter(entry => entry.lastCategory === selectedCategory);
+                }
+
+                const groupedData = groupDataByLastProduct(filteredData);
+                const sortedData = sortDataByQuantity(groupedData);
+                setSortedData(sortedData);
+                setDateRangeModalOpen(false); 
+            } else {
+                // Handle error in fetching data
+            }
+        } catch (error) {
+            // Handle error in fetching data
+        }
+    }
 
     const getDomainPadding = () => {
         const numDataPoints = Math.max(sortedData.length, 5) + 3;
@@ -223,7 +252,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                         <CalendarTodayIcon />
                     </IconButton>
                 </Box>
-                <FormControl style={{ marginTop: '20px', width: '100%' }}>
+                <FormControl style={{ marginTop: '20px', width: '100%' }} variant="filled">
                 <InputLabel key="category-select-label" id="category-select-label">Categoria</InputLabel>
                     <Select
                         labelId="category-select-label"
@@ -255,6 +284,9 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                             />
                         </LocalizationProvider>
                         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                            <Button variant="contained" color="primary" onClick={applyDateSelectionData} style={{ marginRight: '30px' }}>
+                                Aceptar
+                            </Button>
                             <Button variant="contained" color="primary" onClick={handleApplyDateRange}>
                                 Reestablecer
                             </Button>
@@ -264,15 +296,25 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                 <VictoryChart width={getBoxWidth() * 0.8} height={350} domainPadding={{ x: getDomainPadding() }} >
                     <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
                     {selectedCategory === "" && (
-                        <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.slice(0, 5).map(data => data.lastProduct)} // Use tickValues to specify the values for the first 5 bars
-                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
+                        <VictoryAxis
+                            tickValues={sortedData.slice(startIndex, startIndex + 5).map(data => data.lastProduct)}
+                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
+                            style={{
+                                tickLabels: {
+                                  fontSize: 10, 
+                                },
+                            }}
                         />
                     )}
                     {selectedCategory !== "" && (
-                        <VictoryAxis // Define the x-axis
+                        <VictoryAxis 
                             tickValues={slicedDataByCategory[selectedCategory]?.map(data => data.lastProduct)}
-                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick} // Wrap the label if it exceeds 10 characters
+                            tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
+                            style={{
+                                tickLabels: {
+                                  fontSize: 10, 
+                                },
+                            }}
                         />
                     )}
                     <VictoryBar
@@ -286,9 +328,9 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                             }}
                             dy={-10} 
                         />}
-                        data={selectedCategory === "" ? sortedData.slice(0, 5) : slicedDataByCategory[selectedCategory] || []}
-                        minBarWidth={50}
-                        barWidth={100}
+                        data={selectedCategory === "" ? sortedData.slice(startIndex, startIndex + 5) : slicedDataByCategory[selectedCategory] || []}
+                        minBarWidth={40}
+                        barWidth={70}
                         style={{
                             data: {
                                 fill: ({ index }) => {

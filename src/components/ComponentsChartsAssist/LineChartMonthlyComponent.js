@@ -4,7 +4,7 @@ import { toPng } from 'html-to-image';
 import { useDispatch } from 'react-redux';
 import { addImageConversations } from '../../features/indicators/indicatorSlice';
 import { Chart } from 'primereact/chart';
-import { getInteractionsByMonth } from '../../services/servicesInteractions';
+import { getCrmByFlow } from '../../services/service';
 import { getCrmByMonth } from '../../services/service';
 import { logOut } from '../../services/service';
 import { useNavigate } from 'react-router-dom';
@@ -15,8 +15,37 @@ const LineChartMonthlyComponent = ({ title }) => {
   const currentMonthIndex = currentDate.getMonth(); 
   const [chartData, setChartData] = useState({});
   const [monthlyInteractions, setMonthlyInteractions] = useState([]);
+  const [uniqueFlows,setUniqueFlows]=useState();
   const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex + 1); // Initial selected month is 1 (January)
   const navigate = useNavigate();
+  const [selectedFlow, setSelectedFlow] = useState('');
+  const flowLabels = {
+    cbaStudentOrNotConfirmationFlow: 'Consulta estudiantes(o no)',
+    BuyFlow: 'Compras',
+    pricesFlow: 'Precios',
+    productsFlow: 'Productos',
+    mainFlow: 'Inicio conversación',
+    whatToDoFlow: 'Menu',
+    botSelectionFlow: 'Inicio conversación',
+    categoryFlow: "Categorias",
+    // Add more mappings as needed
+  };
+  const updateChartDataOutside = (datasets) => {
+    // Check if datasets is empty
+    if (datasets && datasets.length > 0) {
+      const chartData = {
+        labels: monthlyInteractions.map(entry => entry.day),
+        datasets: datasets,
+      };
+    
+      setChartData(chartData);
+    } else {
+      // Handle empty datasets here
+      console.log('Datasets is empty');
+      // Optionally, you can set default chart data or do nothing
+    }
+  };
+    
   const [optionsChart, setOptionsChart] = useState({
     scales: {
       y: {
@@ -30,9 +59,9 @@ const LineChartMonthlyComponent = ({ title }) => {
 
   useEffect(() => {
     const formattedData = () => {
-      // Format data based on interactions for the selected month
-      const labels = monthlyInteractions.map(entry => entry.day); // Get days as labels
-      const totals = monthlyInteractions.map(entry => entry.total); // Get total interactions per day
+      const labels = monthlyInteractions.map(entry => entry.day);
+      const totals = monthlyInteractions.map(entry => entry.total);
+      console.log("Esto es montlhy interactions \n",monthlyInteractions)
       return {
         labels: labels,
         datasets: [
@@ -63,7 +92,7 @@ const LineChartMonthlyComponent = ({ title }) => {
 
     const fetchData = async () => {
       try {
-        const resp = await getCrmByMonth(localStorage.getItem('Business'),currentYear, selectedMonth);
+        const resp = await getCrmByMonth(localStorage.getItem('Business'),currentYear, selectedMonth,"mainFlow");
         if (resp.success === true) {
           setMonthlyInteractions(resp.data);
           updateChartData(resp.data);
@@ -77,7 +106,7 @@ const LineChartMonthlyComponent = ({ title }) => {
         console.error('Error fetching interactions:', error);
       }
     };
-
+    console.log('Monthly interactions:', monthlyInteractions);
     const updateChart = () => {
       setChartData(formattedData());
     };
@@ -110,9 +139,65 @@ const LineChartMonthlyComponent = ({ title }) => {
     };
   }, [selectedMonth, dispatch]);
 
+  useEffect(() => {
+    const getFlows = async () => {
+      try {
+        const flows = await getCrmByFlow(localStorage.getItem('Business'), 'lastFlow');
+        console.log('Flows:', flows);
+        setUniqueFlows(flows);
+      } catch (error) {
+        console.error('Error fetching flows:', error);
+      }
+    };
+  
+    // Call getFlows when the component mounts
+    getFlows();
+  
+    // Other useEffect dependencies and cleanup functions...
+  }, []); // Empty dependency array ensures this effect runs only once
+  
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
   };
+
+  const handleFlowChange = async (event) => {
+    setSelectedFlow(event.target.value);
+    
+    try {
+      const mainFlowResp = await getCrmByMonth(localStorage.getItem('Business'), currentYear, selectedMonth, "mainFlow");
+      const selectedFlowResp = await getCrmByMonth(localStorage.getItem('Business'), currentYear, selectedMonth, event.target.value);
+  
+      if (mainFlowResp.success === true && selectedFlowResp.success === true) {
+        const mainFlowData = mainFlowResp.data;
+        const selectedFlowData = selectedFlowResp.data;
+  
+        // Update chart with main flow and selected flow datasets
+        updateChartDataOutside([
+          {
+            label: 'Número de conversaciones iniciadas',
+            borderColor: '#42a5f5',
+            data: mainFlowData.map(entry => entry.total),
+            tension: 0.4,
+          },
+          {
+            label: `Número de ${event.target.value}`,
+            borderColor: '#ff9800',
+            data: selectedFlowData.map(entry => entry.total),
+            tension: 0.4,
+          }
+        ]);
+      } else {
+        if (mainFlowResp.status === 403 || selectedFlowResp.status === 403) {
+          logOut();
+          navigate('/login');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching interactions for flow:', error);
+    }
+  };
+  
+  
 
   return (
     <Box
@@ -132,8 +217,17 @@ const LineChartMonthlyComponent = ({ title }) => {
       <Typography variant="h4" sx={{ fontSize: { xs: '1.6rem', sm: '1.8rem' } }}>
         {title}
       </Typography>
+      <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginTop: '20px',
+      }}
+    >
       <FormControl 
-        style={{ marginTop: '20px', width: '100%' }}
+        style={{ width: '48%' }}
+        variant="filled"
       >
         <InputLabel id="month-select-label">Mes</InputLabel>
         <Select
@@ -156,6 +250,25 @@ const LineChartMonthlyComponent = ({ title }) => {
           <MenuItem value={12}>Diciembre</MenuItem>
         </Select>
       </FormControl>
+      <FormControl 
+        style={{ width: '48%' }}
+        variant="filled"
+      >
+        <InputLabel id="flow-select-label">Flujo</InputLabel>
+        <Select
+          labelId="flow-select-label"
+          id="flow-select"
+          value={selectedFlow}
+          onChange={handleFlowChange}
+        >
+          <MenuItem value="">Todos</MenuItem>
+          {uniqueFlows && uniqueFlows.data && Array.isArray(uniqueFlows.data) && uniqueFlows.data.map((flow, index) => (
+            <MenuItem key={index} value={flow}>{flowLabels[flow] || flow}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+
       <div style={{ marginTop: '20px', width: '100%', height: '100%' }}>
         <Chart type="line" className="chart__width" data={chartData} options={optionsChart} style={{ width: '100%', height: '100%' }} />
       </div>
