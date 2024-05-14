@@ -148,6 +148,7 @@ const CrmDashboardComponent = () => {
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categoría',
       inscripcionFlow:'Inscripciones',
+      completeInscriptionFlow: 'Inscripción completada'
     };
 
     return flowNames[flow] || flow;
@@ -182,6 +183,7 @@ const CrmDashboardComponent = () => {
       "directContactFlow": "Seleccionó contacto directo",
       'categoryFlow': 'Categoría',
       'inscripcionFlow':'Inscripciones',
+      'completeInscriptionFlow':'Inscripción completada'
       // Add more mappings as needed
     };
 
