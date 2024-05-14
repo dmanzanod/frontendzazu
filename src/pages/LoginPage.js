@@ -47,14 +47,15 @@ const LoginPage = () => {
       
       if(resp.success){
         setLoading(false)
-        localStorage.setItem('Auth',resp.data.token)
-        localStorage.setItem('Business',resp.data.businessId)
-        localStorage.setItem('user',resp.data.name)
-        localStorage.setItem('type',resp.data.type)
-        localStorage.setItem('ScheduleId',resp.data.scheduleId)
-        localStorage.setItem('url',resp.data.url)
-        localStorage.setItem('BusinessType', resp.data.BusinessType)
-        navigate('/')
+        localStorage.setItem('UserId', resp.data.userId);
+        localStorage.setItem('Auth',resp.data.token);
+        localStorage.setItem('Business',resp.data.businessId);
+        localStorage.setItem('user',resp.data.name);
+        localStorage.setItem('type',resp.data.type);
+        localStorage.setItem('ScheduleId',resp.data.scheduleId);
+        localStorage.setItem('url',resp.data.url);
+        localStorage.setItem('BusinessType', resp.data.BusinessType);
+        navigate('/');
         //const isAdminResp = await authAdminVerification();
         // if(isAdminResp.role === 'admin'){
         //   navigate('/dashboardAdmin');

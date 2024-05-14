@@ -54,8 +54,44 @@ const LineChartMonthlyComponent = ({ title }) => {
         beginAtZero: true,
       },
     },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: () => '',
+
+        },
+      },
+      legend: {
+        labels: {
+          generateLabels: function(chart) {
+            if (chart && chart.data && chart.data.datasets) {
+              return chart.data.datasets.map((dataset, i) => ({
+                text: dataset.legendLabel,
+                fillStyle: dataset.borderColor,
+              }));
+            } else {
+              return [];
+            }
+          }
+        },
+        onClick: (e, legendItem, legend) => {
+          const index = legendItem.datasetIndex;
+          const chart = legend.chart;
+          const meta = chart.getDatasetMeta(index);
+      
+          // Check if meta is defined and has the hidden property
+          if (meta && typeof meta.hidden !== 'undefined') {
+            // Toggle visibility of the dataset
+            meta.hidden = !meta.hidden;
+            chart.update();
+          }
+        }
+      }
+      
+    },
     maintainAspectRatio: false,
   });
+  
   const dispatch = useDispatch();
   const elementRef = useRef();
 
@@ -68,10 +104,11 @@ const LineChartMonthlyComponent = ({ title }) => {
         labels: labels,
         datasets: [
           {
-            label: 'Número de conversaciones',
+            label: '',
             borderColor: '#42a5f5',
             data: totals,
             tension: 0.4,
+            legendLabel:'Inicio conversación'
           },
         ],
       };
@@ -120,10 +157,11 @@ const LineChartMonthlyComponent = ({ title }) => {
         labels: labels,
         datasets: [
           {
-            label: 'Número de conversaciones',
+            label: 'Muestra color',
             borderColor: '#42a5f5',
             data: totals,
             tension: 0.4,
+            legendLabel:'Inicio conversación'
           },
         ],
       };
@@ -176,16 +214,18 @@ const LineChartMonthlyComponent = ({ title }) => {
         // Update chart with main flow and selected flow datasets
         updateChartDataOutside([
           {
-            label: 'Número de conversaciones iniciadas',
+            label: ' ',
             borderColor: '#42a5f5',
             data: mainFlowData.map(entry => entry.total),
             tension: 0.4,
+            legendLabel:'Inicio conversación'
           },
           {
-            label: `Número de ${event.target.value}`,
+            label: ` `,
             borderColor: '#ff9800',
             data: selectedFlowData.map(entry => entry.total),
             tension: 0.4,
+            legendLabel:`${event.target.value}`,
           }
         ]);
       } else {
@@ -263,7 +303,7 @@ const LineChartMonthlyComponent = ({ title }) => {
           value={selectedFlow}
           onChange={handleFlowChange}
         >
-          <MenuItem value="">Todos</MenuItem>
+          <MenuItem value="">Ninguno</MenuItem>
           {uniqueFlows && uniqueFlows.data && Array.isArray(uniqueFlows.data) && uniqueFlows.data.map((flow, index) => (
             <MenuItem key={index} value={flow}>{flowLabels[flow] || flow}</MenuItem>
           ))}

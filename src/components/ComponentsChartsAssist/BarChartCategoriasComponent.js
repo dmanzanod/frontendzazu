@@ -24,6 +24,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
     const elementRef = useRef();
     const businessId = localStorage.getItem('Business');
     const [randomColors, setRandomColors] = useState([]);
+    const [categoryChanged, setCategoryChanged] = useState(false);
 
     const captureElementAsImage = async () => {
         try {
@@ -50,14 +51,6 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
                     const filteredCategories = uniqueCategories.filter(category => category !== null && category !== undefined);
                     setCategories(filteredCategories);
-                    if (selectedStartDate && selectedEndDate) {
-                        const startDate = new Date(selectedStartDate);
-                        const endDate = new Date(selectedEndDate);
-                        filteredData = filteredData.filter(entry => {
-                            const entryDate = new Date(entry.createdAt);
-                            return entryDate >= startDate && entryDate <= endDate;
-                        });
-                    }
                     if (selectedCategory) {
                         filteredData = filteredData.filter(entry => entry.lastCategory === selectedCategory);
                     }
@@ -74,7 +67,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
         };
 
         fetchData();
-    }, [filterCondition, selectedStartDate, selectedEndDate,selectedCategory]);
+    }, [filterCondition,selectedCategory,categoryChanged]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -123,6 +116,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
         setSelectedStartDate(null);
         setSelectedEndDate(null); 
         setDateRangeModalOpen(false); 
+        setCategoryChanged(prev => !prev)
     };
     
 
@@ -159,7 +153,44 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                 return '#000000';
             }
         };
-        
+    
+        const applyDateSelectionData = async () => {
+            try {
+                const currentYear = new Date().getFullYear();
+                const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
+    
+                if (response.success) {
+                    let filteredData = response.data.filter(entry => entry.lastFlow === filterCondition);
+                    const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
+                    const filteredCategories = uniqueCategories.filter(category => category !== null && category !== undefined);
+                    setCategories(filteredCategories);
+    
+                    // Filter data based on the selected date range
+                    if (selectedStartDate && selectedEndDate) {
+                        const startDate = new Date(selectedStartDate);
+                        const endDate = new Date(selectedEndDate);
+                        filteredData = filteredData.filter(entry => {
+                            const entryDate = new Date(entry.createdAt);
+                            return entryDate >= startDate && entryDate <= endDate;
+                        });
+                    }
+    
+                    // Filter data based on the selected category
+                    if (selectedCategory) {
+                        filteredData = filteredData.filter(entry => entry.lastCategory === selectedCategory);
+                    }
+    
+                    const groupedData = groupDataByLastProduct(filteredData);
+                    const sortedData = sortDataByQuantity(groupedData);
+                    setSortedData(sortedData);
+                    setDateRangeModalOpen(false);
+                } else {
+                    // Handle error in fetching data
+                }
+            } catch (error) {
+                // Handle error in fetching data
+            }
+        };
     
     return (
         <ThemeProvider theme={theme}>
@@ -205,6 +236,9 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                             />
                         </LocalizationProvider>
                         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+                            <Button variant="contained" color="primary" onClick={applyDateSelectionData} style={{ marginRight: '30px' }}>
+                                Aceptar
+                            </Button>
                             <Button variant="contained" color="primary" onClick={handleApplyDateRange}>
                                 Reestablecer
                             </Button>
