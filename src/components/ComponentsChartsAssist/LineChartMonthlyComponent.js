@@ -158,7 +158,7 @@ const LineChartMonthlyComponent = ({ title }) => {
         labels: labels,
         datasets: [
           {
-            label: 'Muestra color',
+            label: ' ',
             borderColor: '#42a5f5',
             data: totals,
             tension: 0.4,
@@ -226,7 +226,7 @@ const LineChartMonthlyComponent = ({ title }) => {
             borderColor: '#ff9800',
             data: selectedFlowData.map(entry => entry.total),
             tension: 0.4,
-            legendLabel:`${event.target.value}`,
+            legendLabel:`${flowLabels[event.target.value] || event.target.value}`,
           }
         ]);
       } else {
