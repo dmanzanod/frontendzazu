@@ -31,7 +31,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
             const newDataByCategory = {};
             categories.forEach(category => {
                 
-                newDataByCategory[category] = sortedData.slice(startIndex, startIndex + 5);
+                newDataByCategory[category] = sortedData.slice(startIndex, startIndex + 6);
             });
             setSlicedDataByCategory(newDataByCategory);
         }
@@ -48,17 +48,17 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         
         let maxIndex;
         if (selectedCategory === "") {
-            maxIndex = Math.min(startIndex + 5, sortedData.length);
+            maxIndex = Math.min(startIndex + 6, sortedData.length);
         } else {
             const remainingData = sortedData.length - startIndex;
-            maxIndex = Math.min(startIndex + 5, startIndex + remainingData);
+            maxIndex = Math.min(startIndex + 6, startIndex + remainingData);
         }
         setStartIndex(maxIndex);
     };
     
     
     const handlePrevClick = () => {
-        setStartIndex(Math.max(startIndex - 5, 0));
+        setStartIndex(Math.max(startIndex - 6, 0));
     };
 
     const captureElementAsImage = async () => {
@@ -193,9 +193,9 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
     }
 
     const getDomainPadding = () => {
-        const numDataPoints = Math.max(sortedData.length, 5) + 3;
+        const numDataPoints = Math.max(sortedData.length, 6) + 3;
         if (sortedData.length === 2) {
-            return 600; // Set domain padding to 10px when there are exactly 2 bars
+            return 600;
         }
         return Math.min(600, numDataPoints * 10);
     };
@@ -294,10 +294,10 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                     </div>
                 </Modal>
                 <VictoryChart width={getBoxWidth() * 0.8} height={350} domainPadding={{ x: getDomainPadding() }} >
-                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} style={{grid: { stroke: "gray", strokeWidth: 0.5 }}}/>
+                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 6]} style={{grid: { stroke: "gray", strokeWidth: 0.5 }}}/>
                     {selectedCategory === "" && (
                         <VictoryAxis
-                            tickValues={sortedData.slice(startIndex, startIndex + 5).map(data => data.lastProduct)}
+                            tickValues={sortedData.slice(startIndex, startIndex + 6).map(data => data.lastProduct)}
                             tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
                             style={{
                                 tickLabels: {
@@ -328,7 +328,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                             }}
                             dy={-10} 
                         />}
-                        data={selectedCategory === "" ? sortedData.slice(startIndex, startIndex + 5) : slicedDataByCategory[selectedCategory] || []}
+                        data={selectedCategory === "" ? sortedData.slice(startIndex, startIndex + 6) : slicedDataByCategory[selectedCategory] || []}
                         minBarWidth={20}
                         barWidth={30}
                         style={{
