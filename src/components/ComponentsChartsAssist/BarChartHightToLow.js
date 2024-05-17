@@ -294,7 +294,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                     </div>
                 </Modal>
                 <VictoryChart width={getBoxWidth() * 0.8} height={350} domainPadding={{ x: getDomainPadding() }} >
-                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
+                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} style={{grid: { stroke: "gray", strokeWidth: 0.5 }}}/>
                     {selectedCategory === "" && (
                         <VictoryAxis
                             tickValues={sortedData.slice(startIndex, startIndex + 5).map(data => data.lastProduct)}
@@ -329,8 +329,8 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
                             dy={-10} 
                         />}
                         data={selectedCategory === "" ? sortedData.slice(startIndex, startIndex + 5) : slicedDataByCategory[selectedCategory] || []}
-                        minBarWidth={40}
-                        barWidth={70}
+                        minBarWidth={20}
+                        barWidth={30}
                         style={{
                             data: {
                                 fill: ({ index }) => {

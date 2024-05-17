@@ -25,7 +25,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
     const businessId = localStorage.getItem('Business');
     const [randomColors, setRandomColors] = useState([]);
     const [categoryChanged, setCategoryChanged] = useState(false);
-
+    const [startIndex, setStartIndex] = useState(0);
     const captureElementAsImage = async () => {
         try {
             const element = elementRef.current;
@@ -191,7 +191,15 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                 // Handle error in fetching data
             }
         };
+        const handleNextClick = () => {
+            const maxIndex = Math.min(startIndex + 5, sortedData.length);
+            setStartIndex(maxIndex);
+        };
     
+        const handlePrevClick = () => {
+            const newIndex = Math.max(startIndex - 5, 0);
+            setStartIndex(newIndex);
+        };
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -246,10 +254,10 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     </div>
                 </Modal>
                 <VictoryChart width={getBoxWidth() * 0.8} height={250} domainPadding={{ x: getDomainPadding() }}>
-                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} />
+                    <VictoryAxis dependentAxis tickFormat={(tick) => Math.round(tick)} domain={[0, 5]} style={{grid: { stroke: "gray", strokeWidth: 0.5 }}} />
                     {selectedCategory === "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.map(data => data.lastProduct)}
+                            tickValues={sortedData.slice(startIndex, startIndex + 5).map(data => data.lastProduct)}
                             tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
                             style={{
                                 tickLabels: {
@@ -260,7 +268,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     )}
                     {selectedCategory !== "" && (
                         <VictoryAxis // Define the x-axis
-                            tickValues={sortedData.map(data => data.lastProduct)}
+                            tickValues={sortedData.slice(startIndex, startIndex + 5).map(data => data.lastProduct)}
                             tickFormat={(tick) => tick.length > 14 ? tick.replace(/(.{14})/g, "$1-\n") : tick}
                             style={{
                                 tickLabels: {
@@ -280,7 +288,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                             }}
                             dy={-10} 
                         />}
-                        data={sortedData}
+                        data={sortedData.slice(startIndex, startIndex + 5)}
                         minBarWidth={50}
                         barWidth={50}
                         style={{
@@ -306,6 +314,17 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                         y="quantity"
                     />
                 </VictoryChart>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        marginTop: '20px',
+                    }}
+                >
+                    <Button onClick={handlePrevClick}>Anterior</Button>
+                    <Button onClick={handleNextClick}>Siguiente</Button>
+                </Box>
             </Box>
         </ThemeProvider>
     );
