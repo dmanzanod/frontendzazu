@@ -28,7 +28,7 @@ const MenuComponent = () => {
     const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText','/contactList']
     const navigate=useNavigate()
     const location=useLocation()
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleExpand=()=>{
       setSelectedIndex(2)
