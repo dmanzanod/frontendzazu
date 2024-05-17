@@ -1,4 +1,4 @@
-import { Box, Collapse,  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,  Toolbar } from '@mui/material'
+import { Box, Collapse,  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,  Toolbar, IconButton } from '@mui/material'
 import React, { useState } from 'react'
 import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -18,6 +18,7 @@ import ExcelUploadIcon from '@mui/icons-material/CloudUpload'
 import { UploadFile } from '@mui/icons-material';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import Groups3Icon from '@mui/icons-material/Groups3';
+import MenuIcon from '@mui/icons-material/Menu'
 const MenuComponent = () => {
     
     const [expand, setExpand]=useState(false)
@@ -27,6 +28,8 @@ const MenuComponent = () => {
     const routes=['/','/qr','/crud','/report','/help','/excelUpload','/crmData','/crmPersonalInformation', '/fileUploadText','/contactList']
     const navigate=useNavigate()
     const location=useLocation()
+    const [isOpen, setIsOpen] = useState(true);
+
     const handleExpand=()=>{
       setSelectedIndex(2)
       setExpand(!expand)
@@ -35,7 +38,11 @@ const MenuComponent = () => {
     const handleExpandCRM = () => {
       setExpandCRM(!expandCRM);
       setSelectedIndex(6); // Update the selected index when "CRM" is clicked
-  };
+    };
+
+     const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
 
     const handleSubList=(index)=>{
       const subRoutes=[`/categories/${localStorage.getItem('Business')}`,`/products/${localStorage.getItem('Business')}`,`/bookingDetails/${localStorage.getItem('Business')}`,`/businessDetailsUpdate/${localStorage.getItem('Business')}`,'/schedule']
@@ -49,28 +56,33 @@ const MenuComponent = () => {
   };
   return (
     <Drawer
-        variant="permanent"
-        sx={{
-          width: {
-            xs: "60px",
-            sm:"180px",
-            lg:'240px'
-          },
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: {xs:"60px",sm:"180px",
-          lg:'240px'}, boxSizing: 'border-box' },
-        }}
-      >
+    variant="permanent"
+    sx={{
+        width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' },
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: { 
+            width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' }, 
+            boxSizing: 'border-box',
+        },
+    }}
+>
         <Toolbar />
         <Box sx={{ overflow: 'hidden' }}>
+        
           <List>
+            <ListItem disablePadding>
+              <ListItemButton onClick={toggleMenu}>
+                <MenuIcon />
+              </ListItemButton>
+            </ListItem>
+          
             <ListItem  disablePadding>
                 <ListItemButton 
                 
                 onClick={(event) => handleListItemClick(event, 0)}
                 >
                     <DashboardOutlinedIcon/>
-                  <ListItemText primary={'Dashboard'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Dashboard'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -79,7 +91,7 @@ const MenuComponent = () => {
                 
                 >
                     <QrCodeOutlinedIcon/>
-                  <ListItemText primary={'Generar QR'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Generar QR'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -88,7 +100,7 @@ const MenuComponent = () => {
                 
                 >
                     <DesignServicesIcon/>
-                  <ListItemText primary={'Operaciones'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Operaciones'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                   {expand ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
               </ListItem>
@@ -159,7 +171,7 @@ const MenuComponent = () => {
                 
                 >
                     <ContactsIcon/>
-                  <ListItemText primary={'CRM'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'CRM'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                   {expand ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
               </ListItem>
@@ -206,7 +218,7 @@ const MenuComponent = () => {
                 
                 >
                     <SummarizeOutlinedIcon/>
-                  <ListItemText primary={'Reportes'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Reportes'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -214,7 +226,7 @@ const MenuComponent = () => {
                 onClick={(event) => handleListItemClick(event, 4)}       
                 >
                     <ContactSupportOutlinedIcon/>
-                  <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm:"block"}}}/>
+                  <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>               
               </ListItem>
               
