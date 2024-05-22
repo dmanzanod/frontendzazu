@@ -157,33 +157,39 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
         setCategoryChanged(prev => !prev)
     };
     
-    const applyDateSelectionData = async () =>{
+    const applyDateSelectionData = async () => {
         try {
             const currentYear = new Date().getFullYear();
             const response = await getCrmDataByYear(currentYear, localStorage.getItem('Business'));
-
+    
             if (response.success) {
+                
+                setDateRangeModalOpen(false);
                 let filteredData = response.data.filter(entry => entry.lastFlow === filterCondition);
                 const uniqueCategories = [...new Set(filteredData.map(entry => entry.lastCategory))];
                 const filteredCategories = uniqueCategories.filter(category => category !== null && category !== undefined);
                 setCategories(filteredCategories);
+    
                 if (selectedStartDate && selectedEndDate) {
                     const startDate = new Date(selectedStartDate);
-                    const endDate = new Date(selectedEndDate);
-                    console.log(startDate," - Endate - ", endDate)
+                    let endDate = new Date(selectedEndDate);
+    
+                    // Adjust the end date to be the end of the selected day
+                    endDate.setHours(23, 59, 59, 999);
+    
                     filteredData = filteredData.filter(entry => {
                         const entryDate = new Date(entry.createdAt);
                         return entryDate >= startDate && entryDate <= endDate;
                     });
                 }
+    
                 if (selectedCategory) {
                     filteredData = filteredData.filter(entry => entry.lastCategory === selectedCategory);
                 }
-
+    
                 const groupedData = groupDataByLastProduct(filteredData);
                 const sortedData = sortDataByQuantity(groupedData);
                 setSortedData(sortedData);
-                setDateRangeModalOpen(false); 
             } else {
                 // Handle error in fetching data
             }
@@ -191,7 +197,7 @@ const BarChartHighToLowComponent = ({ title, filterCondition }) => {
             // Handle error in fetching data
         }
     }
-
+    
     const getDomainPadding = () => {
         const numDataPoints = Math.max(sortedData.length, 6) + 3;
         if (sortedData.length === 2) {
