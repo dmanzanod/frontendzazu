@@ -37,7 +37,7 @@ const MenuComponent = () => {
     
     const handleExpandCRM = () => {
       setExpandCRM(!expandCRM);
-      setSelectedIndex(6); // Update the selected index when "CRM" is clicked
+      setSelectedIndex(6);
     };
 
      const toggleMenu = () => {
@@ -195,7 +195,7 @@ const MenuComponent = () => {
               <ListItemIcon>
               <PeopleOutlineIcon />
               </ListItemIcon>            
-              <ListItemText primary={'Mensajes CRM'} />
+              <ListItemText primary={'Lista de contactos'} />
             </ListItemButton>
             </ListItem>
 

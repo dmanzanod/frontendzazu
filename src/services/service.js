@@ -129,6 +129,36 @@ export const getCrmByFlow = async(businessId,field)=>{
     })
 }
 
+export const getContactListsData = async(businessId)=>{
+    return await axios.get(`${url}/getContactLists/${businessId}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
+export const getContactInformation = async(businessId,field)=>{
+    return await axios.get(`${url}/getContactsInformation/${businessId}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const getUniqueCrmByCategory = async(businessId)=>{
     return await axios.get(`${url}/getUniqueCrmByCategory/${businessId}`)
     .then((response)=>{
@@ -223,6 +253,58 @@ export const login=async(values)=>{
         }
     })
 }
+
+export const createContactList=async(values)=>{
+    console.log("dentro de valores",values)
+    return await axios.post(`${url}/createContactsInformation`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
+export const udpateContactList=async(businessId,listName,values)=>{
+    console.log("dentro de valores",values)
+    return await axios.post(`${url}/updateContactList/${businessId}/${listName}`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
+
+export const deleteContactList=async(businessId,listName)=>{
+    return await axios.delete(`${url}/deleteContactListInformation/${businessId}/${listName}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const saveSchedule=async(values)=>{
     return await axios.post(`${url}/newSimpleSchedule`,values)
     .then((response)=>{
@@ -241,6 +323,22 @@ export const saveSchedule=async(values)=>{
 
 export const getSimpleScheduleByBussinesId = async(id)=>{
     return await axios.get(`${url}/getSimpleSchedule/${id}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
+
+export const getContactListByName = async(businessId,listName)=>{
+    return await axios.get(`${url}/getContactListDataByName/${businessId}/${listName}`)
     .then((response)=>{
         return response.data
     })
