@@ -272,7 +272,7 @@ const CrmPersonalInformationPage = () => {
             alignItems: 'center',
             width: '100%',
             maxWidth: '1600px',
-            padding: '0 20px',
+            padding: '90px 20px 0 20px',
             marginBottom: '20px', // Add margin bottom for padding between buttons and DataTable
           }}
         >

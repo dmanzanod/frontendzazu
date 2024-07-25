@@ -9,10 +9,19 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { grey, green, common } from "@mui/material/colors";
 import { Container, Paper } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const grey500 = grey["500"];
 const green400 = green["400"];
 const white = common.white;
+
+// Define a theme with the Poppins font and increased font size
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 14, // Adjust the base font size
+  },
+});
 
 const styles = {
   searchButton: {
@@ -49,12 +58,15 @@ const styles = {
     minWidth: '150px',
     backgroundColor: grey500,
     color: white,
+    fontSize: '1rem', // Adjust the font size as needed
   },
   tableCell: {
     backgroundColor: white,
+    fontSize: '1rem', // Adjust the font size as needed
   },
   alternateTableCell: {
     backgroundColor: grey["100"],
+    fontSize: '1rem', // Adjust the font size as needed
   },
   tableContainer: {
     borderRadius: '8px',
@@ -175,7 +187,7 @@ function DataTable({
   const headerCount = headers.length;
 
   return (
-    <React.Fragment>
+    <ThemeProvider theme={theme}>
       <Paper style={styles.tableContainer}>
         <Table>
           <TableHead>
@@ -254,11 +266,11 @@ function DataTable({
             count={totalPages}
             page={page}
             color="primary"
-            onChange={(_, page) => onPageChange(page)}
+            onChange={(_, newPage) => onPageChange(_, newPage)}
           />
         </Container>
       </Paper>
-    </React.Fragment>
+    </ThemeProvider>
   );
 }
 
