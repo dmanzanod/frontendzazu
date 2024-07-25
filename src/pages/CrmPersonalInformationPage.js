@@ -21,6 +21,13 @@ const CrmPersonalInformationPage = () => {
   const [selectedListIds, setSelectedListIds] = useState([]);
   const [showListsTable, setShowListsTable] = useState(false);
 
+  const predefinedOrder = [
+    'menu principal',
+    'categoría',
+    'inscripción',
+    'inscripción completa'
+  ];
+
   useEffect(() => {
     const fetchContactInformation = async () => {
       try {
@@ -30,7 +37,12 @@ const CrmPersonalInformationPage = () => {
         if (response.success && responseContactListData) {
           setContacts(response.data);
           setLists(responseContactListData.data);
-          setUniqueLastFlows(response.uniqueLastFlows);
+          const sortedFlows = response.uniqueLastFlows.sort((a, b) => {
+            const indexA = predefinedOrder.indexOf(a) !== -1 ? predefinedOrder.indexOf(a) : predefinedOrder.length;
+            const indexB = predefinedOrder.indexOf(b) !== -1 ? predefinedOrder.indexOf(b) : predefinedOrder.length;
+            return indexA - indexB;
+          });
+          setUniqueLastFlows(sortedFlows);
         } else {
           console.error("Failed to fetch contact information:", response.message);
         }
