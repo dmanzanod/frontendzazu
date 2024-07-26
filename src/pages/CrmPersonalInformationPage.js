@@ -67,10 +67,6 @@ const CrmPersonalInformationPage = () => {
         for (const value of contact.values) {
           const key = `lastFlow_${value.lastFlow}`;
           flowData[key] = value.lastProduct;
-
-          if (value.lastFlow === contact.lastFlow) {
-            break;
-          }
         }
       }
 
@@ -92,15 +88,12 @@ const CrmPersonalInformationPage = () => {
     setSelectedFlow(event.target.value);
   };
 
-  // Updated filtering logic to include search functionality
   const filteredContacts = contacts
     .filter(contact => {
-      // If a flow is selected, filter by the flow
       if (selectedFlow && contact.lastFlow !== selectedFlow) {
         return false;
       }
 
-      // Convert contact fields to a string and check if it contains the search value
       const contactString = Object.values({
         userId: contact.userId,
         contactUsername: contact.contactUsername || '-',
@@ -148,7 +141,7 @@ const CrmPersonalInformationPage = () => {
       console.log(editableUserIds)
       const usersToEdit = contacts.filter(contact => contactNumbersToEdit.includes(contact.userId));
       console.log(usersToEdit)
-      setSelectedUserIds(usersToEdit.map(user => user.userId)); // Ensure correct ids are set
+      setSelectedUserIds(usersToEdit.map(user => user.userId));
       setIsEditMode(true);
       setListNameToEdit(listName);
       setNewListName(listName);
@@ -239,7 +232,7 @@ const CrmPersonalInformationPage = () => {
 
       const values = {
         contactNumbers: selectedUserIds,
-        newListName: newListName || listName, // Use newListName if provided
+        newListName: newListName || listName, 
         users: users
       };
 
@@ -268,7 +261,7 @@ const CrmPersonalInformationPage = () => {
   };
 
   const handleAcceptEdit = () => {
-    handleUpdateList(listNameToEdit); // Pass the original list name
+    handleUpdateList(listNameToEdit);
     setIsEditMode(false);
   };
 
@@ -285,11 +278,11 @@ const CrmPersonalInformationPage = () => {
             width: '100%',
             maxWidth: '1600px',
             padding: '90px 20px 0 20px',
-            marginBottom: '20px', // Add margin bottom for padding between buttons and DataTable
+            marginBottom: '20px',
           }}
         >
           <h2>Contactos</h2>
-          <Box sx={{ display: 'flex', gap: '5px' }}> {/* Box to group buttons with 5px gap */}
+          <Box sx={{ display: 'flex', gap: '5px' }}> {}
             <Button variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
               Crear lista
             </Button>
