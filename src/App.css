@@ -3,7 +3,34 @@
   padding:0;
 }
 body { min-height: 100vh; background-color: #442ce4!important;}
-
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins/Poppins-Black.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-thin';
+  src: url('./assets/fonts/Poppins/Poppins-Thin.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-light';
+  src: url('./assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-medium';
+  src: url('./assets/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-regular';
+  src: url('./assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-extraBold';
+  src: url('./assets/fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins-bold';
+  src: url('./assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+}
 .logo{
   
   width:100px;
@@ -56,4 +83,7 @@ background-color:#0C045C;
 }
 .chart__width{
   width:100%;
+}
+.chart__height{
+  height:100%;
 }

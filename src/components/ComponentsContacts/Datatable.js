@@ -18,7 +18,7 @@ const white = common.white;
 // Define a theme with the Poppins font and increased font size
 const theme = createTheme({
   typography: {
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: 'Poppins-medium, sans-serif',
     fontSize: 14, // Adjust the base font size
   },
 });
@@ -56,17 +56,17 @@ const styles = {
   headerCell: {
     padding: '16px',
     minWidth: '150px',
-    backgroundColor: grey500,
+    backgroundColor: '#2818A0',
     color: white,
-    fontSize: '1rem', // Adjust the font size as needed
+    fontSize: '1rem',
   },
   tableCell: {
     backgroundColor: white,
-    fontSize: '1rem', // Adjust the font size as needed
+    fontSize: '1rem',
   },
   alternateTableCell: {
     backgroundColor: grey["100"],
-    fontSize: '1rem', // Adjust the font size as needed
+    fontSize: '1rem',
   },
   tableContainer: {
     borderRadius: '8px',
