@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { getContactInformation, getContactListsData, createContactList, deleteContactList, getContactListByName, udpateContactList } from '../services/service';
+import { getContactInformation, getContactListsData, createContactList, deleteContactList, getContactListByName, updateContactList } from '../services/service';
 import Principal from './Principal';
 import { Box, Button, Modal, Typography, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import DataTable from '../components/ComponentsContacts/Datatable';
 import ContactListModal from '../components/ComponentsContacts/ContactListModal';
 import ContactListsTable from '../components/ComponentsContacts/ContactListTable';
-
+import { CalendarToday as CalendarTodayIcon } from '@mui/icons-material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import parse from 'date-fns/parse';
+import isWithinInterval from 'date-fns/isWithinInterval';
 const CrmPersonalInformationPage = () => {
   const [contacts, setContacts] = useState([]);
   const [uniqueLastFlows, setUniqueLastFlows] = useState([]);
@@ -20,6 +25,9 @@ const CrmPersonalInformationPage = () => {
   const [newListName, setNewListName] = useState('');
   const [selectedListIds, setSelectedListIds] = useState([]);
   const [showListsTable, setShowListsTable] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
 
   const predefinedOrder = [
     'menu principal',
@@ -53,6 +61,9 @@ const CrmPersonalInformationPage = () => {
 
     fetchContactInformation();
   }, []);
+  const handleCloseDateRangeModal = () => {
+      setDateRangeModalOpen(false);
+  };
 
   const formatContactData = (contacts) => {
     return contacts.map(contact => {
@@ -88,25 +99,40 @@ const CrmPersonalInformationPage = () => {
     setSelectedFlow(event.target.value);
   };
 
-  const filteredContacts = contacts
-    .filter(contact => {
-      if (selectedFlow && contact.lastFlow !== selectedFlow) {
-        return false;
-      }
+  const filteredContacts = contacts.filter(contact => {
+    const contactDate = parse(contact.createdAt, 'dd/MM/yyyy HH:mm', new Date());
+  
+    // Apply start date filter
+    if (startDate && contactDate < startDate) {
+      return false;
+    }
+  
+    // Apply end date filter
+    if (endDate && contactDate > endDate) {
+      return false;
+    }
+  
+    // Apply flow filter
+    if (selectedFlow && contact.lastFlow !== selectedFlow) {
+      return false;
+    }
+  
+    // Apply search filter
+    const contactString = Object.values({
+      userId: contact.userId,
+      contactUsername: contact.contactUsername || '-',
+      lastCategory: contact.lastCategory || '-',
+      createdAt: contact.createdAt || '-',
+      ...contact.values.reduce((acc, value) => ({
+        ...acc,
+        [`lastFlow_${value.lastFlow}`]: value.lastProduct || '-'
+      }), {})
+    }).join(' ').toLowerCase();
+  
+    return contactString.includes(searchValue.toLowerCase());
+  });
+  
 
-      const contactString = Object.values({
-        userId: contact.userId,
-        contactUsername: contact.contactUsername || '-',
-        lastCategory: contact.lastCategory || '-',
-        createdAt: contact.createdAt || '-',
-        ...contact.values.reduce((acc, value) => ({
-          ...acc,
-          [`lastFlow_${value.lastFlow}`]: value.lastProduct || '-'
-        }), {})
-      }).join(' ').toLowerCase();
-
-      return contactString.includes(searchValue.toLowerCase());
-    });
 
   const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
@@ -135,13 +161,17 @@ const CrmPersonalInformationPage = () => {
       const listNameData = await getContactListByName(businessId, listName);
       console.log(listNameData);
 
-      const editableUserIds = listNameData.data.users || [];
-      const contactNumbersToEdit = editableUserIds.map(user => user.contactNumber);
-      console.log("Number to edit", contactNumbersToEdit)
-      console.log(editableUserIds)
-      const usersToEdit = contacts.filter(contact => contactNumbersToEdit.includes(contact.userId));
-      console.log(usersToEdit)
-      setSelectedUserIds(usersToEdit.map(user => user.userId));
+      const editableUsers = listNameData.data.users || [];
+      console.log("Editable users", editableUsers);
+
+      const usersToEdit = contacts.filter(contact => {
+        return editableUsers.some(editableUser => 
+          `${editableUser.contactNumber}|${editableUser.createdAt}` === `${contact.userId}|${contact.createdAt}`
+        );
+      });
+
+      console.log("Users to edit", usersToEdit);
+      setSelectedUserIds(usersToEdit.map(user => `${user.userId}|${user.createdAt}`));
       setIsEditMode(true);
       setListNameToEdit(listName);
       setNewListName(listName);
@@ -149,6 +179,7 @@ const CrmPersonalInformationPage = () => {
       console.error('Error handling edit:', error);
     }
   };
+  
 
   const handleDeleteList = async (listName) => {
     try {
@@ -173,19 +204,22 @@ const CrmPersonalInformationPage = () => {
       const businessId = localStorage.getItem('Business');
       console.log("USUARIOS CREAR LISTA\n", selectedUserIds);
       console.log(contacts)
-      const users = selectedUserIds.map(userId => {
-        const contact = contacts.find(contact => contact.userId === userId);
+      const users = selectedUserIds.map(idWithCreatedAt => {
+        const [userId, createdAt] = idWithCreatedAt.split('|');
+        const contact = contacts.find(contact => contact.userId === userId && contact.createdAt === createdAt);
         if (contact) {
           return {
             contactNumber: contact.userId,
             username: contact.contactUsername || 'Desconocido',
             lastFlow: contact.lastFlow || null,
+            createdAt: contact.createdAt || 'null',
           };
         } else {
           return {
             contactNumber: userId,
             username: 'desconocido',
             lastFlow: null,
+            createdAt: 'Indefinido',
           };
         }
       });
@@ -211,44 +245,51 @@ const CrmPersonalInformationPage = () => {
   };
 
   const handleUpdateList = async (listName) => {
-    try {
-      const businessId = localStorage.getItem('Business');
-      const users = selectedUserIds.map(userId => {
-        const contact = contacts.find(contact => contact.userId === userId);
-        if (contact) {
-          return {
-            contactNumber: contact.userId,
-            username: contact.contactUsername || 'Desconocido',
-            lastFlow: contact.lastFlow || null,
-          };
-        } else {
-          return {
-            contactNumber: userId,
-            username: 'desconocido',
-            lastFlow: null,
-          };
-        }
-      });
-
-      const values = {
-        contactNumbers: selectedUserIds,
-        newListName: newListName || listName, 
-        users: users
-      };
-
-      const response = await udpateContactList(businessId, listName, values);
-      if (response.success) {
-        const responseContactListData = await getContactListsData(businessId);
-        if (responseContactListData.success) {
-          setLists(responseContactListData.data);
-        }
+  try {
+    const businessId = localStorage.getItem('Business');
+    console.log("USUARIOS ACTUALIZAR LISTA\n", selectedUserIds);
+    console.log(contacts);
+    const users = selectedUserIds.map(idWithCreatedAt => {
+      const [userId, createdAt] = idWithCreatedAt.split('|');
+      const contact = contacts.find(contact => contact.userId === userId && contact.createdAt === createdAt);
+      if (contact) {
+        return {
+          contactNumber: contact.userId,
+          username: contact.contactUsername || 'Desconocido',
+          lastFlow: contact.lastFlow || null,
+          createdAt: contact.createdAt || 'null',
+        };
       } else {
-        console.error('Failed to update list:', response.message);
+        return {
+          contactNumber: userId,
+          username: 'desconocido',
+          lastFlow: null,
+          createdAt: 'Indefinido',
+        };
       }
-    } catch (error) {
-      console.error('Error updating list:', error);
+    });
+
+    const values = {
+      contactNumbers: selectedUserIds,
+      newListName: newListName || listName, 
+      users: users
+    };
+
+    const response = await updateContactList(businessId, listName, values);
+    if (response.success) {
+      const responseContactListData = await getContactListsData(businessId);
+      if (responseContactListData.success) {
+        setLists(responseContactListData.data);
+      }
+      handleModalClose();
+    } else {
+      console.error('Failed to update list:', response.message);
     }
-  };
+  } catch (error) {
+    console.error('Error updating list:', error);
+  }
+};
+
 
   const handleSelectItem = (selectedIds) => {
     setSelectedUserIds(selectedIds);
@@ -264,8 +305,28 @@ const CrmPersonalInformationPage = () => {
     handleUpdateList(listNameToEdit);
     setIsEditMode(false);
   };
-
+  const handleOpenDateRangeModal = () => {
+    setDateRangeModalOpen(true);
+};
   const formattedContacts = formatContactData(filteredContacts);
+
+  const handleApplyDateRange = () => {
+    setStartDate(null);
+    setEndDate(null); 
+    setDateRangeModalOpen(false); 
+};
+
+const applyDateSelectionData = () => {
+  if (startDate && endDate) {
+    const filtered = contacts.filter(contact => {
+      const contactDate = parse(contact.createdAt, 'dd/MM/yyyy HH:mm', new Date());
+      return isWithinInterval(contactDate, { start: startDate, end: endDate });
+    });
+    setContacts(filtered);
+  }
+  setDateRangeModalOpen(false); 
+};
+
 
   return (
     <Principal>
@@ -285,6 +346,9 @@ const CrmPersonalInformationPage = () => {
           <Box sx={{ display: 'flex', gap: '5px' }}> {}
             <Button variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
               Crear lista
+            </Button>
+            <Button variant="contained" color="secondary" onClick={() => handleOpenDateRangeModal(true)}>
+              Seleccionar Fechas
             </Button>
             <Button variant="contained" color="primary" onClick={() => setShowListsTable(!showListsTable)}>
               {showListsTable ? 'Ocultar listas' : 'Listas'}
@@ -347,7 +411,7 @@ const CrmPersonalInformationPage = () => {
               onSelectItem={handleSelectItem}
               totalPages={totalPages}
               page={page}
-              rowsPerPage={10}
+              rowsPerPage={100}
               onPageChange={handlePageChange}
               onDelete={handleDelete}
             />
@@ -395,6 +459,55 @@ const CrmPersonalInformationPage = () => {
             />
           </Box>
         </Modal>
+        <Modal open={isDateRangeModalOpen} onClose={handleCloseDateRangeModal}>
+      <div style={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        padding: '20px', backgroundColor: 'white', borderRadius: '8px', width: '400px',
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <Typography
+          id="date-picker-modal-title"
+          variant="h6"
+          component="h2"
+          style={{ marginBottom: '20px', fontSize: '1.5rem', fontWeight: 'bold' }}
+        >
+          Seleccionar Fechas
+        </Typography>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', marginBottom: '20px' }}>
+            <DatePicker
+              label="Fecha de inicio"
+              value={startDate}
+              onChange={(date) => setStartDate(date)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <DatePicker
+              label="Fecha de fin"
+              value={endDate}
+              onChange={(date) => setEndDate(date)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </Box>
+        </LocalizationProvider>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={applyDateSelectionData}
+            style={{ marginRight: '10px' }}
+          >
+            Aceptar
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleApplyDateRange}
+          >
+            Reestablecer
+          </Button>
+        </Box>
+      </div>
+    </Modal>
       </Box>
     </Principal>
   );

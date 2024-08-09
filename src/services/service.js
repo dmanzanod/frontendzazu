@@ -5,6 +5,7 @@ AxiosInterceptor()
 
 export const sendBulkMessages = async (urlMessages, values) => {
     try {
+        console.log('send Vlaues from service\n', values)
       const response = await axios.post(`${urlMessages}/sendMessages`, values, {
         headers: {
           'Content-Type': 'application/json',
@@ -271,7 +272,7 @@ export const createContactList=async(values)=>{
     })
 }
 
-export const udpateContactList=async(businessId,listName,values)=>{
+export const updateContactList=async(businessId,listName,values)=>{
     console.log("dentro de valores",values)
     return await axios.post(`${url}/updateContactList/${businessId}/${listName}`,values)
     .then((response)=>{
@@ -288,6 +289,22 @@ export const udpateContactList=async(businessId,listName,values)=>{
     })
 }
 
+export const updateLastMessageSendByList=async(businessId,listName,values)=>{
+    console.log("dentro de valores",values)
+    return await axios.post(`${url}/updateLastMessageSendList/${businessId}/${listName}`,values)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        
+        return{
+            error:error.response.data.message,
+            code:error.code,
+            name:error.name,
+            status:error.response.status
+        }
+    })
+}
 
 export const deleteContactList=async(businessId,listName)=>{
     return await axios.delete(`${url}/deleteContactListInformation/${businessId}/${listName}`)

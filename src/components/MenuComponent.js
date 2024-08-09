@@ -206,7 +206,7 @@ const MenuComponent = () => {
               <ListItemIcon>
               <PeopleOutlineIcon />
               </ListItemIcon>            
-              <ListItemText primary={'Contactos CRM'} />
+              <ListItemText primary={'Contactos remarketing'} />
             </ListItemButton>
             </ListItem>
 

@@ -3,10 +3,10 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
-import Pagination from "@mui/material/Pagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Pagination from "@mui/material/Pagination";
 import { grey, green, common } from "@mui/material/colors";
 import { Container, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -15,11 +15,10 @@ const grey500 = grey["500"];
 const green400 = green["400"];
 const white = common.white;
 
-// Define a theme with the Poppins font and increased font size
 const theme = createTheme({
   typography: {
     fontFamily: 'Poppins-medium, sans-serif',
-    fontSize: 14, // Adjust the base font size
+    fontSize: 14,
   },
 });
 
@@ -70,7 +69,7 @@ const styles = {
   },
   tableContainer: {
     borderRadius: '8px',
-    overflow: 'auto', 
+    overflow: 'auto',
     border: `1px solid ${grey["300"]}`,
   },
 };
@@ -81,7 +80,7 @@ function DataTable({
   dataKeys = [],
   totalPages = 1,
   page = 1,
-  rowsPerPage = 10,
+  rowsPerPage = 100,
   headers = [],
   onPageChange = () => {},
   onDelete = () => {},
@@ -126,7 +125,7 @@ function DataTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = items.map((n) => n.userId);
+      const newSelecteds = items.map((n) => `${n.userId}|${n.createdAt}`);
       setSelected(newSelecteds);
       onSelectItem(newSelecteds);
       return;
@@ -135,7 +134,8 @@ function DataTable({
     onSelectItem([]);
   };
 
-  const handleClick = (event, id) => {
+  const handleClick = (event, userId, createdAt) => {
+    const id = `${userId}|${createdAt}`;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -156,7 +156,7 @@ function DataTable({
     onSelectItem(newSelected);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (userId, createdAt) => selected.indexOf(`${userId}|${createdAt}`) !== -1;
 
   const renderData = (dataKey, data) => {
     if (!data) return null;
@@ -164,11 +164,11 @@ function DataTable({
     if (dataKey === "avatar") {
       return <img width={35} src={data[dataKey]} alt="avatar" />;
     } else if (dataKey === "actions") {
-      const isItemSelected = isSelected(data.userId);
+      const isItemSelected = isSelected(data.userId, data.createdAt);
       return (
         <Checkbox
           checked={isItemSelected}
-          onChange={(event) => handleClick(event, data.userId)}
+          onChange={(event) => handleClick(event, data.userId, data.createdAt)}
           color="primary"
         />
       );
@@ -221,13 +221,13 @@ function DataTable({
           <TableBody>
             {paginatedItems.length > 0 ? (
               paginatedItems.map((item, index) => {
-                const isItemSelected = isSelected(item.userId);
+                const isItemSelected = isSelected(item.userId, item.createdAt);
                 const rowStyle = index % 2 === 0 ? styles.tableCell : styles.alternateTableCell;
                 return (
                   <TableRow
-                    key={item.userId}
+                    key={`${item.userId}|${item.createdAt}`}
                     hover
-                    onClick={(event) => handleClick(event, item.userId)}
+                    onClick={(event) => handleClick(event, item.userId, item.createdAt)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     selected={isItemSelected}
@@ -236,7 +236,7 @@ function DataTable({
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isItemSelected}
-                        onChange={(event) => handleClick(event, item.userId)}
+                        onChange={(event) => handleClick(event, item.userId, item.createdAt)}
                         color="primary"
                       />
                     </TableCell>

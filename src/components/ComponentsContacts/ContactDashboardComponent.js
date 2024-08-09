@@ -1,134 +1,189 @@
 import React, { useState, useEffect } from 'react';
 import ContactListComponent from '../ComponentsContacts/ContactListComponent';
 import MessageInputComponent from '../ComponentsContacts/MessageInputComponent';
-import {getInfoCrmData, sendBulkMessages} from '../../services/service'
+import { getContactListsData, sendBulkMessages, updateLastMessageSendByList } from '../../services/service';
+import { Box, FormControl, InputLabel, Select, MenuItem, Typography, ThemeProvider, createTheme, Modal, Button, List, ListItem, IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import SortIcon from '@mui/icons-material/Sort';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Poppins-medium, sans-serif',
+    fontSize: 14,
+  },
+});
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const ContactDashboardComponent = () => {
-  const [selectedContacts, setSelectedContacts] = useState([]);
-  const [sentMessages, setSentMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [lists, setLists] = useState([]);
+  const [selectedListName, setSelectedListName] = useState('');
   const [dynamicMessageEndpoint, setDynamicMessageEndpoint] = useState('');
+  const [lastMessageSend, setLastMessageSend] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const businessId = localStorage.getItem('Business');
-        const data = await getInfoCrmData(businessId);
-  
+        const data = await getContactListsData(businessId);
         if (data.success) {
+          setLists(data.data);
           if (data.data.length > 0) {
-            const transformedContacts = data.data.map(contact => {
-              const formattedDate = formatCreatedAt(contact.createdAt);
-              return {
-                id: contact._id,  
-                name: contact.lastProduct,
-                cel: contact.userId,
-                flujo: modifyFlujoValue(contact.lastFlow),
-                creadoEn: formattedDate,
-              };
-            });
-            setContacts(transformedContacts);
-          } else {
-            console.log('No contacts found.');
+            setSelectedListName(data.data[0].listName);
+            setContacts(data.data[0].users);
+            setLastMessageSend(data.data[0].lastMessageSend || []);
           }
-        } else {
-          console.error('Error fetching contacts:', data.error);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     };
-    const formatCreatedAt = (createdAt) => {
-      const date = new Date(createdAt);
-      const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-      return `${date.toLocaleDateString('es-BO')} ${date.getHours()}:${minutes}`;
-    };
+
     fetchData();
   }, []);
-  
-  const modifyFlujoValue = (originalFlujo) => {
-    const flujoMapping = {
-      scheduleFlow: 'Horarios',
-      pricesFlow: 'Compra',
-      mainFlow: 'Inicio conversacion',
-      BuyFlow: 'Compras o Reservas',
-      morningSelectionFlow: 'Seleccionando horarios',
-      botSelectionFlow: 'Inicio conversacion',
-      directContactFlow: 'Contacto con asesor',
-      cursoHorario: 'Cursos y horarios',
-      preciosMensualidad: 'Precios de la mensualidad',
-      // Add more mappings as needed
-    };
-  
-    return flujoMapping[originalFlujo] || originalFlujo;
+
+  const handleListChange = (e) => {
+    const listName = e.target.value;
+    setSelectedListName(listName);
+    const selectedList = lists.find(list => list.listName === listName);
+    setContacts(selectedList ? selectedList.users : []);
+    setLastMessageSend(selectedList ? selectedList.lastMessageSend : []);
+    setCurrentPage(1);  // Reset to first page on list change
   };
-  
-  const handleToggle = (contactIds) => {
-    if (Array.isArray(contactIds)) {
-      setSelectedContacts(contactIds);
-    } else {
-      setSelectedContacts((prevSelectedContacts) =>
-        prevSelectedContacts.includes(contactIds)
-          ? prevSelectedContacts.filter((id) => id !== contactIds)
-          : [...prevSelectedContacts, contactIds]
-      );
-    }
-  };
+
   const updateMessageEndpoint = (message) => {
-    // Logic to update dynamicMessageEndpoint based on the message value
     setDynamicMessageEndpoint(`${message}`);
   };
 
   const sendMessage = async (message) => {
     try {
-      if (selectedContacts.length === 0) {
-        console.log('No contacts selected to send messages.');
+      const businessId = localStorage.getItem('Business');
+      if (contacts.length === 0) {
+        console.log('No contacts to send messages.');
         return;
       }
-      const phoneNumbers = selectedContacts.map(contactId => {
-        const contact = contacts.find(c => c.id === contactId);
-        return contact ? contact.cel : null;
-      }).filter(Boolean);
+      const phoneNumbers = contacts.map(contact => contact.contactNumber).filter(Boolean);
 
       const messageData = { 
         message: message,
         contacts: phoneNumbers,
       };
+      console.log(messageData, selectedListName);
       const urlMessages = localStorage.getItem('url');
-      const result = await sendBulkMessages(urlMessages,messageData);
-
+      console.log('URL MENSAJES\n', message);
+      const result = await sendBulkMessages(urlMessages, messageData);  
+      const messageAdditionToList = await updateLastMessageSendByList(businessId, selectedListName, { message: messageData.message });
       if (result && result.error) {
         console.error('Error sending messages:', result.error);
       } else {
         console.log('Messages sent successfully!');
-        setSentMessages([...sentMessages, { message, to: selectedContacts }]);
       }
     } catch (error) {
       console.error('Error sending messages:', error);
     }
   };
 
-  return (
-    <div style={{ textAlign: 'center', margin: 'auto', marginTop: '70px' }}>
-      <h2>Contactos</h2>
-      <ContactListComponent
-        style={{ marginTop: '30px' }}
-        contacts={contacts}
-        selectedContacts={selectedContacts}
-        handleToggle={handleToggle}
-      />
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
-      <div style={{ marginTop: '20px' }}>
-        <MessageInputComponent sendMessage={sendMessage} updateMessageEndpoint={updateMessageEndpoint} />
-      </div>
-      <div>
-        <h3>Enviar mensajes</h3>
-        {sentMessages.map((sentMessage, index) => (
-          <div key={index}>
-            {`To: ${sentMessage.to.map((contactId) => contacts.find((c) => c.id === contactId)?.cel).join(', ')} - Message: ${sentMessage.message}`}
-          </div>
-        ))}
-      </div>
-    </div>
+  const handleSortOrderToggle = () => {
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortedMessages = sortOrder === 'asc' ? lastMessageSend : [...lastMessageSend].reverse();
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedMessages = sortedMessages.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (startIndex + itemsPerPage < lastMessageSend.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Box sx={{ textAlign: 'center', margin: 'auto', marginTop: '70px' }}>
+        <Typography variant="h2" gutterBottom>Contactos</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, marginBottom: '20px' }}>
+          <FormControl sx={{ minWidth: 200, width: '200px' }}>
+            <InputLabel id="list-selector-label">Select List</InputLabel>
+            <Select
+              labelId="list-selector-label"
+              value={selectedListName}
+              onChange={handleListChange}
+              label="Select List"
+            >
+              {lists.map(list => (
+                <MenuItem key={list._id} value={list.listName}>{list.listName}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button onClick={handleOpenModal} variant="outlined" sx={{ width: '200px' }}>
+            Mensajes enviados
+          </Button>
+        </Box>
+        <ContactListComponent contacts={contacts} />
+        <MessageInputComponent
+          sendMessage={sendMessage}
+          updateMessageEndpoint={updateMessageEndpoint}
+        />
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box sx={modalStyle}>
+            <Typography id="modal-title" variant="h6" component="h2">
+              Mensajes enviados
+            </Typography>
+            <IconButton onClick={handleSortOrderToggle} aria-label="sort">
+              <SortIcon />
+            </IconButton>
+            <List>
+              {paginatedMessages.map((message, index) => (
+                <ListItem key={index}>
+                  {message || 'No message'}
+                </ListItem>
+              ))}
+            </List>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+              <IconButton onClick={handlePrevPage} disabled={currentPage === 1}>
+                <ArrowBackIcon />
+              </IconButton>
+              <Typography>{currentPage}</Typography>
+              <IconButton onClick={handleNextPage} disabled={startIndex + itemsPerPage >= lastMessageSend.length}>
+                <ArrowForwardIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </Modal>
+      </Box>
+    </ThemeProvider>
   );
 };
 

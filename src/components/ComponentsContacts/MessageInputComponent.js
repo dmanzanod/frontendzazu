@@ -14,12 +14,12 @@ const MessageInputComponent = ({ sendMessage, updateMessageEndpoint }) => {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      setMessage((prevMessage) => prevMessage + '\n');
+      handleSendMessage();
     }
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop:"10px" }}>
       <TextField
         label="Escribe tu mensaje"
         value={message}
