@@ -97,9 +97,9 @@ const LoginPage = () => {
     }}>
       <Box
       sx={{
-        paddingBlock:'12px'
+        paddingBlock:'20px'
       }}>
-        <img src={`${process.env.PUBLIC_URL}/logo1.png`} alt="logo"/>
+        <img src={`${process.env.PUBLIC_URL}/logoZazuPerformance.png`} alt="logo"/>
       </Box>
       
         <Paper sx={{
@@ -115,7 +115,7 @@ const LoginPage = () => {
             textAlign:'center'
             
         }}>
-            <Typography variant='h5' color={cyan[800]}>Iniciar sesión</Typography>
+            <Typography variant='h5' color={"#0C045C"} fontFamily={"Poppins-medium"}>Iniciar sesión</Typography>
             <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false)}/>
             <form onSubmit={formik.handleSubmit}>
                 <div>

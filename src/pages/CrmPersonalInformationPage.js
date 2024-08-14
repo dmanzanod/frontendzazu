@@ -10,6 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import parse from 'date-fns/parse';
+import format from 'date-fns/format';
 import isWithinInterval from 'date-fns/isWithinInterval';
 const CrmPersonalInformationPage = () => {
   const [contacts, setContacts] = useState([]);
@@ -28,13 +29,26 @@ const CrmPersonalInformationPage = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
+  const [filteredContacts, setFilteredContacts] = useState([]);
 
+  useEffect(() => {
+    setFilteredContacts(contacts); // Initialize with all contacts
+  }, [contacts]);
   const predefinedOrder = [
     'menu principal',
     'categoría',
     'inscripción',
     'inscripción completa'
   ];
+
+  const parseCreatedAt = (dateString) => {
+    return parse(dateString, 'dd/MM/yyyy HH:mm', new Date());
+  };
+  
+
+  const formatDate = (date) => {
+    return format(date, 'dd/MM/yyyy HH:mm');
+  };
 
   useEffect(() => {
     const fetchContactInformation = async () => {
@@ -98,41 +112,6 @@ const CrmPersonalInformationPage = () => {
   const handleFlowChange = (event) => {
     setSelectedFlow(event.target.value);
   };
-
-  const filteredContacts = contacts.filter(contact => {
-    const contactDate = parse(contact.createdAt, 'dd/MM/yyyy HH:mm', new Date());
-  
-    // Apply start date filter
-    if (startDate && contactDate < startDate) {
-      return false;
-    }
-  
-    // Apply end date filter
-    if (endDate && contactDate > endDate) {
-      return false;
-    }
-  
-    // Apply flow filter
-    if (selectedFlow && contact.lastFlow !== selectedFlow) {
-      return false;
-    }
-  
-    // Apply search filter
-    const contactString = Object.values({
-      userId: contact.userId,
-      contactUsername: contact.contactUsername || '-',
-      lastCategory: contact.lastCategory || '-',
-      createdAt: contact.createdAt || '-',
-      ...contact.values.reduce((acc, value) => ({
-        ...acc,
-        [`lastFlow_${value.lastFlow}`]: value.lastProduct || '-'
-      }), {})
-    }).join(' ').toLowerCase();
-  
-    return contactString.includes(searchValue.toLowerCase());
-  });
-  
-
 
   const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
@@ -312,21 +291,32 @@ const CrmPersonalInformationPage = () => {
 
   const handleApplyDateRange = () => {
     setStartDate(null);
-    setEndDate(null); 
-    setDateRangeModalOpen(false); 
-};
+    setEndDate(null);
+    setFilteredContacts(contacts);
+    setDateRangeModalOpen(false);
+  };
 
-const applyDateSelectionData = () => {
-  if (startDate && endDate) {
-    const filtered = contacts.filter(contact => {
-      const contactDate = parse(contact.createdAt, 'dd/MM/yyyy HH:mm', new Date());
-      return isWithinInterval(contactDate, { start: startDate, end: endDate });
-    });
-    setContacts(filtered);
-  }
-  setDateRangeModalOpen(false); 
-};
 
+  const applyDateSelectionData = () => {
+    if (startDate && endDate) {
+      const parsedStartDate = parse(formatDate(startDate), 'dd/MM/yyyy HH:mm', new Date());
+      const parsedEndDate = parse(formatDate(endDate), 'dd/MM/yyyy HH:mm', new Date());
+  
+      const filtered = contacts.filter(contact => {
+        const contactDate = parseCreatedAt(contact.createdAt);
+        return isWithinInterval(contactDate, { start: parsedStartDate, end: parsedEndDate });
+      });
+  
+      console.log("Filtered Values: ", filtered); // Debugging output
+      setFilteredContacts(filtered);
+    } else {
+      setFilteredContacts(contacts);
+    }
+  
+    setDateRangeModalOpen(false);
+  };
+  
+  
 
   return (
     <Principal>

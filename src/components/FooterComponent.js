@@ -22,7 +22,6 @@ const FooterComponent = () => {
         
         zIndex: (theme) => theme.zIndex.drawer + 1
     }}>
-        <img alt='bot_image' className="bot" src={`${process.env.PUBLIC_URL}/bot.png`}/>
         <Box>
             
         
