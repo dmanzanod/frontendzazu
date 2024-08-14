@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Paper, Container, Checkbox } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, green, common } from '@mui/material/colors';
@@ -76,6 +76,11 @@ const DataTable = ({
 }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('');
+  const [selected, setSelected] = useState(selectedItems || []);
+
+  useEffect(() => {
+    setSelected(selectedItems);
+  }, [selectedItems]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -113,6 +118,41 @@ const DataTable = ({
     }
   };
 
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = items.map((n) => `${n.userId}|${n.createdAt}`);
+      setSelected(newSelecteds);
+      onSelectItem(newSelecteds);
+      return;
+    }
+    setSelected([]);
+    onSelectItem([]);
+  };
+
+  const handleClick = (event, userId, createdAt) => {
+    const id = `${userId}|${createdAt}`;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+    onSelectItem(newSelected);
+  };
+
+  const isSelected = (userId, createdAt) => selected.indexOf(`${userId}|${createdAt}`) !== -1;
+
   const sortedItems = sortData(items, getComparator(order, orderBy));
 
   return (
@@ -121,6 +161,13 @@ const DataTable = ({
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell padding="checkbox" style={styles.headerCell}>
+                <Checkbox
+                  indeterminate={selected.length > 0 && selected.length < items.length}
+                  checked={items.length > 0 && selected.length === items.length}
+                  onChange={handleSelectAllClick}
+                />
+              </TableCell>
               {headers.map((header, index) => (
                 <TableCell
                   key={header}
@@ -140,7 +187,17 @@ const DataTable = ({
           </TableHead>
           <TableBody>
             {sortedItems.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((item, index) => (
-              <TableRow key={index} style={index % 2 === 0 ? styles.tableCell : styles.alternateTableCell}>
+              <TableRow
+                key={`${item.userId}|${item.createdAt}`}
+                style={index % 2 === 0 ? styles.tableCell : styles.alternateTableCell}
+              >
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={isSelected(item.userId, item.createdAt)}
+                    onChange={(event) => handleClick(event, item.userId, item.createdAt)}
+                    color="primary"
+                  />
+                </TableCell>
                 {dataKeys.map((key) => (
                   <TableCell key={key} style={styles.columns.width10}>
                     {item[key]}
