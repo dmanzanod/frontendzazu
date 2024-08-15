@@ -142,8 +142,11 @@ const CrmPersonalInformationPage = () => {
         setFilteredContacts(contacts);
         return;
     }
+
+    let filteredContacts = contacts;
+
     // Filter contacts based on the selected flow
-    const filteredContacts = contacts.filter(contact => {
+    filteredContacts = filteredContacts.filter(contact => {
         // If selected flow is in predefinedOrder
         if (predefinedOrder.includes(selectedFlow)) {
             const flowValues = contact.values.filter(value => value.lastFlow === selectedFlow);
@@ -171,12 +174,20 @@ const CrmPersonalInformationPage = () => {
         }
     });
 
+    // Apply date range filter if dates are set
+    if (startDate && endDate) {
+        const parsedStartDate = parse(format(startDate, 'dd/MM/yyyy, HH:mm'), 'dd/MM/yyyy, HH:mm', new Date());
+        const parsedEndDate = parse(format(endDate, 'dd/MM/yyyy, HH:mm'), 'dd/MM/yyyy, HH:mm', new Date());
+
+        filteredContacts = filteredContacts.filter(contact => {
+            const contactDate = parseCreatedAt(contact.createdAt);
+            return isWithinInterval(contactDate, { start: parsedStartDate, end: parsedEndDate });
+        });
+    }
+
     // Update the state with the filtered contacts
     setFilteredContacts(filteredContacts);
 };
-
-
-
 
   const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
