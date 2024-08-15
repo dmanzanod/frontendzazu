@@ -192,7 +192,7 @@ const CrmPersonalInformationPage = () => {
   const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
 
-  const totalPages = Math.ceil(filteredContacts.length / 10);
+  const totalPages = Math.ceil(filteredContacts.length / 100);
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
