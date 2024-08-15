@@ -83,8 +83,8 @@ const DataTable = ({
   onSelectItem, totalPages, page, rowsPerPage,
   onPageChange, onDelete
 }) => {
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('');
+  const [order, setOrder] = useState('desc'); // Set default order to descending
+  const [orderBy, setOrderBy] = useState('createdAt'); // Set default orderBy to 'createdAt'
   const [selected, setSelected] = useState(selectedItems || []);
 
   useEffect(() => {
