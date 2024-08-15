@@ -115,8 +115,9 @@ const DataTable = ({
 
   const descendingComparator = (a, b, orderBy) => {
     if (orderBy === 'createdAt') {
-      const dateA = parse(a[orderBy], 'dd/MM/yyyy HH:mm', new Date());
-      const dateB = parse(b[orderBy], 'dd/MM/yyyy HH:mm', new Date());
+      const dateA = parse(a[orderBy], 'dd/MM/yyyy, HH:mm', new Date());
+      const dateB = parse(b[orderBy], 'dd/MM/yyyy, HH:mm', new Date());
+  
       if (dateB < dateA) return -1;
       if (dateB > dateA) return 1;
       return 0;
