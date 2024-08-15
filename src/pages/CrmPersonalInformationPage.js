@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isWithinInterval from 'date-fns/isWithinInterval';
+import { es } from 'date-fns/locale';
 const CrmPersonalInformationPage = () => {
   const [contacts, setContacts] = useState([]);
   const [uniqueLastFlows, setUniqueLastFlows] = useState([]);
@@ -43,7 +44,7 @@ const CrmPersonalInformationPage = () => {
   ];
 
   const parseCreatedAt = (dateString) => {
-    return parse(dateString, 'dd/MM/yyyy HH:mm', new Date());
+    return parse(dateString, 'dd/MM/yyyy, HH:mm', new Date());
   };
   useEffect(() => {
     const fetchContactInformation = async () => {
@@ -72,7 +73,7 @@ const CrmPersonalInformationPage = () => {
   }, []);
  
   const formatDate = (date) => {
-    return format(date, 'dd/MM/yyyy HH:mm');
+    return format(date, 'dd/MM/yyyy, HH:mm');
   };
   
   useEffect(() => {
@@ -133,8 +134,10 @@ const CrmPersonalInformationPage = () => {
 
 const handleFlowChange = (event) => {
     const selectedFlow = event.target.value;
-
-    const filteredContacts = contacts.filter(contact => {
+    if (selectedFlow === '') {
+      // Reset to all contacts when "Ninguno" is selected
+      setFilteredContacts(contacts);
+    }else{const filteredContacts = contacts.filter(contact => {
         // Extract the flow values from the 'values' array that match the selected flow
         const flowValues = contact.values.filter(value => value.lastFlow === selectedFlow);
 
@@ -162,6 +165,7 @@ const handleFlowChange = (event) => {
     });
 
     setFilteredContacts(filteredContacts);
+  }
 };
 
 
@@ -351,23 +355,24 @@ const handleFlowChange = (event) => {
 
 
   const applyDateSelectionData = () => {
-  if (startDate && endDate) {
-    const parsedStartDate = parse(formatDate(startDate), 'dd/MM/yyyy HH:mm', new Date());
-    const parsedEndDate = parse(formatDate(endDate), 'dd/MM/yyyy HH:mm', new Date());
-
-    const filtered = contacts.filter(contact => {
-      const contactDate = parseCreatedAt(contact.createdAt);
-      return isWithinInterval(contactDate, { start: parsedStartDate, end: parsedEndDate });
-    });
-
-    console.log("Filtered Values: ", filtered); // Debugging output
-    setFilteredContacts(filtered);
-  } else {
-    setFilteredContacts(contacts);
-  }
-
-  setDateRangeModalOpen(false);
-};
+    if (startDate && endDate) {
+      const parsedStartDate = parse(format(startDate, 'dd/MM/yyyy, HH:mm'), 'dd/MM/yyyy, HH:mm', new Date());
+      const parsedEndDate = parse(format(endDate, 'dd/MM/yyyy, HH:mm'), 'dd/MM/yyyy, HH:mm', new Date());
+  
+      const filtered = contacts.filter(contact => {
+        const contactDate = parseCreatedAt(contact.createdAt);
+        return isWithinInterval(contactDate, { start: parsedStartDate, end: parsedEndDate });
+      });
+  
+      console.log("Filtered Values: ", filtered); // Debugging output
+      setFilteredContacts(filtered);
+    } else {
+      setFilteredContacts(contacts);
+    }
+  
+    setDateRangeModalOpen(false);
+  };
+  
   
   return (
     <Principal>
@@ -402,7 +407,7 @@ const handleFlowChange = (event) => {
                 onChange={handleFlowChange}
                 label="Seleccionar flujo"
               >
-                <MenuItem value=""><em>None</em></MenuItem>
+                <MenuItem value=""><em>Ninguno</em></MenuItem>
                 {uniqueLastFlows.map(flow => (
                   <MenuItem key={flow} value={flow}>{flow}</MenuItem>
                 ))}
@@ -514,18 +519,20 @@ const handleFlowChange = (event) => {
         >
           Seleccionar Fechas
         </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} localeText={es}>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', marginBottom: '20px' }}>
             <DatePicker
               label="Fecha de inicio"
               value={startDate}
               onChange={(date) => setStartDate(date)}
+              inputFormat="dd/MM/yyyy"  // Ensuring the input format
               renderInput={(params) => <TextField {...params} />}
             />
             <DatePicker
               label="Fecha de fin"
               value={endDate}
               onChange={(date) => setEndDate(date)}
+              inputFormat="dd/MM/yyyy"  // Ensuring the input format
               renderInput={(params) => <TextField {...params} />}
             />
           </Box>
