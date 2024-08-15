@@ -37,10 +37,10 @@ const CrmPersonalInformationPage = () => {
   }, [contacts]);
   
   const predefinedOrder = [
-    'menu principal',
-    'categoría',
-    'inscripción',
-    'inscripción completa'
+    'MENÚ PRINCIPAL',
+    'CATEGORÍA',
+    'PROGRAMA',
+    'INSCRIPCIÓN COMPLETADA'
   ];
 
   const parseCreatedAt = (dateString) => {
@@ -189,7 +189,7 @@ const CrmPersonalInformationPage = () => {
     setFilteredContacts(filteredContacts);
 };
 
-  const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
+  const headers = ["NÚMERO", "USUARIO", ...uniqueLastFlows, "CREADA EN"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
 
   const totalPages = Math.ceil(filteredContacts.length / 100);
@@ -407,7 +407,7 @@ const CrmPersonalInformationPage = () => {
             marginBottom: '20px',
           }}
         >
-          <h2>Contactos</h2>
+          <h2>LISTA DE CONTACTOS</h2>
           <Box sx={{ display: 'flex', gap: '5px' }}> {}
             <Button variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
               Crear lista
@@ -426,7 +426,7 @@ const CrmPersonalInformationPage = () => {
                 onChange={handleFlowChange}
                 label="Seleccionar flujo"
               >
-                <MenuItem value="ninguno"><em>Ninguno</em></MenuItem>
+                <MenuItem value="ninguno"><em>NINGUNO</em></MenuItem>
                 {uniqueLastFlows.map(flow => (
                 <MenuItem key={flow} value={flow}>{flow}</MenuItem>
                 ))}

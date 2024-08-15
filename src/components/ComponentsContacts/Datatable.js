@@ -173,7 +173,7 @@ const DataTable = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" style={styles.headerCell}>
+            <TableCell padding="checkbox" style={{ ...styles.headerCell, textAlign: 'center' }}>
                 <Checkbox
                   indeterminate={selected.length > 0 && selected.length < uniqueItems.length}
                   checked={uniqueItems.length > 0 && selected.length === uniqueItems.length}
@@ -183,7 +183,7 @@ const DataTable = ({
               {headers.map((header, index) => (
                 <TableCell
                   key={header}
-                  style={styles.headerCell}
+                  style={{ ...styles.headerCell, textAlign: 'center' }}
                   sortDirection={orderBy === dataKeys[index] ? order : false}
                 >
                   <TableSortLabel
@@ -203,7 +203,7 @@ const DataTable = ({
                 key={generateUniqueKey(item, index)}
                 style={index % 2 === 0 ? styles.tableCell : styles.alternateTableCell}
               >
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" style={{ textAlign: 'center' }}>
                   <Checkbox
                     checked={isSelected(item.userId, item.createdAt)}
                     onChange={(event) => handleClick(event, item.userId, item.createdAt)}
@@ -211,7 +211,7 @@ const DataTable = ({
                   />
                 </TableCell>
                 {dataKeys.map((key) => (
-                  <TableCell key={key} style={styles.columns.width10}>
+                  <TableCell key={key} style={{ ...styles.columns.width10, textAlign: 'center' }}>
                     {item[key]}
                   </TableCell>
                 ))}

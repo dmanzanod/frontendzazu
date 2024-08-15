@@ -24,6 +24,7 @@ const LoginPage = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [severity,setSeverity]=useState('error')
     const navigate =useNavigate()
+    console.log("VAlor de url\n",`${process.env.PUBLIC_URL}`)
     const handleCheckboxChange = (checked) => {
       setIsAdmin(checked);
     };
@@ -83,24 +84,25 @@ const LoginPage = () => {
         width:'100%',
         minHeight:'100vh'
       }}>
-<Box className="backGround-shape" sx={{
+    <Box className="backGround-shape" sx={{
         display:'flex',
-       
-        justifyContent:'flex-start',
-       gap:'24px',
+        justifyContent:'center',
+        gap:'24px',
         alignItems:'center',
         margin:'0',
-        flexDirection:'column',
-        
-        flexGrow:1
-
+        flexDirection:'column',   
+        flexGrow:1,
+        backgroundImage: `url(${process.env.PUBLIC_URL}/ImagenFondo7Segunda.jpeg)`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
     }}>
-      <Box
-      sx={{
-        paddingBlock:'20px'
-      }}>
-        <img src={`${process.env.PUBLIC_URL}/logoZazuPerformance.png`} alt="logo"/>
-      </Box>
+      <Box sx={{ textAlign: 'center', marginBottom: 7 }}>
+          <img
+            src={`${process.env.PUBLIC_URL}/ZAZU-BLANCO-sin-iso.png`}
+            alt="logo"
+            style={{ width: '350px', height: 'auto' }} // Adjust the size of the logo
+          />
+        </Box>
       
         <Paper sx={{
             display:'flex',
@@ -111,7 +113,7 @@ const LoginPage = () => {
             flexDirection:'column',
             borderRadius:'32px',
             mt:1,
-            mb:6,
+            mb:15,
             textAlign:'center'
             
         }}>
