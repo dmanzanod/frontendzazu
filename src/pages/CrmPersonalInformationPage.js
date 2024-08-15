@@ -132,41 +132,49 @@ const CrmPersonalInformationPage = () => {
     });
   };
 
-const handleFlowChange = (event) => {
+  const handleFlowChange = async (event) => {
+    console.log('Flow changed:', event.target.value);
     const selectedFlow = event.target.value;
-    if (selectedFlow === '') {
-      // Reset to all contacts when "Ninguno" is selected
-      setFilteredContacts(contacts);
-    }else{const filteredContacts = contacts.filter(contact => {
-        // Extract the flow values from the 'values' array that match the selected flow
-        const flowValues = contact.values.filter(value => value.lastFlow === selectedFlow);
 
-        // Filter out entries where lastProduct is "-" or undefined
-        const validFlowValues = flowValues.filter(value => value.lastProduct !== "-" && value.lastProduct !== undefined);
+    // If 'Ninguno' is selected, reset to all contacts
+    if (selectedFlow === 'ninguno') {
+        console.log("Ninguno selected");
+        setFilteredContacts(contacts);
+        return;
+    }
+    // Filter contacts based on the selected flow
+    const filteredContacts = contacts.filter(contact => {
+        // If selected flow is in predefinedOrder
+        if (predefinedOrder.includes(selectedFlow)) {
+            const flowValues = contact.values.filter(value => value.lastFlow === selectedFlow);
 
-        // If the selected flow is not in the predefined order, return false
-        if (!predefinedOrder.includes(selectedFlow)) {
-            return false;
+            const validFlowValues = flowValues.filter(value => value.lastProduct !== "-" && value.lastProduct !== undefined);
+
+            if (validFlowValues.length > 0) {
+                // Get the latest flow value based on creation date
+                const latestFlowValue = validFlowValues.reduce((latest, current) => {
+                    const latestDate = new Date(latest.createdAt);
+                    const currentDate = new Date(current.createdAt);
+                    return currentDate > latestDate ? current : latest;
+                }, validFlowValues[0]);
+
+                return latestFlowValue.lastFlow === selectedFlow;
+            }
+
+            // Ensure that the contact matches the selected flow and has a valid last product
+            return contact.lastFlow === selectedFlow && contact.lastProduct !== "-" && contact.lastProduct !== undefined;
+        } else {
+            // For flows not in predefinedOrder, only show if lastProduct is valid
+            return contact.values.some(value => 
+                value.lastFlow === selectedFlow && value.lastProduct !== "-" && value.lastProduct !== undefined
+            );
         }
-
-        // If there are multiple valid entries, pick the latest one
-        if (validFlowValues.length > 0) {
-            const latestFlowValue = validFlowValues.reduce((latest, current) => {
-                const latestDate = new Date(latest.createdAt);
-                const currentDate = new Date(contact.createdAt);
-                return currentDate > latestDate ? current : latest;
-            }, validFlowValues[0]);
-
-            return latestFlowValue.lastFlow === selectedFlow;
-        }
-
-        // Also, check if the contact itself has the selected flow and a valid lastProduct
-        return contact.lastFlow === selectedFlow && contact.lastProduct !== "-" && contact.lastProduct !== undefined;
     });
 
+    // Update the state with the filtered contacts
     setFilteredContacts(filteredContacts);
-  }
 };
+
 
 
 
@@ -407,9 +415,9 @@ const handleFlowChange = (event) => {
                 onChange={handleFlowChange}
                 label="Seleccionar flujo"
               >
-                <MenuItem value=""><em>Ninguno</em></MenuItem>
+                <MenuItem value="ninguno"><em>Ninguno</em></MenuItem>
                 {uniqueLastFlows.map(flow => (
-                  <MenuItem key={flow} value={flow}>{flow}</MenuItem>
+                <MenuItem key={flow} value={flow}>{flow}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -519,7 +527,7 @@ const handleFlowChange = (event) => {
         >
           Seleccionar Fechas
         </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns} localeText={es}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', marginBottom: '20px' }}>
             <DatePicker
               label="Fecha de inicio"
