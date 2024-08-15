@@ -68,6 +68,15 @@ const styles = {
     border: `1px solid ${grey['300']}`,
   },
 };
+const getUniqueItems = (items) => {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = `${item.userId}|${item.createdAt}`;
+    return seen.has(key) ? false : seen.add(key);
+  });
+};
+
+const generateUniqueKey = (item, index) => `${item.userId}|${item.createdAt}|${index}`;
 
 const DataTable = ({
   items, dataKeys, headers, selectedItems,
@@ -120,15 +129,16 @@ const DataTable = ({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = items.map((n) => `${n.userId}|${n.createdAt}`);
-      setSelected(newSelecteds);
-      onSelectItem(newSelecteds);
-      return;
+      // Select all items
+      const newSelecteds = uniqueItems.map((item) => `${item.userId}|${item.createdAt}`);
+      setSelected(newSelecteds);  // Update local state
+      onSelectItem(newSelecteds); // Notify parent
+    } else {
+      // Unselect all items
+      setSelected([]);            // Clear local selection
+      onSelectItem([]);           // Notify parent
     }
-    setSelected([]);
-    onSelectItem([]);
   };
-
   const handleClick = (event, userId, createdAt) => {
     const id = `${userId}|${createdAt}`;
     const selectedIndex = selected.indexOf(id);
@@ -153,7 +163,8 @@ const DataTable = ({
 
   const isSelected = (userId, createdAt) => selected.indexOf(`${userId}|${createdAt}`) !== -1;
 
-  const sortedItems = sortData(items, getComparator(order, orderBy));
+  const uniqueItems = getUniqueItems(items);
+  const sortedItems = sortData(uniqueItems, getComparator(order, orderBy));
 
   return (
     <ThemeProvider theme={theme}>
@@ -163,8 +174,8 @@ const DataTable = ({
             <TableRow>
               <TableCell padding="checkbox" style={styles.headerCell}>
                 <Checkbox
-                  indeterminate={selected.length > 0 && selected.length < items.length}
-                  checked={items.length > 0 && selected.length === items.length}
+                  indeterminate={selected.length > 0 && selected.length < uniqueItems.length}
+                  checked={uniqueItems.length > 0 && selected.length === uniqueItems.length}
                   onChange={handleSelectAllClick}
                 />
               </TableCell>
@@ -188,7 +199,7 @@ const DataTable = ({
           <TableBody>
             {sortedItems.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((item, index) => (
               <TableRow
-                key={`${item.userId}|${item.createdAt}`}
+                key={generateUniqueKey(item, index)}
                 style={index % 2 === 0 ? styles.tableCell : styles.alternateTableCell}
               >
                 <TableCell padding="checkbox">

@@ -34,6 +34,7 @@ const CrmPersonalInformationPage = () => {
   useEffect(() => {
     setFilteredContacts(contacts); // Initialize with all contacts
   }, [contacts]);
+  
   const predefinedOrder = [
     'menu principal',
     'categoría',
@@ -44,56 +45,6 @@ const CrmPersonalInformationPage = () => {
   const parseCreatedAt = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy HH:mm', new Date());
   };
-
-  const formatDate = (date) => {
-    return format(date, 'dd/MM/yyyy HH:mm');
-  };
-  
-  useEffect(() => {
-    let filtered = contacts;
-
-    // Filter by selected flow
-    if (selectedFlow) {
-      const selectedIndex = predefinedOrder.indexOf(selectedFlow);
-
-      filtered = contacts.filter(contact => {
-        // Check if all flows up to the selectedFlow have a lastProduct defined
-        return predefinedOrder.slice(0, selectedIndex + 1).every(flow =>
-          contact.values.some(value => value.lastFlow === flow && value.lastProduct !== undefined)
-        );
-      });
-    }
-
-    // Filter by search value
-    if (searchValue) {
-      const query = searchValue.toLowerCase();
-      filtered = filtered.filter(contact => {
-        const username = contact.contactUsername ? contact.contactUsername.toLowerCase() : '';
-        const category = contact.lastCategory ? contact.lastCategory.toLowerCase() : '';
-        const createdAt = contact.createdAt ? contact.createdAt.toLowerCase() : '';
-        const productValues = (contact.values || []).map(item => item.lastProduct.toLowerCase());
-
-        return username.includes(query) ||
-               category.includes(query) ||
-               createdAt.includes(query) ||
-               productValues.some(value => value.includes(query));
-      });
-    }
-
-    // Filter by date range
-    if (startDate && endDate) {
-      const parsedStartDate = parse(formatDate(startDate), 'dd/MM/yyyy HH:mm', new Date());
-      const parsedEndDate = parse(formatDate(endDate), 'dd/MM/yyyy HH:mm', new Date());
-
-      filtered = filtered.filter(contact => {
-        const contactDate = parseCreatedAt(contact.createdAt);
-        return isWithinInterval(contactDate, { start: parsedStartDate, end: parsedEndDate });
-      });
-    }
-
-    setFilteredContacts(filtered);
-  }, [contacts, selectedFlow, searchValue, startDate, endDate]);
-  
   useEffect(() => {
     const fetchContactInformation = async () => {
       try {
@@ -119,6 +70,33 @@ const CrmPersonalInformationPage = () => {
 
     fetchContactInformation();
   }, []);
+ 
+  const formatDate = (date) => {
+    return format(date, 'dd/MM/yyyy HH:mm');
+  };
+  
+  useEffect(() => {
+    let filtered = [...contacts];
+    // Filter by search value
+    if (searchValue) {
+        const query = searchValue.toLowerCase();
+        filtered = filtered.filter(contact => {
+            const username = contact.contactUsername ? contact.contactUsername.toLowerCase() : '';
+            const category = contact.lastCategory ? contact.lastCategory.toLowerCase() : '';
+            const createdAt = contact.createdAt ? contact.createdAt.toLowerCase() : '';
+            const productValues = (contact.values || []).map(item => item.lastProduct.toLowerCase());
+
+            return username.includes(query) ||
+                   category.includes(query) ||
+                   createdAt.includes(query) ||
+                   productValues.some(value => value.includes(query));
+        });
+    }
+    // Set the filtered contacts
+    setFilteredContacts(filtered);
+}, [contacts, searchValue, startDate, endDate]);
+
+  
   const handleCloseDateRangeModal = () => {
       setDateRangeModalOpen(false);
   };
@@ -153,9 +131,40 @@ const CrmPersonalInformationPage = () => {
     });
   };
 
-  const handleFlowChange = (event) => {
-    setSelectedFlow(event.target.value);
-  };
+const handleFlowChange = (event) => {
+    const selectedFlow = event.target.value;
+
+    const filteredContacts = contacts.filter(contact => {
+        // Extract the flow values from the 'values' array that match the selected flow
+        const flowValues = contact.values.filter(value => value.lastFlow === selectedFlow);
+
+        // Filter out entries where lastProduct is "-" or undefined
+        const validFlowValues = flowValues.filter(value => value.lastProduct !== "-" && value.lastProduct !== undefined);
+
+        // If the selected flow is not in the predefined order, return false
+        if (!predefinedOrder.includes(selectedFlow)) {
+            return false;
+        }
+
+        // If there are multiple valid entries, pick the latest one
+        if (validFlowValues.length > 0) {
+            const latestFlowValue = validFlowValues.reduce((latest, current) => {
+                const latestDate = new Date(latest.createdAt);
+                const currentDate = new Date(contact.createdAt);
+                return currentDate > latestDate ? current : latest;
+            }, validFlowValues[0]);
+
+            return latestFlowValue.lastFlow === selectedFlow;
+        }
+
+        // Also, check if the contact itself has the selected flow and a valid lastProduct
+        return contact.lastFlow === selectedFlow && contact.lastProduct !== "-" && contact.lastProduct !== undefined;
+    });
+
+    setFilteredContacts(filteredContacts);
+};
+
+
 
   const headers = ["Numero", "Usuario", ...uniqueLastFlows, "Creado en"];
   const dataKeys = ["userId", "contactUsername", ...uniqueLastFlows.map(flow => `lastFlow_${flow}`), "createdAt"];
