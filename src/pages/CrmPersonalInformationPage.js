@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getContactInformation, getContactListsData, createContactList, deleteContactList, getContactListByName, updateContactList } from '../services/service';
+import { getContactInformation, getContactListsData, createContactList, deleteContactList, getContactListByName, updateContactList, getContactInformationByMonth } from '../services/service';
 import Principal from './Principal';
 import { Box, Button, Modal, Typography, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import DataTable from '../components/ComponentsContacts/Datatable';
@@ -13,6 +13,8 @@ import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isWithinInterval from 'date-fns/isWithinInterval';
 import { es } from 'date-fns/locale';
+import { getYear, getMonth } from 'date-fns';
+
 const CrmPersonalInformationPage = () => {
   const [contacts, setContacts] = useState([]);
   const [uniqueLastFlows, setUniqueLastFlows] = useState([]);
@@ -30,8 +32,11 @@ const CrmPersonalInformationPage = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isDateRangeModalOpen, setDateRangeModalOpen] = useState(false);
+  const [isMonthAndYearModal, setMonthAndYearModal] = useState(false);
   const [filteredContacts, setFilteredContacts] = useState([]);
-
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+  
   useEffect(() => {
     setFilteredContacts(contacts); // Initialize with all contacts
   }, [contacts]);
@@ -46,12 +51,16 @@ const CrmPersonalInformationPage = () => {
   const parseCreatedAt = (dateString) => {
     return parse(dateString, 'dd/MM/yyyy, HH:mm', new Date());
   };
+  
   useEffect(() => {
-    const fetchContactInformation = async () => {
+    const fetchContactInformationByMonth = async () => {
       try {
         const businessId = localStorage.getItem('Business');
-        const response = await getContactInformation(businessId);
+        const currentYear = getYear(new Date());
+        const currentMonth = getMonth(new Date()) + 1;
+        const response = await getContactInformationByMonth(businessId, currentYear, currentMonth);
         const responseContactListData = await getContactListsData(businessId);
+  
         if (response.success && responseContactListData) {
           setContacts(response.data);
           setLists(responseContactListData.data);
@@ -65,17 +74,51 @@ const CrmPersonalInformationPage = () => {
           console.error("Failed to fetch contact information:", response.message);
         }
       } catch (error) {
-        console.error("Error fetching contact information:", error);
+        console.error("Error fetching contact information by month:", error);
       }
     };
-
-    fetchContactInformation();
+  
+    fetchContactInformationByMonth();
   }, []);
- 
-  const formatDate = (date) => {
-    return format(date, 'dd/MM/yyyy, HH:mm');
+
+  const fetchContactInformationByMonth = async () => {
+    try {
+      const businessId = localStorage.getItem('Business');
+      const year = selectedYear || getYear(new Date());
+      const month = selectedMonth || getMonth(new Date()) + 1; 
+      const response = await getContactInformationByMonth(businessId, year, month);
+      const responseContactListData = await getContactListsData(businessId);
+  
+      if (response.success && responseContactListData) {
+        setContacts(response.data);
+        setLists(responseContactListData.data);
+        const sortedFlows = response.uniqueLastFlows.sort((a, b) => {
+          const indexA = predefinedOrder.indexOf(a) !== -1 ? predefinedOrder.indexOf(a) : predefinedOrder.length;
+          const indexB = predefinedOrder.indexOf(b) !== -1 ? predefinedOrder.indexOf(b) : predefinedOrder.length;
+          return indexA - indexB;
+        });
+        setUniqueLastFlows(sortedFlows);
+      } else {
+        console.error("Failed to fetch contact information:", response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching contact information by month:", error);
+    }
   };
   
+  useEffect(() => {
+    if (selectedMonth && selectedYear) {
+      const startOfMonth = new Date(selectedYear, selectedMonth - 1, 1);
+      const endOfMonth = new Date(selectedYear, selectedMonth, 0); // Last day of the month
+  
+      setStartDate(startOfMonth);
+      setEndDate(endOfMonth);
+  
+      fetchContactInformationByMonth();
+    }
+  }, [selectedMonth, selectedYear]);
+  
+
   useEffect(() => {
     let filtered = [...contacts];
     // Filter by search value
@@ -97,10 +140,20 @@ const CrmPersonalInformationPage = () => {
     setFilteredContacts(filtered);
 }, [contacts, searchValue, startDate, endDate]);
 
-  
+const handleMonthChange = (event) => {
+  setSelectedMonth(event.target.value);
+};
+
+const handleYearChange = (event) => {
+  setSelectedYear(event.target.value);
+};
+
   const handleCloseDateRangeModal = () => {
       setDateRangeModalOpen(false);
   };
+  const handleCloseYearAndMonthModal = () => {
+    setMonthAndYearModal(false);
+};
 
   const formatContactData = (contacts) => {
     return contacts.map(contact => {
@@ -415,6 +468,9 @@ const CrmPersonalInformationPage = () => {
             <Button variant="contained" color="secondary" onClick={() => handleOpenDateRangeModal(true)}>
               Seleccionar Fechas
             </Button>
+            <Button variant="contained" color="secondary" onClick={() => setMonthAndYearModal(true)}>
+              Seleccionar Mes y Año
+            </Button>
             <Button variant="contained" color="primary" onClick={() => setShowListsTable(!showListsTable)}>
               {showListsTable ? 'Ocultar listas' : 'Listas'}
             </Button>
@@ -540,20 +596,20 @@ const CrmPersonalInformationPage = () => {
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px', marginBottom: '20px' }}>
-            <DatePicker
-              label="Fecha de inicio"
-              value={startDate}
-              onChange={(date) => setStartDate(date)}
-              inputFormat="dd/MM/yyyy"  // Ensuring the input format
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <DatePicker
-              label="Fecha de fin"
-              value={endDate}
-              onChange={(date) => setEndDate(date)}
-              inputFormat="dd/MM/yyyy"  // Ensuring the input format
-              renderInput={(params) => <TextField {...params} />}
-            />
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={(newValue) => setStartDate(newValue)}
+            defaultValue={startDate || new Date()}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={(newValue) => setEndDate(newValue)}
+            defaultValue={endDate || new Date()}
+            renderInput={(params) => <TextField {...params} />}
+          />
           </Box>
         </LocalizationProvider>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
@@ -575,6 +631,60 @@ const CrmPersonalInformationPage = () => {
         </Box>
       </div>
     </Modal>
+    <Modal
+          open={isMonthAndYearModal}
+          onClose={handleCloseYearAndMonthModal}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '400px',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+              Seleccionar Mes y Año
+            </Typography>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="month-select-label">Mes</InputLabel>
+              <Select
+                labelId="month-select-label"
+                value={selectedMonth}
+                onChange={handleMonthChange}
+                label="Mes"
+              >
+                {[...Array(12).keys()].map(i => (
+                  <MenuItem key={i + 1} value={i + 1}>
+                    {new Date(0, i).toLocaleString('es', { month: 'long' })}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel id="year-select-label">Año</InputLabel>
+              <Select
+                labelId="year-select-label"
+                value={selectedYear}
+                onChange={handleYearChange}
+                label="Año"
+              >
+                {[2023, 2024, 2025].map(year => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button variant="contained" color="primary" >
+              Aplicar
+            </Button>
+          </Box>
+        </Modal>
       </Box>
     </Principal>
   );

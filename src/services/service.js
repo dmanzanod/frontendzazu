@@ -160,6 +160,21 @@ export const getContactInformation = async(businessId,field)=>{
     })
 }
 
+export const getContactInformationByMonth = async(businessId,year,month)=>{
+    return await axios.get(`${url}/getContactsInformationByMonth/${businessId}/${year}/${month}`)
+    .then((response)=>{
+        return response.data
+    })
+    .catch((error)=>{
+        return {
+            error: error.message,
+            code: error.code,
+            name: error.name,
+            status:error.response.status
+        }
+    })
+}
+
 export const getUniqueCrmByCategory = async(businessId)=>{
     return await axios.get(`${url}/getUniqueCrmByCategory/${businessId}`)
     .then((response)=>{
