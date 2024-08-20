@@ -93,7 +93,7 @@ const CRMComponent = () => {
       BuyFlow: 'Compras o Reservas',
       morningSelectionFlow: 'Seleccionando horarios',
       botSelectionFlow: 'Inicio conversación',
-      directContactFlow: 'Contacto con asesor',
+      directContactFlow: 'Consultas',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categorías',
