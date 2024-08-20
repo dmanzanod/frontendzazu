@@ -77,8 +77,8 @@ const CRMComponent = () => {
     formattedData.sort((a, b) => {
       if (a.label === 'Inicio conversación') return -1;
       if (b.label === 'Inicio conversación') return 1;
-      if (a.label === 'Inscripciones') return 1;
-      if (b.label === 'Inscripciones') return -1;
+      if (a.label === 'Inscripción completa') return 1;
+      if (b.label === 'Inscripción completa') return -1;
       return b.value - a.value;
     });
   
@@ -98,6 +98,7 @@ const CRMComponent = () => {
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categorías',
       inscripcionFlow:'Inscripciones',
+      completeInscriptionFlow:'Inscripción completa',
     };
 
     return flowNames[flow] || flow;
@@ -168,7 +169,8 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
         "cursoHorario": "Seleccionó horarios",
         "directContactFlow": "Seleccionó contacto directo",
         'categoryFlow': 'Categorías',
-        'inscripcionFlow':'Inscripciones',
+        'inscripcionFlow':'Programas',
+        'completeInscriptionFlow':'Inscripción completa',
         // Add more mappings as needed
     };
 
