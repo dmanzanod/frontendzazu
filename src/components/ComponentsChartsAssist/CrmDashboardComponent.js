@@ -100,7 +100,7 @@ const CrmDashboardComponent = () => {
   }, [crmData]);
 
   const processData = (data) => {
-    const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Inscripciones'];
+    const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Programas'];
   
     const flowMap = {};
     data.forEach((entry) => {
@@ -147,7 +147,7 @@ const CrmDashboardComponent = () => {
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categoría',
-      inscripcionFlow:'Inscripciones',
+      inscripcionFlow:'Programas',
       completeInscriptionFlow: 'Inscripción completada'
     };
 
@@ -182,7 +182,7 @@ const CrmDashboardComponent = () => {
       "cursoHorario": "Seleccionó horarios",
       "directContactFlow": "Seleccionó contacto directo",
       'categoryFlow': 'Categoría',
-      'inscripcionFlow':'Inscripciones',
+      'inscripcionFlow':'Programas',
       'completeInscriptionFlow':'Inscripción completada'
       // Add more mappings as needed
     };
