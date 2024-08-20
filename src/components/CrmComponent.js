@@ -97,7 +97,7 @@ const CRMComponent = () => {
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categorías',
-      inscripcionFlow:'Inscripciones',
+      inscripcionFlow:'Programas',
       completeInscriptionFlow:'Inscripción completa',
     };
 
