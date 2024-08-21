@@ -82,7 +82,7 @@ const MenuComponent = () => {
                 onClick={(event) => handleListItemClick(event, 0)}
                 >
                     <DashboardOutlinedIcon/>
-                  <ListItemText primary={'Dashboard'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
+                  <ListItemText primary={'DASHBOARD'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -91,7 +91,7 @@ const MenuComponent = () => {
                 
                 >
                     <QrCodeOutlinedIcon/>
-                  <ListItemText primary={'Generar QR'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
+                  <ListItemText primary={'GENERAR QR'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -100,7 +100,7 @@ const MenuComponent = () => {
                 
                 >
                     <DesignServicesIcon/>
-                  <ListItemText primary={'Operaciones'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
+                  <ListItemText primary={'OPERACIONES'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                   {expand ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
               </ListItem>
@@ -112,34 +112,34 @@ const MenuComponent = () => {
             <ListItemIcon>
               <CategoryOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary="Categorías" />
+            <ListItemText primary="CATEGORÍAS" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(1)}>
             <ListItemIcon>
               <InventoryOutlinedIcon/>
             </ListItemIcon>
-            <ListItemText primary={localStorage.getItem('type')==='services'?"Servicios":"Productos"} />
+            <ListItemText primary={localStorage.getItem('type')==='services'?"SERVICIOS":"PRODUCTOS"} />
           </ListItemButton>
           {BusinessType !== "Asistente virtual cba" && (
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
             <ListItemIcon>
               <ListAltIcon/>
             </ListItemIcon>
-            <ListItemText primary={localStorage.getItem('type')==='services'?"Reservas":"Pedidos"} />
+            <ListItemText primary={localStorage.getItem('type')==='services'?"RESERVAS":"PEDIDOS"} />
           </ListItemButton>
           )}
           <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(3)}>
             <ListItemIcon>
               <WorkIcon/>
             </ListItemIcon>
-            <ListItemText primary="Información" />
+            <ListItemText primary="INFORMACIÓN" />
           </ListItemButton>
           {
             localStorage.getItem('type')==='services'&&<ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(4)}>
             <ListItemIcon>
               <CalendarIcon/>
             </ListItemIcon>
-            <ListItemText primary="Agenda" />
+            <ListItemText primary="AGENDA" />
             </ListItemButton>
           }
           
@@ -150,7 +150,7 @@ const MenuComponent = () => {
               <ExcelUploadIcon />
             </ListItemIcon>
               
-              <ListItemText primary={'Cargar Excel'}/>
+              <ListItemText primary={'CARGAR EXCEL'}/>
             </ListItemButton>
 
            
@@ -161,7 +161,7 @@ const MenuComponent = () => {
               <UploadFile />
             </ListItemIcon>
               
-              <ListItemText primary={'Cargar texto'}/>
+              <ListItemText primary={'CARGAR TEXTO'}/>
             </ListItemButton>
         </List>
       </Collapse>
@@ -184,7 +184,7 @@ const MenuComponent = () => {
               <ListItemIcon>
               <Groups3Icon /> 
               </ListItemIcon>           
-              <ListItemText primary={'Datos CRM'} />
+              <ListItemText primary={'DATOS CRM'} />
             </ListItemButton>
             </ListItem>
 
@@ -195,7 +195,7 @@ const MenuComponent = () => {
               <ListItemIcon>
               <PeopleOutlineIcon />
               </ListItemIcon>            
-              <ListItemText primary={'Lista de contactos'} />
+              <ListItemText primary={'LISTA DE CONTACTOS'} />
             </ListItemButton>
             </ListItem>
 
@@ -206,7 +206,7 @@ const MenuComponent = () => {
               <ListItemIcon>
               <PeopleOutlineIcon />
               </ListItemIcon>            
-              <ListItemText primary={'Contactos remarketing'} />
+              <ListItemText primary={'CONTACTOS MARKETING'} />
             </ListItemButton>
             </ListItem>
 
@@ -218,7 +218,7 @@ const MenuComponent = () => {
                 
                 >
                     <SummarizeOutlinedIcon/>
-                  <ListItemText primary={'Reportes'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
+                  <ListItemText primary={'REPORTES'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>
               </ListItem>
             <ListItem  disablePadding>
@@ -226,7 +226,7 @@ const MenuComponent = () => {
                 onClick={(event) => handleListItemClick(event, 4)}       
                 >
                     <ContactSupportOutlinedIcon/>
-                  <ListItemText primary={'Ayuda'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
+                  <ListItemText primary={'AYUDA'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
                 </ListItemButton>               
               </ListItem>
               
