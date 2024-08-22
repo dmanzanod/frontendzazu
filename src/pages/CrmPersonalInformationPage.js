@@ -119,7 +119,7 @@ const CrmPersonalInformationPage = () => {
   }, [selectedMonth, selectedYear]);
   
 
-  useEffect(() => {
+  const filterContacts = () => {
     let filtered = [...contacts];
     // Filter by search value
     if (searchValue) {
@@ -138,8 +138,12 @@ const CrmPersonalInformationPage = () => {
     }
     // Set the filtered contacts
     setFilteredContacts(filtered);
-}, [contacts, searchValue, startDate, endDate]);
-
+};
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter') {
+      filterContacts();
+  }
+};
 const handleMonthChange = (event) => {
   setSelectedMonth(event.target.value);
 };
@@ -186,7 +190,7 @@ const handleYearChange = (event) => {
   };
 
   const handleFlowChange = async (event) => {
-    console.log('Flow changed:', event.target.value);
+    setSelectedFlow(event.target.value);
     const selectedFlow = event.target.value;
 
     // If 'Ninguno' is selected, reset to all contacts
@@ -489,11 +493,11 @@ const handleYearChange = (event) => {
               </Select>
             </FormControl>
             <TextField
-              label="Buscar"
-              variant="outlined"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              sx={{ marginLeft: '10px', maxWidth: '300px' }}
+              type="text" 
+              value={searchValue} 
+              onChange={(e) => setSearchValue(e.target.value)} 
+              onKeyDown={handleKeyDown}
+              placeholder="Buscar..."
             />
           </Box>
         </Box>
