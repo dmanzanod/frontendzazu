@@ -121,16 +121,17 @@ const CrmPersonalInformationPage = () => {
 
   const filterContacts = () => {
     let filtered = [...contacts];
-    // Filter by search value
     if (searchValue) {
         const query = searchValue.toLowerCase();
         filtered = filtered.filter(contact => {
+            const userId = contact.userId ? contact.userId : '';
             const username = contact.contactUsername ? contact.contactUsername.toLowerCase() : '';
             const category = contact.lastCategory ? contact.lastCategory.toLowerCase() : '';
             const createdAt = contact.createdAt ? contact.createdAt.toLowerCase() : '';
             const productValues = (contact.values || []).map(item => item.lastProduct.toLowerCase());
 
-            return username.includes(query) ||
+            return userId.includes(query) || 
+                   username.includes(query) ||
                    category.includes(query) ||
                    createdAt.includes(query) ||
                    productValues.some(value => value.includes(query));
