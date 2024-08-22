@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Paper, Container, Checkbox } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel, Paper, Container, Checkbox, Typography, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, green, common } from '@mui/material/colors';
 import Pagination from "@mui/material/Pagination";
@@ -46,6 +46,9 @@ const styles = {
     width: 350,
     margin: '0 auto',
     paddingTop: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   headerCell: {
     padding: '16px',
@@ -68,6 +71,7 @@ const styles = {
     border: `1px solid ${grey['300']}`,
   },
 };
+
 const getUniqueItems = (items) => {
   const seen = new Set();
   return items.filter((item) => {
@@ -140,6 +144,7 @@ const DataTable = ({
       onSelectItem([]);           // Notify parent
     }
   };
+
   const handleClick = (event, userId, createdAt) => {
     const id = `${userId}|${createdAt}`;
     const selectedIndex = selected.indexOf(id);
@@ -167,19 +172,23 @@ const DataTable = ({
   const uniqueItems = getUniqueItems(items);
   const sortedItems = sortData(uniqueItems, getComparator(order, orderBy));
 
+  // Calculate the total number of selected items
+  const selectedCount = selected.length;
+
   return (
     <ThemeProvider theme={theme}>
       <Paper style={styles.tableContainer}>
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell padding="checkbox" style={{ ...styles.headerCell, textAlign: 'center' }}>
+              <TableCell padding="checkbox" style={{ ...styles.headerCell, textAlign: 'center' }}>
                 <Checkbox
                   indeterminate={selected.length > 0 && selected.length < uniqueItems.length}
                   checked={uniqueItems.length > 0 && selected.length === uniqueItems.length}
                   onChange={handleSelectAllClick}
                 />
               </TableCell>
+              <TableCell style={{ ...styles.headerCell, textAlign: 'center' }}>#</TableCell>
               {headers.map((header, index) => (
                 <TableCell
                   key={header}
@@ -210,6 +219,7 @@ const DataTable = ({
                     color="primary"
                   />
                 </TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{(page - 1) * rowsPerPage + index + 1}</TableCell>
                 {dataKeys.map((key) => (
                   <TableCell key={key} style={{ ...styles.columns.width10, textAlign: 'center' }}>
                     {item[key]}
@@ -220,12 +230,16 @@ const DataTable = ({
           </TableBody>
         </Table>
         <Container style={styles.pagination}>
+         
           <Pagination
             count={totalPages}
             page={page}
             color="primary"
             onChange={(_, newPage) => onPageChange(_, newPage)}
           />
+           <Typography variant="body2" color="textSecondary" justifyContent={'flex-end'}>
+            SELECCIONADOS: {selectedCount}
+          </Typography>
         </Container>
       </Paper>
     </ThemeProvider>
