@@ -42,13 +42,19 @@ const styles = {
     margin: '1.5em',
     width: '95%',
   },
-  pagination: {
-    width: 350,
-    margin: '0 auto',
-    paddingTop: 10,
+  paginationContainer: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 0',
+  },
+  leftContainer: {
+    flex: '1 1 auto',
+    textAlign: 'left',
+  },
+  rightContainer: {
+    flex: '1 1 auto',
+    textAlign: 'center',
   },
   headerCell: {
     padding: '16px',
@@ -229,17 +235,23 @@ const DataTable = ({
             ))}
           </TableBody>
         </Table>
-        <Container style={styles.pagination}>
-         
-          <Pagination
-            count={totalPages}
-            page={page}
-            color="primary"
-            onChange={(_, newPage) => onPageChange(_, newPage)}
-          />
-           <Typography variant="body2" color="textSecondary" justifyContent={'flex-end'}>
-            SELECCIONADOS: {selectedCount}
-          </Typography>
+        <Container style={styles.paginationContainer}>
+          <Box style={styles.leftContainer}>
+            <Typography variant="body2" color="textSecondary">
+              SELECCIONADOS: {selectedCount}
+            </Typography>
+          </Box>
+          <Box style={styles.rightContainer}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              color="primary"
+              onChange={(_, newPage) => onPageChange(_, newPage)}
+              siblingCount={1}
+              boundaryCount={1}
+              size="small"
+            />
+          </Box>
         </Container>
       </Paper>
     </ThemeProvider>
@@ -247,16 +259,16 @@ const DataTable = ({
 };
 
 DataTable.propTypes = {
-  items: PropTypes.array.isRequired,
-  dataKeys: PropTypes.array.isRequired,
-  headers: PropTypes.array.isRequired,
-  selectedItems: PropTypes.array,
-  onSelectItem: PropTypes.func,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dataKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  headers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selectedItems: PropTypes.arrayOf(PropTypes.string),
+  onSelectItem: PropTypes.func.isRequired,
   totalPages: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
-  onDelete: PropTypes.func,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default DataTable;
