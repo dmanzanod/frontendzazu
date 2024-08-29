@@ -120,7 +120,7 @@ const CrmPersonalInformationPage = () => {
   
 
   const filterContacts = () => {
-    let filtered = [...contacts];
+    let filtered = [...filteredContacts];
     if (searchValue) {
         const query = searchValue.toLowerCase();
         filtered = filtered.filter(contact => {
