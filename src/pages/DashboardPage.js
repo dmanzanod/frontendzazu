@@ -44,7 +44,7 @@ const DashboardPage = () => {
   const [salesMonth,setSalesMonth]=useState(0)
   const type=localStorage.getItem('type')
   let BusinessType = localStorage.getItem('BusinessType');
-  
+  let BusinessFlow = localStorage.getItem('FlowData')
   if (BusinessType === "undefined") {
     BusinessType = "";
   } else if (!BusinessType) {
@@ -71,6 +71,7 @@ const DashboardPage = () => {
     }
     const getBusinessCurrency=async()=>{
       const uniqueCategories = await getUniqueCrmByCategory(localStorage.getItem('Business'));
+      console.log("UserId \n", localStorage.getItem('UserId'))
       setUniqueCategories(uniqueCategories.count)
       let resp
       if(type==='services'){
@@ -241,16 +242,81 @@ const DashboardPage = () => {
    
   return (
     <Principal>
-      <Box component="main" sx={{ flexGrow: 1, p: { xs: 1, sm: 1, md: 3 }, display: "grid", backgroundColor: "#F4F3FA", gridRowGap: "32px", gridColumnGap: "24px", mt: '72px', gridTemplateColumns: BusinessType === "Asistente virtual cba" ? "1fr" : {xs:"1fr",sm:"1fr 1fr"}, gridTemplateRows: BusinessType === "Asistente virtual cba" ? "auto" : { xs: "repeat(4,1fr)", sm: "repeat(2,1fr)" } }}>
-        {BusinessType === "" && (
-          <React.Fragment>
-            {stats.length > 0 ? <ChartComponent title={type === 'services' ? 'Servicios' : 'Productos'} data={stats} type={'bar'} /> : <EmptyComponent title={type === 'services' ? 'Servicios' : 'Productos'} />}
-            {monthlyBookings.length > 0 && <BarChartComponent title={'Total de Ventas'} data={monthlyBookings} />}
-            {bookingsMonth && totalInteractions ? <InteractionBookingComponent type={type} title={type === 'services' ? 'Conversaciones - Reservas' : 'Conversaciones - Pedidos'} bookings={bookingsMonth} conversations={totalInteractions} /> : <EmptyComponent title={'Conversaciones/' + (type === 'services' ? 'Reservas' : 'Pedidos')} />}
-            {weeklyInteractions.length > 0 && <LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions} />}
-          </React.Fragment>
+  <Box
+    component="main"
+    sx={{
+      flexGrow: 1,
+      p: { xs: 1, sm: 1, md: 5 },
+      display: "flex",
+      flexDirection: "column", // Stack components vertically
+      backgroundColor: "#141741",
+      mt: "60px",
+      gap: "32px", // Row gap
+    }}
+  >
+    {BusinessType === "" && (
+      <React.Fragment>
+        {/* First row: Two components, each taking 50% of the width */}
+        <Box sx={{ display: "flex", width: "100%", gap: "24px" }}>
+          <Box sx={{ flex: 1 }}>
+            <BarChartHighToLowComponent title={'PROGRAMAS'} filterCondition="mainFlow" />
+          </Box>
+          <Box sx={{ width: uniqueCategory > 5 ? { xs: '100%', sm: '100%' } : '50%' }}>
+                {<BarChartCategoriaComponent title={'Categoría'} filterCondition = "categoryFlow" />}
+          </Box>
+        </Box>
+
+        {/* Second row: One component taking 100% of the width */}
+        {weeklyInteractions.length > 0 && (
+          <Box sx={{ width: "100%", height: { sm: "550px" }, backgroundColor: "#fff", borderRadius: "15px" }}>
+            <LineChartMonthlyComponent title={'CONVERSACIONES MENSUALES'} />
+          </Box>
         )}
-        {BusinessType === "" && (
+
+        {/* Third row: Two components, each taking 50% of the width */}
+        <Box sx={{ display: "flex", width: "100%", gap: "24px" }}>
+          {bookingsMonth && totalInteractions ? (
+            <Box sx={{ flex: 1 }}>
+              <InteractionBookingComponent
+                type={type}
+                title={type === 'services' ? 'Conversaciones - Reservas' : 'Conversaciones - Pedidos'}
+                bookings={bookingsMonth}
+                conversations={totalInteractions}
+              />
+            </Box>
+          ) : (
+            <Box sx={{ flex: 1 }}>
+              <EmptyComponent
+                title={
+                  'Conversaciones/' + (type === 'services' ? 'Reservas' : 'Pedidos')
+                }
+              />
+            </Box>
+          )}
+          {weeklyInteractions.length > 0 && (
+            <Box sx={{ flex: 1 }}>
+              <LineChartComponent title={'Conversaciones de la última semana'} data={weeklyInteractions} />
+            </Box>
+          )}
+        </Box>
+
+        {/* Last row: One component taking 100% of the width */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            gap: "12px",
+            mb: 2,
+            backgroundColor: "#fff",
+            borderRadius: "15px",
+          }}
+        >
+          <CrmDashboardComponent />
+        </Box>
+      </React.Fragment>
+        )}
+        {/* {BusinessType === "" && (
           <Box sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -272,13 +338,13 @@ const DashboardPage = () => {
               // Conditional rendering ends here
             }
           </Box>
-        )}
+        )} */}
         {BusinessType === "Asistente virtual cba" && (
           <React.Fragment>
             <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
               <BarChartHighToLowComponent title={'Programas'} filterCondition = "inscripcionFlow" />
             </Box>
-            <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto" }}>
+            <Box sx={{ width: { xs: '100%', sm: '100%' }, height: "auto",minHeight: '600px' }}>
               {weeklyInteractions.length > 0 && (
                 <LineChartMonthlyComponent title={'Conversaciones mensuales'}/>
               )}
@@ -286,11 +352,11 @@ const DashboardPage = () => {
             <Box sx={{ display: 'flex', flexDirection: uniqueCategory > 5 ? 'column' : 'row', width: { xs: '100%', sm: '100%' }, height: "auto", gap: '24px'  }}>
               {/* First BarChartHighToLowComponent */}
               <Box sx={{ width: uniqueCategory > 5 ? { xs: '100%', sm: '100%' } : '50%' }}>
-                {<BarChartCategoriaComponent title={'Categoria'} filterCondition = "categoryFlow" />}
+                {<BarChartCategoriaComponent title={'Categoría'} filterCondition = "categoryFlow" />}
               </Box>
               {/* Second BarChartHighToLowComponent */}
               <Box sx={{ width: '50%' }}>
-                {<DualBarChartComponent title={'Conversaciones vs Consultas'}/>}
+                {<DualBarChartComponent title={'Conversaciones VS Consultas'}/>}
               </Box>
             </Box>
               <CrmDashboardComponent></CrmDashboardComponent>
