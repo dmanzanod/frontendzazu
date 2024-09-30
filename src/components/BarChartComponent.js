@@ -66,30 +66,35 @@ const BarChartComponent = ({data,title}) => {
   },[])
   return (
     <ThemeProvider theme={theme}>
-        <Box sx={{
-           display:'flex',
-           flexDirection:'column',
-           justifyContent:'center',
-           
-           width:{xs:'98%',sm:'100%'},
-           paddingInline:'12px',
-            borderRadius:"20px",
-           backgroundColor:"#FFF",
-           
-            gap:"36px"
-          
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          width: { xs: '100%', sm: '100%' },
+          height: { xs: '100%', sm: '100%' },
+          padding: '12px 12px 36px 12px', // Adds manual padding
+          borderRadius: '20px',
+          backgroundColor: '#FFF',
+          gap: '36px',
         }}
         ref={elementRef}
         className='chart'
+      >
+        <Typography
+          variant='h4'
+          sx={{
+            fontSize: { xs: '1.6rem', sm: '1.8rem' },
+            textAlign: 'center', // Centers the text in the container
+            paddingTop: '12px', // Adjust padding for the Typography itself
+          }}
         >
-             <Typography variant='h4' sx={{alignSelf:'center',fontSize:{xs:'1.6rem',sm:'1.8rem'}}}>Ventas por mes</Typography>
-            <Chart className='chart__width' type="bar" data={dataFormatted}  options={options}/>
-
-        </Box>
-
-    
+          VENTAS POR MES
+        </Typography>
+        <Chart className='chart__width' type="bar" data={dataFormatted} options={options} />
+      </Box>
     </ThemeProvider>
-  )
-}
-
+  );
+        }  
 export default BarChartComponent

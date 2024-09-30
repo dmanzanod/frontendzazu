@@ -1,4 +1,4 @@
-import { Box, Collapse,  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,  Toolbar, IconButton } from '@mui/material'
+import { Box, Collapse,  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,  Toolbar, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -56,185 +56,256 @@ const MenuComponent = () => {
   };
   return (
     <Drawer
-    variant="permanent"
-    sx={{
+      variant="permanent"
+      sx={{
         width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' },
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { 
-            width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' }, 
-            boxSizing: 'border-box',
+        [`& .MuiDrawer-paper`]: {
+          width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' },
+          boxSizing: 'border-box',
         },
-    }}
->
-        <Toolbar />
-        <Box sx={{ overflow: 'hidden' }}>
-        
-          <List>
+      }}
+    >
+      <Toolbar />
+      <Box sx={{ overflow: 'hidden' }}>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton onClick={toggleMenu}>
+              <MenuIcon />
+            </ListItemButton>
+          </ListItem>
+
+          <Tooltip title="Dashboard" placement="right"  componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
             <ListItem disablePadding>
-              <ListItemButton onClick={toggleMenu}>
-                <MenuIcon />
+              <ListItemButton onClick={(event) => handleListItemClick(event, 0)}>
+                <DashboardOutlinedIcon />
+                <ListItemText primary={'DASHBOARD'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
               </ListItemButton>
             </ListItem>
-          
-            <ListItem  disablePadding>
-                <ListItemButton 
-                
-                onClick={(event) => handleListItemClick(event, 0)}
-                >
-                    <DashboardOutlinedIcon/>
-                  <ListItemText primary={'DASHBOARD'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                </ListItemButton>
-              </ListItem>
-            <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleListItemClick(event, 1)}
-                
-                >
-                    <QrCodeOutlinedIcon/>
-                  <ListItemText primary={'GENERAR QR'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                </ListItemButton>
-              </ListItem>
-            <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleExpand()}
-                
-                >
-                    <DesignServicesIcon/>
-                  <ListItemText primary={'OPERACIONES'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                  {expand ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-              </ListItem>
-              <Collapse in={expand} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}
-          onClick={(e)=>handleSubList(0)}
-          >
-            <ListItemIcon>
-              <CategoryOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="CATEGORÍAS" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(1)}>
-            <ListItemIcon>
-              <InventoryOutlinedIcon/>
-            </ListItemIcon>
-            <ListItemText primary={localStorage.getItem('type')==='services'?"SERVICIOS":"PRODUCTOS"} />
-          </ListItemButton>
-          {BusinessType !== "Asistente virtual cba" && (
-          <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(2)}>
-            <ListItemIcon>
-              <ListAltIcon/>
-            </ListItemIcon>
-            <ListItemText primary={localStorage.getItem('type')==='services'?"RESERVAS":"PEDIDOS"} />
-          </ListItemButton>
-          )}
-          <ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(3)}>
-            <ListItemIcon>
-              <WorkIcon/>
-            </ListItemIcon>
-            <ListItemText primary="INFORMACIÓN" />
-          </ListItemButton>
-          {
-            localStorage.getItem('type')==='services'&&<ListItemButton sx={{ pl: 4 }} onClick={(e)=>handleSubList(4)}>
-            <ListItemIcon>
-              <CalendarIcon/>
-            </ListItemIcon>
-            <ListItemText primary="AGENDA" />
-            </ListItemButton>
-          }
-          
-            <ListItemButton
-              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 5)}
-            >
-              <ListItemIcon>
-              <ExcelUploadIcon />
-            </ListItemIcon>
-              
-              <ListItemText primary={'CARGAR EXCEL'}/>
-            </ListItemButton>
+          </Tooltip>
 
-           
-              <ListItemButton
-              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 8)}
-            >
-              <ListItemIcon>
-              <UploadFile />
-            </ListItemIcon>
-              
-              <ListItemText primary={'CARGAR TEXTO'}/>
-            </ListItemButton>
-        </List>
-      </Collapse>
-      <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleExpandCRM()}
-                
-                >
-                    <ContactsIcon/>
-                  <ListItemText primary={'CRM'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                  {expand ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-              </ListItem>
-        <Collapse in={expandCRM} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-            <ListItem  disablePadding>
-              <ListItemButton
-              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 6)}
-            >
-              <ListItemIcon>
-              <Groups3Icon /> 
-              </ListItemIcon>           
-              <ListItemText primary={'DATOS CRM'} />
-            </ListItemButton>
+          <Tooltip title="Generar QR" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleListItemClick(event, 1)}>
+                <QrCodeOutlinedIcon />
+                <ListItemText primary={'GENERAR QR'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
+              </ListItemButton>
             </ListItem>
+          </Tooltip>
 
-            <ListItem  disablePadding>
-              <ListItemButton
-              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 7)}
-            >
-              <ListItemIcon>
-              <PeopleOutlineIcon />
-              </ListItemIcon>            
-              <ListItemText primary={'LISTA DE CONTACTOS'} />
-            </ListItemButton>
+          <Tooltip title="Operaciones" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleExpand()}>
+                <DesignServicesIcon />
+                <ListItemText primary={'OPERACIONES'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
+                {expand ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
             </ListItem>
+          </Tooltip>
 
-            <ListItem  disablePadding>
-              <ListItemButton
-              sx={{ pl:4}} onClick={(event) => handleListItemClick(event, 9)}
-            >
-              <ListItemIcon>
-              <PeopleOutlineIcon />
-              </ListItemIcon>            
-              <ListItemText primary={'CONTACTOS MARKETING'} />
-            </ListItemButton>
-            </ListItem>
+          <Collapse in={expand} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Tooltip title="Categorías" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItemButton sx={{ pl: 4 }} onClick={(e) => handleSubList(0)}>
+                  <ListItemIcon>
+                    <CategoryOutlinedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="CATEGORÍAS" />
+                </ListItemButton>
+              </Tooltip>
 
+              <Tooltip title={localStorage.getItem('type') === 'services' ? "Servicios" : "Productos"} placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItemButton sx={{ pl: 4 }} onClick={(e) => handleSubList(1)}>
+                  <ListItemIcon>
+                    <InventoryOutlinedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={localStorage.getItem('type') === 'services' ? "SERVICIOS" : "PRODUCTOS"} />
+                </ListItemButton>
+              </Tooltip>
+
+              {BusinessType !== "Asistente virtual cba" && (
+                <Tooltip title={localStorage.getItem('type') === 'services' ? "Reservas" : "Pedidos"} placement="right" componentsProps={{
+                  tooltip: {
+                    sx: { fontSize: '1.2rem' } 
+                  },
+                }}>
+                  <ListItemButton sx={{ pl: 4 }} onClick={(e) => handleSubList(2)}>
+                    <ListItemIcon>
+                      <ListAltIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={localStorage.getItem('type') === 'services' ? "RESERVAS" : "PEDIDOS"} />
+                  </ListItemButton>
+                </Tooltip>
+              )}
+
+              <Tooltip title="Información" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItemButton sx={{ pl: 4 }} onClick={(e) => handleSubList(3)}>
+                  <ListItemIcon>
+                    <WorkIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="INFORMACIÓN" />
+                </ListItemButton>
+              </Tooltip>
+
+              {localStorage.getItem('type') === 'services' && (
+                <Tooltip title="Agenda" placement="right" componentsProps={{
+                  tooltip: {
+                    sx: { fontSize: '1.2rem' } 
+                  },
+                }}>
+                  <ListItemButton sx={{ pl: 4 }} onClick={(e) => handleSubList(4)}>
+                    <ListItemIcon>
+                      <CalendarIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="AGENDA" />
+                  </ListItemButton>
+                </Tooltip>
+              )}
+
+              <Tooltip title="Cargar Excel" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItemButton sx={{ pl: 4 }} onClick={(event) => handleListItemClick(event, 5)}>
+                  <ListItemIcon>
+                    <ExcelUploadIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={'CARGAR EXCEL'} />
+                </ListItemButton>
+              </Tooltip>
+
+              <Tooltip title="Cargar Texto" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItemButton sx={{ pl: 4 }} onClick={(event) => handleListItemClick(event, 8)}>
+                  <ListItemIcon>
+                    <UploadFile />
+                  </ListItemIcon>
+                  <ListItemText primary={'CARGAR TEXTO'} />
+                </ListItemButton>
+              </Tooltip>
             </List>
-      </Collapse>
-            <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleListItemClick(event, 3)}
-                
-                >
-                    <SummarizeOutlinedIcon/>
-                  <ListItemText primary={'REPORTES'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                </ListItemButton>
-              </ListItem>
-            <ListItem  disablePadding>
-                <ListItemButton 
-                onClick={(event) => handleListItemClick(event, 4)}       
-                >
-                    <ContactSupportOutlinedIcon/>
-                  <ListItemText primary={'AYUDA'} sx={{marginInline:"12px", display:{xs:"none",sm: isOpen ? "none" : "block"}}}/>
-                </ListItemButton>               
-              </ListItem>
-              
-          </List>
-          
-        </Box>
-      </Drawer>
-  )
-}
+          </Collapse>
 
-export default MenuComponent
+          <Tooltip title="CRM" placement="right"componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleExpandCRM()}>
+                <ContactsIcon />
+                <ListItemText primary={'CRM'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
+                {expandCRM ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+            </ListItem>
+          </Tooltip>
+
+          <Collapse in={expandCRM} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Tooltip title="Datos CRM" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ pl: 4 }} onClick={(event) => handleListItemClick(event, 6)}>
+                    <ListItemIcon>
+                      <Groups3Icon />
+                    </ListItemIcon>
+                    <ListItemText primary={'DATOS CRM'} />
+                  </ListItemButton>
+                </ListItem>
+              </Tooltip>
+
+              <Tooltip title="Lista de Contactos" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ pl: 4 }} onClick={(event) => handleListItemClick(event, 7)}>
+                    <ListItemIcon>
+                      <PeopleOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={'LISTA DE CONTACTOS'} />
+                  </ListItemButton>
+                </ListItem>
+              </Tooltip>
+
+              <Tooltip title="Contactos Marketing" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ pl: 4 }} onClick={(event) => handleListItemClick(event, 9)}>
+                    <ListItemIcon>
+                      <PeopleOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={'CONTACTOS MARKETING'} />
+                  </ListItemButton>
+                </ListItem>
+              </Tooltip>
+            </List>
+          </Collapse>
+
+          <Tooltip title="Reportes" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleListItemClick(event, 3)}>
+                <SummarizeOutlinedIcon />
+                <ListItemText primary={'REPORTES'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
+              </ListItemButton>
+            </ListItem>
+          </Tooltip>
+
+          <Tooltip title="Ayuda" placement="right" componentsProps={{
+              tooltip: {
+                sx: { fontSize: '1.2rem' } 
+              },
+            }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={(event) => handleListItemClick(event, 4)}>
+                <ContactSupportOutlinedIcon />
+                <ListItemText primary={'AYUDA'} sx={{ marginInline: "12px", display: { xs: "none", sm: isOpen ? "none" : "block" } }} />
+              </ListItemButton>
+            </ListItem>
+          </Tooltip>
+        </List>
+      </Box>
+    </Drawer>
+  );
+};
+
+export default MenuComponent;

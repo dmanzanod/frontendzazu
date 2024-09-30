@@ -14,14 +14,14 @@ import { Chart } from 'primereact/chart';
 
 const InteractionBookingComponent = ({type,bookings,conversations,title}) => {
  
- const typeBusiness= title.includes('Pedidos')?'Pedidos':'Reservas'
+ const typeBusiness= title.includes('Pedidos')?'PEDIDOS':'RESERVAS '
  const [data,setData]=useState({
-    labels:[typeBusiness,'Conversaciones'],
+    labels:['Conversaciones',typeBusiness],
     datasets:[
       {
-        label:'Número de conversaciones-'+typeBusiness,
+        label:typeBusiness +'Número de conversaciones-',
         backgroundColor: '#42A5F5',
-        data:[bookings.total,conversations.total]
+        data:[conversations.total,bookings.total]
       }
     ]
     
@@ -112,84 +112,86 @@ const handleClickListItem = (event) => {
   },[])
   return (
     <ThemeProvider theme={theme}>
-        <Box sx={{
-           display:'flex',
-           flexDirection:'column',
-           justifyContent:'center',
-           
-           width:{xs:'98%',sm:'100%'},
-           paddingInline:'12px',
-            borderRadius:"20px",
-           backgroundColor:"#FFF",
-           paddingTop:"24px",
-            gap:"24px"
-
-
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start', // Ensures content is aligned to the top
+          alignItems: 'center', // Centers content horizontally
+          width: { xs: '98%', sm: '100%' },
+          padding: '12px 12px', // Manual padding for consistent spacing
+          borderRadius: '20px',
+          backgroundColor: '#FFF',
+          gap: '24px', // Space between components
         }}
         className='chart'
         ref={elementRef}
-        >
-          <Typography variant='h4' sx={{alignSelf:'center',fontSize:{xs:'1.4rem',sm:'1.8rem'}}}>{typeBusiness}-Conversaciones</Typography>
-          <Box sx={{
-            display:'flex',
-            paddingInline:'24px',
-            
-            
-            alignItems:'center',
-            gap:'24px'
-          }}>
-            <Typography variant='h5'>Periodo</Typography>
-          
-          
-          <List
-        component="nav"
-        aria-label="Device settings"
-        sx={{ bgcolor: 'background.paper' }}
       >
-        <ListItem
-          button
-          id="lock-button"
-          aria-haspopup="listbox"
-          aria-controls="lock-menu"
-          
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClickListItem}
+        <Typography
+          variant='h4'
+          sx={{
+            fontSize: { xs: '1.4rem', sm: '1.8rem' },
+            textAlign: 'center', // Centers text horizontally
+            paddingTop: '12px', // Optional space above the title
+          }}
         >
-          <ListItemText
-            
-            primary={optionsLabels[selectedIndex]}
-          />
-        </ListItem>
-      </List>
-      <Menu
-        id="lock-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'lock-button',
-          role: 'listbox',
-        }}
-      >
-        {optionsLabels.map((option, index) => (
-          <MenuItem
-            key={option}
-           
-            selected={index === selectedIndex}
-            onClick={(event) => handleMenuItemClick(event, index)}
+          CONVERSACIONES-{typeBusiness}
+        </Typography>
+  
+        <Box
+          sx={{
+            display: 'flex',
+            paddingInline: '24px',
+            alignItems: 'center',
+            gap: '24px',
+          }}
+        >
+          <Typography variant='h5'>Periodo</Typography>
+  
+          <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <ListItem
+              button
+              id="lock-button"
+              aria-haspopup="listbox"
+              aria-controls="lock-menu"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClickListItem}
+            >
+              <ListItemText primary={optionsLabels[selectedIndex]} />
+            </ListItem>
+          </List>
+  
+          <Menu
+            id="lock-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'lock-button',
+              role: 'listbox',
+            }}
           >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-            </Box>
-            <Chart className='chart__width' type="bar" data={data}  options={optionsChart}/>
-
+            {optionsLabels.map((option, index) => (
+              <MenuItem
+                key={option}
+                selected={index === selectedIndex}
+                onClick={(event) => handleMenuItemClick(event, index)}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </Box>
-
-    
+  
+        <Chart
+          className='chart__width'
+          type="bar"
+          data={data}
+          options={optionsChart}
+        />
+      </Box>
     </ThemeProvider>
-  )
-}
+  );
+            }  
 
 export default InteractionBookingComponent

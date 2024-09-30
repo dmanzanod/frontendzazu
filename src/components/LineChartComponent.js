@@ -55,33 +55,41 @@ const LineChartComponent = ({data,title}) => {
   },[])
   return (
     <ThemeProvider theme={theme}>
-        <Box sx={{
-            display:'flex',
-            flexDirection:'column',
-            justifyContent:'center',
-            
-            width:{xs:'98%',sm:'100%'},
-            paddingInline:'12px',
-             borderRadius:"20px",
-            backgroundColor:"#FFF",
-            
-             gap:"36px"
-
-
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start', // Ensures content is aligned to the top
+          alignItems: 'center', // Centers content horizontally
+          width: { xs: '100%', sm: '100%' },
+          height: { xs: '100%', sm: '100%' },
+          padding: '12px 12px 36px 12px', // Manual padding for consistent spacing
+          borderRadius: '20px',
+          backgroundColor: '#FFF',
+          gap: '36px', // Space between title and chart
         }}
         className='chart'
         ref={elementRef}
+      >
+        <Typography
+          variant='h4'
+          sx={{
+            fontSize: { xs: '1.6rem', sm: '1.8rem' },
+            textAlign: 'center', // Center text horizontally
+            paddingTop: '12px', // Space above the title
+          }}
         >
-            <Typography variant='h4' sx={{alignSelf:'center', fontSize:{xs:'1.6rem',sm:'1.8rem'}}}>Conversaciones </Typography>
-            <Chart type="line" className='chart__width' data={chartData} options={optionsChart}/>
-            
-        
-
-        </Box>
-          
-    
+          CONVERSACIONES
+        </Typography>
+        <Chart
+          type="line"
+          className='chart__width'
+          data={chartData}
+          options={optionsChart}
+        />
+      </Box>
     </ThemeProvider>
-  )
-}
+  );
+        }
 
 export default LineChartComponent

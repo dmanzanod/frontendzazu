@@ -56,6 +56,7 @@ const LoginPage = () => {
         localStorage.setItem('ScheduleId',resp.data.scheduleId);
         localStorage.setItem('url',resp.data.url);
         localStorage.setItem('BusinessType', resp.data.BusinessType);
+        localStorage.setItem('FlowData', resp.data.flowData);
         navigate('/');
         //const isAdminResp = await authAdminVerification();
         // if(isAdminResp.role === 'admin'){

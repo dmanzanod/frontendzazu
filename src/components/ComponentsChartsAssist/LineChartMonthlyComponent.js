@@ -26,7 +26,7 @@ const LineChartMonthlyComponent = ({ title }) => {
     productsFlow: 'Productos',
     mainFlow: 'Inicio conversación',
     whatToDoFlow: 'Menu',
-    botSelectionFlow: 'Inicio conversación',
+    botSelectionFlow: 'Bot selección',
     categoryFlow: "Categorias",
     directContactFlow:"Contacto con asesor",
     inscripcionFlow:'Inscripción',
@@ -252,7 +252,7 @@ const LineChartMonthlyComponent = ({ title }) => {
         padding: '20px 12px', // Adjusted padding to include the gap
         borderRadius: '20px',
         backgroundColor: '#FFF',
-        height: '500px',
+        height: '100%',
       }}
       className="chart"
       ref={elementRef}

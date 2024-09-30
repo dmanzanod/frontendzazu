@@ -211,7 +211,8 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     borderRadius: '20px',
                     backgroundColor: '#FFF',
                     gap: '15px',
-                    height: '500px',
+                    minHeight: '500px',
+                    height:'100%',
                     width: '100%',
                 }}
                 className="chart"
