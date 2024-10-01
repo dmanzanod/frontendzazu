@@ -10,8 +10,8 @@ const FooterComponent = () => {
       component="footer"
       sx={{
         width: '100%',
-        background: '#00CDFF',
-        height: '72px',
+        background: '#F4F3FA',
+        height: '85px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
