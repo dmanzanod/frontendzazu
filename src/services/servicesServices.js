@@ -342,21 +342,42 @@ export const getService= async(id)=>{
     
 
 }
-export const newService=async(values)=>{
+export const newService = async (values) => {
+    const formData = new FormData();
     
-    return await axios.post(`${url}/createServices`,values)
-    .then((response)=>{
-        return response.data
+    console.log("DATOS VALUEs", values);
+  
+    // Append fields to formData
+    formData.append('availableSpaces', values.availableSpaces);
+    formData.append('businessId', values.businessId);
+    formData.append('categoryId', values.categoryId);
+    formData.append('code', values.code);
+    formData.append('coin', values.coin);
+    formData.append('description', values.description);
+    formData.append('details', values.details);
+    formData.append('image', values.image);  // This should be a File object
+    formData.append('name', values.name);
+    formData.append('price', values.price);
+    formData.append('state', values.state);
+    // Send formData instead of values
+    return await axios.post(`${url}/createServices`, formData, {  // Use formData here
+      headers: {
+        "Content-Type": 'multipart/form-data',
+      },
     })
-    .catch((error)=>{
-        return {
-            error: error.message,
-            code: error.code,
-            name: error.name,
-            status:error.response.status
-        }
+    .then((response) => {
+      return response.data;
     })
-}
+    .catch((error) => {
+      return {
+        error: error.message,
+        code: error.code,
+        name: error.name,
+        status: error.response?.status
+      };
+    });
+  };
+  
 export const updateService=async(id,values)=>{
     return await axios.post(`${url}/updateService/${id}`,values)
     .then((response)=>{

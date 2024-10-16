@@ -9,6 +9,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  IconButton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,6 +22,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Principal from "./Principal";
 import AlertComponent from "../components/AlertComponent";
+import { FileUploadOutlined } from '@mui/icons-material'
 const UpdateServicePage = () => {
   const { id } = useParams();
   const [service, setService] = useState({});
@@ -28,6 +30,8 @@ const UpdateServicePage = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(false);
   const[availableSpaces,setAvailableSpaces]=useState(false)
+  const [image,setImage]=useState(null)
+  const [previewImage, setPreviewImage] = useState(null);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("success");
   const navigate = useNavigate();
@@ -37,6 +41,7 @@ const UpdateServicePage = () => {
       console.log(resp);
       if (!resp.error) {
         setService(resp);
+        if (resp.image) setPreviewImage(resp.image);
         if(resp.spaceAvailable){
           setAvailableSpaces(true)
         }
@@ -55,7 +60,12 @@ const UpdateServicePage = () => {
     getServiceById();
     getBusinessCategories();
   }, [id]);
-
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    formik.setFieldValue('image', file);
+    setPreviewImage(URL.createObjectURL(file));
+    setImage(file);
+  };
   const formik = useFormik({
     initialValues: { ...service },
     enableReinitialize: true,
@@ -72,6 +82,17 @@ const UpdateServicePage = () => {
       coin: Yup.string().required("Especifique una moneda"),
       categoryId: Yup.string().required(
         "Seleccione la categoría a la que pertenece el servicio"
+      ),
+      image: Yup.mixed().nullable().test(
+        "type",
+        "Solo puede subir una imagen en formato JPG, JPEG o PNG",
+        function (value) {
+          if (!image) {
+            return true;
+          } else {
+            return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
+          }
+        }
       ),
     }),
     onSubmit: async (values) => {
@@ -256,6 +277,79 @@ const UpdateServicePage = () => {
               <FormHelperText error>{formik.errors.details}</FormHelperText>
             )}
           </FormControl>
+          <FormControl 
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', lg: 'row' }, 
+    gap: '12px', 
+    width: { xs: '100%', sm: '60%', lg: '50%' }
+  }}>
+  {service.image && !image && (
+    <Box 
+      sx={{
+        width: { xs: '100%', lg: '50%' },
+        maxWidth: '100%',       // Restricts image to container width
+        height: 'auto',         // Maintains aspect ratio of the image
+        alignSelf: 'flex-end'
+      }}>
+      <img 
+        className='image__service' 
+        src={`${service.image}`} 
+        alt='prodImage' 
+        style={{ 
+          maxWidth: '100%',     // Ensures the image doesn't overflow
+          height: 'auto' 
+        }} 
+      />
+    </Box>
+  )}
+  {image && (
+    <Box 
+      sx={{
+        width: { xs: '100%', lg: '50%' },
+        maxWidth: '100%',       // Restricts image to container width
+        height: 'auto',         // Maintains aspect ratio of the image
+        alignSelf: 'flex-end'
+      }}>
+      <img 
+        className='image__service' 
+        src={previewImage} 
+        alt='prodImage' 
+        style={{
+          maxWidth: '100%',     // Ensures the image doesn't overflow
+          height: 'auto' 
+        }} 
+      />
+    </Box>
+  )}
+  <TextField
+    sx={{ alignSelf: { xs: 'flex-start', lg: 'flex-end' }, width: { xs: '100%', lg: '50%' } }}
+    variant="filled"
+    value={image?.name || service.image || ''}
+    type="text"
+    label='Imagen'
+    InputLabelProps={{ shrink: true }}
+    InputProps={{
+      endAdornment: (
+        <IconButton component='label'>
+          <FileUploadOutlined />
+          <input
+            styles={{ display: "none" }}
+            type="file"
+            accept="image/jpeg,image/png,image/jpg"
+            hidden
+            onChange={(e) => handleUpload(e)}
+            name="image"
+          />
+        </IconButton>
+      ),
+    }}
+  />
+  {formik.touched.image && formik.errors.image && (
+    <FormHelperText>{formik.errors.image}</FormHelperText>
+  )}
+</FormControl>
+
           {availableSpaces && 
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
             

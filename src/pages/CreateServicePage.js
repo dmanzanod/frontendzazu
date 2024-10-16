@@ -4,7 +4,7 @@ import { Box, Button, Checkbox, CircularProgress, FormControl, FormControlLabel,
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { getCategories, newService } from '../services/servicesServices'
-import { AddOutlined } from '@mui/icons-material'
+import { AddOutlined,FileUploadOutlined } from '@mui/icons-material'
 import NewCategoryModal from '../components/NewCategoryModal'
 import { useNavigate } from 'react-router-dom'
 import AlertComponent from '../components/AlertComponent'
@@ -15,12 +15,19 @@ const CreateServicePage = () => {
     const [loading,setLoading]=useState(false)
     const[alert,setAlert]=useState(false)
     const[availableSpaces,setAvailableSpaces]=useState(false)
+    const [image,setImage]=useState(null)
+    const [previewImage, setPreviewImage] = useState(null);
     const [severity,setSeverity]=useState('success')
     const [message,setMessage]=useState('Servicio creado exitosamente.')
     const navigate= useNavigate()
     
     const handleClose=()=>{
         setOpen(false)
+    }
+    const  handleUpload=(event)=>{
+      formik.setFieldValue('image',event.target.files[0])
+      setPreviewImage(URL.createObjectURL(event.target.files[0]))
+      setImage(event.target.files[0])
     }
     const handleAvailableSpaces=(e)=>{
         setAvailableSpaces(e.target.checked)
@@ -39,8 +46,8 @@ const CreateServicePage = () => {
             availableSpaces:0,
             state:true,
             categoryId:"",
-            businessId:localStorage.getItem('Business')
-
+            businessId:localStorage.getItem('Business'),
+            image: null,
         },
         
         validationSchema:Yup.object({
@@ -52,8 +59,16 @@ const CreateServicePage = () => {
             availableSpaces:Yup.number().integer('Los cupos deben ser positivos'),
             price:Yup.number().integer('El precio debe ser positivo').required('El precio es requerido'),
             coin:Yup.string().required('Especifique una moneda'),
-            categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio')
-        }),
+            categoryId:Yup.string().required('Seleccione la categoría a la que pertenece el servicio'),
+            image: Yup.mixed().nullable()
+            .test("type", "Solo puede subir una imagen", function (value) {
+              if (!image) {
+                return true
+              } else {
+                return value && (value.type === "image/jpg" || value.type === "image/jpeg" || value.type === "image/png");
+              }
+            }),
+          }),
         onSubmit:async(values)=>{
             setLoading(true)
             const resp= await newService(values)
@@ -248,6 +263,37 @@ const CreateServicePage = () => {
               }
               label="Cupos disponibles?"
             />
+          </FormControl>
+          <FormControl sx={{display:'flex',flexDirection:{xs:'column',lg:'row'}, gap:'12px', width:{xs:'100%', sm:'60%', lg:'50%'}}}>
+          {image&&
+          <Box sx={{width:{xs:'100%',lg:'50%'},alignSelf:'flex-end'}}>
+            <img className='image__product' src={previewImage} alt='prodImage'/>
+          </Box>}
+          
+          <TextField
+          sx={{alignSelf:{xs:'flex-start',lg:'flex-end'}, width:{xs:'100%',lg:'50%'}}}
+      variant="filled"
+      value={image?.name|| ''}          
+      type="text"
+      label='Imagen'
+      InputLabelProps={{ shrink: true }}
+      InputProps={{
+        endAdornment: (
+          <IconButton component='label'>
+            <FileUploadOutlined />
+            <input
+              styles={{display:"none"}}
+              type="file"
+              accept="image/jpeg,image/png,image/jpg"
+              hidden
+              onChange={(e)=>handleUpload(e)}
+              name="image"
+            />
+          </IconButton>
+        ),
+      }}
+    />
+    {formik.touched.image && formik.errors.image&&<FormHelperText>{formik.errors.image}</FormHelperText>}
           </FormControl>
           {availableSpaces && 
           <FormControl sx={{ width:{xs:'100%', sm:'60%', lg:'50%'}}}>
