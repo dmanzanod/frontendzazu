@@ -92,7 +92,7 @@ const CRMComponent = () => {
       mainFlow: 'Inicio conversación',
       BuyFlow: 'Compras o Reservas',
       morningSelectionFlow: 'Seleccionando horarios',
-      botSelectionFlow: 'Inicio conversación',
+      botSelectionFlow: 'Selección Bot',
       directContactFlow: 'Consultas',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
@@ -163,7 +163,7 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
     const flowMappings = {
         "morningSelectionFlow": "Seleccionando horarios",
         "BuyFlow": "Compras o Reservas",
-        "botSelectionFlow": "Inicio conversación",
+        "botSelectionFlow": "Selección Bot",
         "mainFlow": "Inicio conversación",
         "preciosMensualidad": "Seleccionó precios",
         "cursoHorario": "Seleccionó horarios",
