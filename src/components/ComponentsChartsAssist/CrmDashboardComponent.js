@@ -139,10 +139,10 @@ const CrmDashboardComponent = () => {
     const flowNames = {
       scheduleFlow: 'Horarios',
       pricesFlow: 'Compra',
-      mainFlow: 'Inicio conversación',
-      BuyFlow: 'Compras o Reservas',
+      mainFlow: 'Inicio de conversaciones',
+      BuyFlow: 'Agenda de reunión',
       morningSelectionFlow: 'Seleccionando horarios',
-      botSelectionFlow: 'Selección Bot',
+      botSelectionFlow: 'Selección de bot',
       directContactFlow: 'Contacto con asesor',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
@@ -175,9 +175,9 @@ const CrmDashboardComponent = () => {
 
     const flowMappings = {
       "morningSelectionFlow": "Seleccionando horarios",
-      "BuyFlow": "Compras o Reservas",
-      "botSelectionFlow": "Selección Bot",
-      "mainFlow": "Inicio conversación",
+      "BuyFlow": "Agenda de reunión",
+      "botSelectionFlow": "Selección de bot",
+      "mainFlow": "Inicio de conversaciones",
       "preciosMensualidad": "Seleccionó precios",
       "cursoHorario": "Seleccionó horarios",
       "directContactFlow": "Seleccionó contacto directo",
