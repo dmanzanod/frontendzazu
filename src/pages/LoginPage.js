@@ -24,7 +24,6 @@ const LoginPage = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [severity,setSeverity]=useState('error')
     const navigate =useNavigate()
-    console.log("VAlor de url\n",`${process.env.PUBLIC_URL}`)
     const handleCheckboxChange = (checked) => {
       setIsAdmin(checked);
     };
@@ -57,6 +56,8 @@ const LoginPage = () => {
         localStorage.setItem('url',resp.data.url);
         localStorage.setItem('BusinessType', resp.data.BusinessType);
         localStorage.setItem('FlowData', resp.data.flowData);
+        localStorage.setItem('flowDataNotPermitted', JSON.stringify(resp.data.flowDataNotPermitted));
+        console.log(resp.data.flowDataNotPermitted)
         navigate('/');
         //const isAdminResp = await authAdminVerification();
         // if(isAdminResp.role === 'admin'){

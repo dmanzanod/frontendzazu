@@ -16,11 +16,13 @@ const HeaderComponent = () => {
     '/qr': 'GENERAR QR',
     [`/categories/${businessId}`]: 'CATEGORÍAS',
     [`/products/${businessId}`]: 'PRODUCTOS',
-    [`/businessDetailsUpdate/${businessId}`]: 'INFORMACIÓN',
+    [`/categories/${businessId}`]: 'CATEGORÍAS',
+    '/serviceUpdate/': 'ACTUALIZAR SERVICIO',
+    '/productUpdate/': 'ACTUALIZAR PRODUCTO',
     '/excelUpload': 'CARGAR EXCEL',
     '/help': 'AYUDA',
-    '/crmData': 'DATOS CRM',
-    '/crmPersonalInformation': 'LISTA DE CONTACTOS',
+    '/crmData': 'EMBUDO DE CONVERSION',
+    '/crmPersonalInformation': 'CRM',
     '/fileUploadText': 'CARGAR TEXTO',
     '/contactList': 'CONTACTOS MARKETING',
     '/report': 'REPORTES',
@@ -30,7 +32,7 @@ const HeaderComponent = () => {
   const currentPath = location.pathname;
 
   // Get the title for the current path
-  const title = pathToTitle[currentPath] || 'Default Header Title';
+  const title = pathToTitle[currentPath] || 'ACTUALIZAR';
 
   const handleClick = () => {
     handleClose();

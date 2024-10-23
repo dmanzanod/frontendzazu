@@ -230,7 +230,7 @@ const MenuComponent = () => {
 
           <Collapse in={expandCRM} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <Tooltip title="Datos CRM" placement="right" componentsProps={{
+              <Tooltip title="EMBUDO DE CONVERSIÓN" placement="right" componentsProps={{
               tooltip: {
                 sx: { fontSize: '1.2rem' } 
               },
@@ -240,12 +240,12 @@ const MenuComponent = () => {
                     <ListItemIcon>
                       <Groups3Icon />
                     </ListItemIcon>
-                    <ListItemText primary={'DATOS CRM'} />
+                    <ListItemText primary={'EMBUDO DE CONVERSIÓN'} />
                   </ListItemButton>
                 </ListItem>
               </Tooltip>
 
-              <Tooltip title="Lista de Contactos" placement="right" componentsProps={{
+              <Tooltip title="CRM" placement="right" componentsProps={{
               tooltip: {
                 sx: { fontSize: '1.2rem' } 
               },
@@ -255,7 +255,7 @@ const MenuComponent = () => {
                     <ListItemIcon>
                       <PeopleOutlineIcon />
                     </ListItemIcon>
-                    <ListItemText primary={'LISTA DE CONTACTOS'} />
+                    <ListItemText primary={'CRM'} />
                   </ListItemButton>
                 </ListItem>
               </Tooltip>

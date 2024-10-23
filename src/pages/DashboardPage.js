@@ -44,6 +44,8 @@ const DashboardPage = () => {
   const [salesMonth,setSalesMonth]=useState(0)
   const type=localStorage.getItem('type')
   let BusinessType = localStorage.getItem('BusinessType');
+  let BusinessFlowDataNotPermitted = JSON.parse(localStorage.getItem('flowDataNotPermitted') || '[]');
+  console.log("Valor busines\n", BusinessFlowDataNotPermitted )
   let BusinessFlow = localStorage.getItem('FlowData')
   if (BusinessType === "undefined") {
     BusinessType = "";
@@ -259,7 +261,7 @@ const DashboardPage = () => {
         {/* First row: Two components, each taking 50% of the width */}
         <Box sx={{ display: "flex", width: "100%", gap: "24px" }}>
           <Box sx={{ flex: 1 }}>
-            <BarChartHighToLowComponent title={'PROGRAMAS'} filterCondition="mainFlow" />
+            <BarChartHighToLowComponent title={'PROGRAMAS'} filterCondition={BusinessFlow}/>
           </Box>
           <Box sx={{ width: uniqueCategory > 5 ? { xs: '100%', sm: '100%' } : '50%' }}>
                 {<BarChartCategoriaComponent title={'Categoría'} filterCondition = "categoryFlow" />}
@@ -312,7 +314,8 @@ const DashboardPage = () => {
             borderRadius: "15px",
           }}
         >
-          <CrmDashboardComponent />
+          <CrmDashboardComponent flowNamesNotPermitted={BusinessFlowDataNotPermitted}/>
+
         </Box>
       </React.Fragment>
         )}
@@ -359,7 +362,7 @@ const DashboardPage = () => {
                 {<DualBarChartComponent title={'Conversaciones VS Consultas'}/>}
               </Box>
             </Box>
-              <CrmDashboardComponent></CrmDashboardComponent>
+            <CrmDashboardComponent flowNamesNotPermitted={BusinessFlowDataNotPermitted}/>
           </React.Fragment>
         )}
       </Box>

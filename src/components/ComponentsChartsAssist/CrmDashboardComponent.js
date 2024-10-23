@@ -8,7 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const CrmDashboardComponent = () => {
+const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
   const [crmData, setCrmData] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('day');
   const [crmDataByYear, setCrmDataByYear] = useState([]);
@@ -100,11 +100,15 @@ const CrmDashboardComponent = () => {
   }, [crmData]);
 
   const processData = (data) => {
+    console.log(flowNamesNotPermitted)
     const flowPriorities = ['Inicio conversación', 'Categoría', 'Contacto con asesor', 'Programas'];
-  
+    const validFlowNamesNotPermitted = Array.isArray(flowNamesNotPermitted) ? flowNamesNotPermitted : [];
     const flowMap = {};
     data.forEach((entry) => {
       const { lastFlow } = entry;
+      if (validFlowNamesNotPermitted.includes(lastFlow)) {
+        return;
+      }
       if (!flowMap[lastFlow]) {
         flowMap[lastFlow] = 0;
       }
@@ -143,7 +147,7 @@ const CrmDashboardComponent = () => {
       BuyFlow: 'Agenda de reunión',
       morningSelectionFlow: 'Seleccionando horarios',
       botSelectionFlow: 'Selección de bot',
-      directContactFlow: 'Contacto con asesor',
+      directContactFlow: 'Selecciono de hablar con humano',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categoría',
@@ -180,7 +184,7 @@ const CrmDashboardComponent = () => {
       "mainFlow": "Inicio de conversaciones",
       "preciosMensualidad": "Seleccionó precios",
       "cursoHorario": "Seleccionó horarios",
-      "directContactFlow": "Seleccionó contacto directo",
+      "directContactFlow": "Selecciono de hablar con humano",
       'categoryFlow': 'Categoría',
       'inscripcionFlow':'Programas',
       'completeInscriptionFlow':'Inscripción completada'
