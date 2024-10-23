@@ -44,7 +44,14 @@ const DashboardPage = () => {
   const [salesMonth,setSalesMonth]=useState(0)
   const type=localStorage.getItem('type')
   let BusinessType = localStorage.getItem('BusinessType');
-  let BusinessFlowDataNotPermitted = JSON.parse(localStorage.getItem('flowDataNotPermitted') || '[]');
+  let flowDataRaw = localStorage.getItem('flowDataNotPermitted');
+  let BusinessFlowDataNotPermitted = [];
+
+  if (flowDataRaw) {
+          BusinessFlowDataNotPermitted = JSON.parse(flowDataRaw);
+  } else {
+      console.warn("No flowDataNotPermitted found in localStorage.");
+  }
   console.log("Valor busines\n", BusinessFlowDataNotPermitted )
   let BusinessFlow = localStorage.getItem('FlowData')
   if (BusinessType === "undefined") {
