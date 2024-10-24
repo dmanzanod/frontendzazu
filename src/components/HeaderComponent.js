@@ -61,7 +61,7 @@ const HeaderComponent = () => {
       >
         <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ width: '100%', paddingInline: '16px' }}>
-            <img className='logo' src={`${process.env.PUBLIC_URL}/LOGO ZAZÚ-01.png`} alt='logo' />
+            <img className='logo' src={`${process.env.PUBLIC_URL}/LOGOZAZÚ-01.png`} alt='logo' />
           </Box>
           <Typography
             variant="h6"
