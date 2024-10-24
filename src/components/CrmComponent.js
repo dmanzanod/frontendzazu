@@ -299,7 +299,7 @@ const filterDataHandleBlockMonth = (data, blockLabel, currentDate) => {
       const chart = new D3Funnel(container.current);
       chart.draw(data, options);
     } else {
-      container.current.innerHTML = '<p>No se encuentran datos del CRM</p>';
+      container.current.innerHTML = '<p>No se encuentran datos del embudo de conversión</p>';
     }
   };
 
@@ -347,7 +347,7 @@ const filterDataHandleBlockMonth = (data, blockLabel, currentDate) => {
 
   return (
     <div style={{ textAlign: 'center', marginTop: '60px', width: '100%' }}>
-      <h1 style={{ alignSelf: 'center', flex: '1' }}>CRM</h1>
+      <h1 style={{ alignSelf: 'center', flex: '1' }}>Embudo de conversión</h1>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flexWrap:'wrap'}}>
         {/* Row 1 */}
         <div style={{ width: '100%', maxWidth: '550px', margin: '30px', paddingTop:'20px' }} ref={chartContainer}></div>
