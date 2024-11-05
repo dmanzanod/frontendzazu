@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, } from 'react';
 import D3Funnel from 'd3-funnel';
 import { getCrmDataByYear, getTotalCrmDataByDates } from '../../services/service';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import { Button, Modal, TextField } from '@mui/material';
+import { Button, Modal, TextField, Box, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -92,7 +92,6 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Entro a use effect para dibujar ")
     if (chartContainer.current && crmData.length > 0) {
       const processedData = processData(crmData);
       drawFunnelChart(chartContainer, processedData, 1);
@@ -147,7 +146,7 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       BuyFlow: 'Agenda de reunión',
       morningSelectionFlow: 'Seleccionando horarios',
       botSelectionFlow: 'Selección de bot',
-      directContactFlow: 'Selecciono de hablar con humano',
+      directContactFlow: 'Seleccionó contacto HH',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categoría',
@@ -184,7 +183,7 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       "mainFlow": "Inicio de conversaciones",
       "preciosMensualidad": "Seleccionó precios",
       "cursoHorario": "Seleccionó horarios",
-      "directContactFlow": "Selecciono de hablar con humano",
+      "directContactFlow": "Seleccionó contacto HH",
       'categoryFlow': 'Categoría',
       'inscripcionFlow':'Programas',
       'completeInscriptionFlow':'Inscripción completada'
@@ -231,7 +230,6 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       "lastProduct": "Ultimo mensaje",
       "lastFlow": "Flujo actual",
       "createdAt": "Creado en",
-      // Add more translations as needed
     };
 
     return translations[header] || header;
@@ -279,12 +277,34 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       const chart = new D3Funnel(container.current);
       chart.draw(data, options);
     } else {
-      container.current.innerHTML = '<p>No se encuentran datos del CRM</p>';
+      container.current.innerHTML = '<p>No se encuentran Embudo de conversión</p>';
     }
   };
   return (
-    <div style={{ textAlign: 'center', marginTop: '60px', width: '100%' }}>
-      <h1 style={{ alignSelf: 'center', flex: '1' }}>CRM</h1>
+    <div style={{ textAlign: 'center', width: '100%' }}>
+      <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        borderBottom: '2px solid #313C95',
+        padding: '10px',
+        background: '#313C95',
+        width: '100%',
+        borderTopLeftRadius: '15px',
+        borderTopRightRadius: '15px',
+        justifyContent: 'center',
+      }}
+    >
+      <Typography
+        variant="h4" 
+        sx={{
+          color: 'white', 
+          textAlign: 'center',
+        }}
+      >
+        Embudo de conversión
+      </Typography>
+    </Box>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
          <Button onClick={handleOpenDateRangeModal}>Filtrar por fecha</Button>
       {/*Modal for error message*/}

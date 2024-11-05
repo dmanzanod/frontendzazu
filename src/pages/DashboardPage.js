@@ -253,6 +253,7 @@ const DashboardPage = () => {
     <Principal>
   <Box
     component="main"
+    className='dashboard-page'
     sx={{
       flexGrow: 1,
       p: { xs: 1, sm: 1, md: 5 },
@@ -271,7 +272,7 @@ const DashboardPage = () => {
             <BarChartHighToLowComponent title={'PROGRAMAS'} filterCondition={BusinessFlow}/>
           </Box>
           <Box sx={{ width: uniqueCategory > 5 ? { xs: '100%', sm: '100%' } : '50%' }}>
-                {<BarChartCategoriaComponent title={'Categoría'} filterCondition = "categoryFlow" />}
+                {<BarChartCategoriaComponent title={'CATEGORÍAS'} filterCondition = "categoryFlow" />}
           </Box>
         </Box>
 

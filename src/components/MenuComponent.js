@@ -58,16 +58,32 @@ const MenuComponent = () => {
     <Drawer
       variant="permanent"
       sx={{
-        width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' },
+        width: isOpen ? "60px" : { xs: "240px", sm: "240px", lg: '240px' },
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
-          width: isOpen ? "60px" : { xs: "60px", sm: "180px", lg: '240px' },
+          width: isOpen ? "60px" : { xs: "240px", sm: "240px", lg: '240px' },
           boxSizing: 'border-box',
+          backgroundColor: '#40B6E9',
         },
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'hidden' }}>
+      <Box sx={{ overflow: 'auto',
+      '&::-webkit-scrollbar': {
+        width: '8px',
+        height: '8px',
+      },
+      '&::-webkit-scrollbar-track': {
+        backgroundColor: '#40B6E9',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#006f9b',
+        borderRadius: '10px',
+      },
+      '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: '#004f75',
+      }
+    }}>
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={toggleMenu}>

@@ -207,7 +207,7 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    paddingInline: '12px',
+                    //paddingInline: '12px',
                     borderRadius: '20px',
                     backgroundColor: '#FFF',
                     gap: '15px',
@@ -218,8 +218,8 @@ const BarChartCategoriaComponent = ({ title, filterCondition }) => {
                 className="chart"
                 ref={elementRef}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h4" sx={{ fontSize: { xs: '1.4rem', sm: '1.8rem' }, marginTop: '5px', textAlign: 'center', flex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center',background:'#313C95', padding: '10px',borderTopLeftRadius: '15px',borderTopRightRadius: '15px',  }}>
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.4rem', sm: '1.8rem' },fontFamily:"Poppins-semiBold", marginTop: '5px', textAlign: 'center', flex: 1, color:'white' }}>
                         {title}
                     </Typography>
                     <IconButton onClick={handleOpenDateRangeModal}>

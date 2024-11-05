@@ -249,7 +249,7 @@ const LineChartMonthlyComponent = ({ title }) => {
         flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
-        padding: '20px 12px', // Adjusted padding to include the gap
+        //padding: '20px 12px',
         borderRadius: '20px',
         backgroundColor: '#FFF',
         height: '100%',
@@ -257,15 +257,34 @@ const LineChartMonthlyComponent = ({ title }) => {
       className="chart"
       ref={elementRef}
     >
-      <Typography variant="h4" sx={{ fontSize: { xs: '1.6rem', sm: '1.8rem' } }}>
-        {title}
-      </Typography>
+      <Box
+    sx={{
+      width: '100%',      
+      textAlign: 'center',
+      borderBottom: '2px solid lightblue',
+      padding: '12px',
+      background:'#313C95',
+      borderTopLeftRadius: '12px',
+      borderTopRightRadius: '12px',
+    }}
+  >
+    <Typography
+      variant="h4"
+      sx={{
+        fontSize: { xs: '1.6rem', sm: '1.8rem' },
+        color:'white'
+      }}
+    >
+      {title}
+    </Typography>
+  </Box>
       <Box
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
         width: '100%',
         marginTop: '20px',
+        padding: '20px 12px',
       }}
     >
       <FormControl 
@@ -312,7 +331,7 @@ const LineChartMonthlyComponent = ({ title }) => {
       </FormControl>
     </Box>
 
-      <div style={{ marginTop: '20px', width: '100%', height: '100%' }}>
+      <div style={{ marginTop: '20px', width: '100%', height: '100%',padding: '20px 12px', }}>
         <Chart type="line" className="chart__width" data={chartData} options={optionsChart} style={{ width: '100%', height: '100%' }} />
       </div>
     </Box>

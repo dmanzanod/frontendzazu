@@ -93,7 +93,7 @@ const CRMComponent = () => {
       BuyFlow: 'Agenda de reunión',
       morningSelectionFlow: 'Seleccionando horarios',
       botSelectionFlow: 'Selección de bot',
-      directContactFlow: 'Selecciono de hablar con humano',
+      directContactFlow: 'Seleccionó contacto HH',
       cursoHorario: 'Cursos y horarios',
       preciosMensualidad: 'Precios de la mensualidad',
       categoryFlow: 'Categorías',
@@ -167,7 +167,7 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
         "mainFlow": "IInicio de conversaciones",
         "preciosMensualidad": "Seleccionó precios",
         "cursoHorario": "Seleccionó horarios",
-        "directContactFlow": "Selecciono de hablar con humano",
+        "directContactFlow": "Seleccionó contacto HH",
         'categoryFlow': 'Categorías',
         'inscripcionFlow':'Programas',
         'completeInscriptionFlow':'Inscripción completa',
@@ -346,8 +346,7 @@ const filterDataHandleBlockMonth = (data, blockLabel, currentDate) => {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '60px', width: '100%' }}>
-      <h1 style={{ alignSelf: 'center', flex: '1' }}>Embudo de conversión</h1>
+    <div style={{ textAlign: 'center', marginTop: '60px', width: '100%', paddingTop:'80px' }}>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flexWrap:'wrap'}}>
         {/* Row 1 */}
         <div style={{ width: '100%', maxWidth: '550px', margin: '30px', paddingTop:'20px' }} ref={chartContainer}></div>

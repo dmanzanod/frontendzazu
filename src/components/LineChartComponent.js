@@ -63,7 +63,7 @@ const LineChartComponent = ({data,title}) => {
           alignItems: 'center', // Centers content horizontally
           width: { xs: '100%', sm: '100%' },
           height: { xs: '100%', sm: '100%' },
-          padding: '12px 12px 36px 12px', // Manual padding for consistent spacing
+          //padding: '12px 12px 36px 12px', // Manual padding for consistent spacing
           borderRadius: '20px',
           backgroundColor: '#FFF',
           gap: '36px', // Space between title and chart
@@ -71,21 +71,37 @@ const LineChartComponent = ({data,title}) => {
         className='chart'
         ref={elementRef}
       >
+             <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: '2px solid #313C95',
+                padding: '10px',
+                background: '#313C95',
+                width: '100%',
+                borderTopLeftRadius: '15px',
+                borderTopRightRadius: '15px', 
+                justifyContent: 'center',
+              }}
+            >
         <Typography
           variant='h4'
           sx={{
             fontSize: { xs: '1.6rem', sm: '1.8rem' },
-            textAlign: 'center', // Center text horizontally
-            paddingTop: '12px', // Space above the title
+            textAlign: 'center',
+            paddingTop: '12px',
+            color:'white'
           }}
         >
           CONVERSACIONES
         </Typography>
+        </Box>
         <Chart
           type="line"
           className='chart__width'
           data={chartData}
           options={optionsChart}
+          style={{padding:'20px 12px 12px 12px'}}
         />
       </Box>
     </ThemeProvider>

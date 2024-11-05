@@ -126,8 +126,9 @@ const ContactDashboardComponent = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ textAlign: 'center', margin: 'auto', marginTop: '70px' }}>
-        <Typography variant="h2" gutterBottom>Contactos</Typography>
+      <Box sx={{ textAlign: 'center', margin: 'auto', marginTop: '70px', paddingTop:'90px' }}>
+        {//<Typography variant="h2" gutterBottom>Contactos</Typography>
+        }
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, marginBottom: '20px' }}>
           <FormControl sx={{ minWidth: 200, width: '200px' }}>
             <InputLabel id="list-selector-label">Select List</InputLabel>

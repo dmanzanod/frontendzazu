@@ -8,7 +8,7 @@ import theme from '../theme/theme'
 const Principal = ({children}) => {
   return (
     <ThemeProvider theme={theme}>
-    <Box sx={{ display: 'flex',background:'#F4F3FA',position:'relative',minHeight:'100vh',flexDirection:'column'}}>
+    <Box sx={{ display: 'flex',background:'#F4F3FA',position:'relative',minHeight:'100vh',minWidth:'100vw',flexDirection:'column'}}>
       <CssBaseline />
       <HeaderComponent/>
       <Box sx={{

@@ -41,6 +41,23 @@ const theme = createTheme({
     // E.g., shift from Red 500 to Red 300 or Red 700.
     tonalOffset: 0.2,
   },
+  typography: {
+    fontFamily: '"Poppins-semiBold", sans-serif',  // Or the font defined in your app.css
+  },
+  components: {
+    MuiListItemText: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': {
+            fontFamily: 'Poppins-medium, sans-serif',
+          },
+        },
+        primary: {
+          fontFamily: 'Poppins-medium, sans-serif', // Apply the font to all ListItemText
+        },
+      },
+    },
+  },
 });
 
 export default theme

@@ -103,13 +103,10 @@ const ProductService = () => {
           gap: "20px",
           backgroundColor: "#fff",
           height:'100%',
-          paddingBottom:'24px'
+          paddingBottom:'24px',
+          paddingTop:'90px',
         }}
       >
-        <Typography variant="h3" color="primary" sx={{ mt: 10 }}>
-          {type === "services" ? "Servicios" : "Productos"}
-        </Typography>
-
         
           <Button
             variant="contained"

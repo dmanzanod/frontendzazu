@@ -257,7 +257,7 @@
             flexGrow:1
           }}
         >
-          <Typography variant='h3' color={'primary'}>Agenda</Typography>
+          
           <AlertComponent open={alert} severity={severity} message={message} handleClose={()=>setAlert(false) } route={'/'}/>
           <Box sx={{
               display:'flex', 

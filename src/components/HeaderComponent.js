@@ -9,18 +9,21 @@ const HeaderComponent = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const type = localStorage.getItem("type");
   // Define the path to title mapping
   const pathToTitle = {
     '/': 'DASHBOARD',
     '/qr': 'GENERAR QR',
     [`/categories/${businessId}`]: 'CATEGORÍAS',
-    [`/products/${businessId}`]: 'PRODUCTOS',
+    [`/products/${businessId}`]: type === 'services' ? 'SERVICIOS' : 'PRODUCTOS',
     [`/categories/${businessId}`]: 'CATEGORÍAS',
     '/serviceUpdate/': 'ACTUALIZAR SERVICIO',
     '/productUpdate/': 'ACTUALIZAR PRODUCTO',
+    [`/bookingDetails/${businessId}`]: type === 'services' ? 'RESERVAS' : 'PEDIDOS',
     '/excelUpload': 'CARGAR EXCEL',
     '/help': 'AYUDA',
+    '/schedule': 'AGENDA',
+    [`/businessDetailsUpdate/${businessId}`]: 'DATOS DEL NEGOCIO',
     '/crmData': 'EMBUDO DE CONVERSION',
     '/crmPersonalInformation': 'CRM',
     '/fileUploadText': 'CARGAR TEXTO',
