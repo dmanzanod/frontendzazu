@@ -31,8 +31,11 @@ body { min-height: 100vh; background-color: #442ce4!important;}
   font-family: 'Poppins-bold';
   src: url('./assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'Poppins-semiBold';
+  src: url('./assets/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+}
 .logo{
-  
   width:100px;
   object-position: center;
 }
@@ -50,10 +53,34 @@ body { min-height: 100vh; background-color: #442ce4!important;}
 background-repeat: no-repeat;
 background-position: center;
 background-size: contain;
-  
+
 
 background-color:#0C045C;
 }
+
+.watermark {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-image: url('../public/ZAZÚ-celeste-completo.png'); /* Replace with the actual path to your image */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%; /* Adjust size as needed */
+  opacity: 0.1;
+  z-index: 1000;
+  pointer-events: none;
+}
+.dashboard-page .watermark {
+  display: none;
+}
+.app-content {
+  position: relative;
+  z-index: 1;
+}
+
 .form__update{
   display:flex;
   flex-direction:column;

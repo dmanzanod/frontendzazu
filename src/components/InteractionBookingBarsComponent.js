@@ -33,7 +33,7 @@ const [optionsChart,setOptionsChart]= useState({
       y: {
           beginAtZero: true
       }
-  }
+  },
 })
     const optionsLabels=['mes','trimestre','semestre']
     const dispatch = useDispatch();
@@ -119,7 +119,7 @@ const handleClickListItem = (event) => {
           justifyContent: 'flex-start', // Ensures content is aligned to the top
           alignItems: 'center', // Centers content horizontally
           width: { xs: '98%', sm: '100%' },
-          padding: '12px 12px', // Manual padding for consistent spacing
+          //padding: '12px 12px', // Manual padding for consistent spacing
           borderRadius: '20px',
           backgroundColor: '#FFF',
           gap: '24px', // Space between components
@@ -127,23 +127,38 @@ const handleClickListItem = (event) => {
         className='chart'
         ref={elementRef}
       >
+         <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      borderBottom: '2px solid #313C95', // Bottom border for separation
+      padding: '10px', // Padding around the content
+      background: '#313C95', // Background color
+      width: '100%', // Full width of the parent
+      borderTopLeftRadius: '15px', // Rounded corners
+      borderTopRightRadius: '15px', // Rounded corners
+      justifyContent: 'center', // Centers the typography inside the box
+    }}
+  >
         <Typography
           variant='h4'
           sx={{
             fontSize: { xs: '1.4rem', sm: '1.8rem' },
-            textAlign: 'center', // Centers text horizontally
-            paddingTop: '12px', // Optional space above the title
+            textAlign: 'center',
+            paddingTop: '12px',
+            color:'white'
           }}
         >
           CONVERSACIONES-{typeBusiness}
         </Typography>
-  
+        </Box>
         <Box
           sx={{
             display: 'flex',
             paddingInline: '24px',
             alignItems: 'center',
             gap: '24px',
+            
           }}
         >
           <Typography variant='h5'>Periodo</Typography>
@@ -182,14 +197,14 @@ const handleClickListItem = (event) => {
             ))}
           </Menu>
         </Box>
-  
         <Chart
           className='chart__width'
           type="bar"
           data={data}
           options={optionsChart}
+          style={{padding:'0px 12px 12px 12px'}}
         />
-      </Box>
+        </Box>
     </ThemeProvider>
   );
             }  
