@@ -195,11 +195,9 @@ const filterChartData = (data, blockLabel, applyFilter = false) => {
 };
 
 const downloadExcelFile = (data, fileName) => {
-    // Transform specific data into Excel format
     const ws = XLSX.utils.json_to_sheet(data);
     const headers = Object.keys(data[0]);
 
-    // Change headers if needed
     headers.forEach((header, index) => {
         const cell = ws[XLSX.utils.encode_cell({ r: 0, c: index })];
         if (cell && cell.v === header) {
@@ -211,7 +209,6 @@ const downloadExcelFile = (data, fileName) => {
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const dataBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
 
-    // Trigger file download with a dynamic filename
     FileSaver.saveAs(dataBlob, `${fileName}.xlsx`);
 };
 

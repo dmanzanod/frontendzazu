@@ -111,9 +111,6 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       if (!flowMap[lastFlow]) {
         flowMap[lastFlow] = 0;
       }
-      if (lastFlow !== 'directContactFlow') {
-        flowMap[lastFlow]++;
-      }
     });
   
     // Filter out entries with a value of 0
