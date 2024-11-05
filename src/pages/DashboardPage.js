@@ -370,7 +370,19 @@ const DashboardPage = () => {
                 {<DualBarChartComponent title={'Conversaciones VS Consultas'}/>}
               </Box>
             </Box>
+            <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            gap: "12px",
+            mb: 2,
+            backgroundColor: "#fff",
+            borderRadius: "15px",
+          }}
+        >
             <CrmDashboardComponent flowNamesNotPermitted={BusinessFlowDataNotPermitted}/>
+            </Box>
           </React.Fragment>
         )}
       </Box>

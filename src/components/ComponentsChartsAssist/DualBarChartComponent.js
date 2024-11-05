@@ -187,7 +187,6 @@ const DualBarChartComponent = ({ title }) => {
             >
                 <Box sx={{ width: '100%',      
                             textAlign: 'center',
-                            borderBottom: '2px solid lightblue',
                             padding: '10px',
                             background:'#313C95',
                             borderTopLeftRadius: '12px',
