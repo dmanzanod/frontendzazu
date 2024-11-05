@@ -175,18 +175,24 @@ const DualBarChartComponent = ({ title }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    paddingInline: '12px',
+                    //paddingInline: '12px',
                     borderRadius: '20px',
                     backgroundColor: '#FFF',
-                    gap: '15px',
-                    height: '500px',
+                    //gap: '15px',
+                    height: '100%',
                     width: '100%',
                 }}
                 className="chart"
                 ref={elementRef}
             >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h4" sx={{ fontSize: { xs: '1.4rem', sm: '1.8rem' }, marginTop: '5px', textAlign: 'center', flex: 1 }}>
+                <Box sx={{ width: '100%',      
+                            textAlign: 'center',
+                            borderBottom: '2px solid lightblue',
+                            padding: '10px',
+                            background:'#313C95',
+                            borderTopLeftRadius: '12px',
+                            borderTopRightRadius: '12px', }}>
+                    <Typography variant="h4" sx={{ fontSize: { xs: '1.4rem', sm: '1.8rem' }, color:'white' }}>
                         {title}
                     </Typography>
                     <IconButton onClick={handleOpenDateRangeModal}>
