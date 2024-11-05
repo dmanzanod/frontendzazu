@@ -111,6 +111,9 @@ const CrmDashboardComponent = ({ flowNamesNotPermitted = [] }) => {
       if (!flowMap[lastFlow]) {
         flowMap[lastFlow] = 0;
       }
+      if (lastFlow !== 'morningSelectionFlow') {
+        flowMap[lastFlow]++;
+      }
     });
   
     // Filter out entries with a value of 0
